@@ -81,14 +81,19 @@ namespace ExceptionReporting.Views
 		/// </summary>
 		public void SendReportByEmail()
 		{
-			if (ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SimpleMAPI)
+			switch (ReportInfo.MailMethod)
 			{
-				SendMapiEmail();
-			}
-
-			if (ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SMTP)
-			{
-				SendSmtpMail();
+				case ExceptionReportInfo.EmailMethod.SimpleMAPI:
+					SendMapiEmail();
+					break;
+				case ExceptionReportInfo.EmailMethod.SMTP:
+					SendSmtpMail();
+					break;
+				case ExceptionReportInfo.EmailMethod.WebService:
+					SendToWebService();
+					break;
+				case ExceptionReportInfo.EmailMethod.None:
+					break;
 			}
 		}
 
@@ -111,7 +116,7 @@ namespace ExceptionReporting.Views
 			_view.ToggleShowFullDetail();
 		}
 
-		string BuildEmailText()
+		string BuildReportString()
 		{
 			var emailTextBuilder = new EmailTextBuilder();
 			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
@@ -125,7 +130,7 @@ namespace ExceptionReporting.Views
 
 		void SendSmtpMail()
 		{
-			var emailText = BuildEmailText();
+			var emailText = BuildReportString();
 
 			_view.ProgressMessage = "Sending email via SMTP...";
 			_view.EnableEmailButton = false;
@@ -133,8 +138,8 @@ namespace ExceptionReporting.Views
 
 			try
 			{
-				var mailSender = new MailSender(ReportInfo);
-				mailSender.SendSmtp(emailText, _view);
+				var mailSender = new MailSender(ReportInfo, _view);
+				mailSender.SendSmtp(emailText);
 			}
 			catch (Exception exception)
 			{
@@ -143,29 +148,55 @@ namespace ExceptionReporting.Views
 			}
 		}
 
+		private void SendToWebService()
+		{
+			_view.ProgressMessage = "Connecting to WebService...";
+			_view.EnableEmailButton = false;
+
+			var report = BuildReportString();
+			var success = false;
+
+			try
+			{
+				var webService = new WebServiceSender(ReportInfo, _view);
+				webService.Send(report);
+				success = true;
+			}
+			catch (Exception exception)
+			{
+				success = true;
+				_view.Completed(false);
+				_view.ShowError("Unable to contact WebService" + Environment.NewLine + exception.Message, exception);
+			}
+			finally
+			{
+				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
+			}
+		}
+
 		void SendMapiEmail()
 		{
-			var emailText = BuildEmailText();
+			var emailText = BuildReportString();
 
 			_view.ProgressMessage = "Launching email program...";
 			_view.EnableEmailButton = false;
 
-			var wasSuccessful = false;
+			var success = false;
 
 			try
 			{
-				var mailSender = new MailSender(ReportInfo);
+				var mailSender = new MailSender(ReportInfo, _view);
 				mailSender.SendMapi(emailText);
-				wasSuccessful = true;
+				success = true;
 			}
 			catch (Exception exception)
 			{
-				wasSuccessful = false;
+				success = false;
 				_view.ShowError("Unable to connect to Email client\r\nPlease create an Email manually and use Copy Details", exception);
 			}
 			finally
 			{
-				_view.SetEmailCompletedState_WithMessageIfSuccess(wasSuccessful, string.Empty);
+				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
 			}
 		}
 

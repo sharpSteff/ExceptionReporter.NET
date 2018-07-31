@@ -11,12 +11,13 @@ namespace ExceptionReporting.Mail
 	internal class MailSender
 	{
 		private readonly ExceptionReportInfo _config;
-		private IEmailSendEvent _emailEvent;
+		private readonly IEmailSendEvent _emailEvent;
 		private readonly Attacher _attacher;
 
-		internal MailSender(ExceptionReportInfo reportInfo)
+		internal MailSender(ExceptionReportInfo reportInfo, IEmailSendEvent emailEvent)
 		{
 			_config = reportInfo;
+			_emailEvent = emailEvent;
 			_attacher = new Attacher(reportInfo);
 		}
 
@@ -25,9 +26,8 @@ namespace ExceptionReporting.Mail
 		/// Requires following ExceptionReportInfo properties to be set:
 		/// SmtpPort, SmtpUseSsl, SmtpUsername, SmtpPassword, SmtpFromAddress, EmailReportAddress
 		/// </summary>
-		public void SendSmtp(string exceptionReport, IEmailSendEvent emailEvent)
+		public void SendSmtp(string exceptionReport)
 		{
-			_emailEvent = emailEvent;
 			var smtpClient = new SmtpClient(_config.SmtpServer)
 			{
 				DeliveryMethod = SmtpDeliveryMethod.Network,

@@ -135,10 +135,45 @@ namespace ExceptionReporting.Core
 		public string ContactMessageTop { get; set; }
 
 		public bool ShowFlatButtons { get; set; }
+
 		public bool ShowLessMoreDetailButton { get; set; }
+
 		public bool ShowFullDetail { get; set; }
+
 		public bool ShowButtonIcons { get; set; }
-		public bool ShowEmailButton { get; set; }
+
+		private bool _silentReportSend;
+
+		/// <summary>
+		/// Send the exception report automatically and silently via the WebServiceUrl - without showing dialog or prompting the user
+		/// NB The EmailMethod must be set to WebService for this to return true ie SilentReportSend will only work when using WebService
+		/// </summary>
+		public bool SilentReportSend
+		{
+			get { return _silentReportSend && MailMethod == EmailMethod.WebService; }
+			set { _silentReportSend = value; }
+		}
+
+		/// <summary>
+		/// The URL to be used to submit the exception report when EmailMethod is set to WebService
+		/// A JSON package containing the textual Exception Report, will be posted to this URL
+		/// The string that would normally be the body of an email report, will be in the root JSON property 'ExceptionReport'
+		/// </summary>
+		public string WebServiceUrl { get; set; }
+
+		private bool _showEmailButton;
+
+		/// <summary>
+		/// Whether or not to show/display the button labelled "Email"
+		/// ShowEmailButton will assume false if EmailMethod is None
+		/// </summary>
+		public bool ShowEmailButton {
+			get
+			{	// ReSharper disable once SimplifyConditionalTernaryExpression
+				return MailMethod == EmailMethod.None ? false : _showEmailButton;
+			}
+			set { _showEmailButton = value; }
+		}
 
 		/// <summary>
 		/// Dialog title text
@@ -231,8 +266,10 @@ namespace ExceptionReporting.Core
 		/// </summary>
 		public enum EmailMethod
 		{
+			None,
 			SimpleMAPI,
-			SMTP
+			SMTP,
+			WebService
 		};
 
 		protected override void DisposeManagedResources()

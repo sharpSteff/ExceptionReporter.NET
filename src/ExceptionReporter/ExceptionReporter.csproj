@@ -33,6 +33,8 @@
     <ReleaseVersion>2.4.1</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -96,6 +98,8 @@
     <Compile Include="Core\ExceptionReportInfo.cs" />
     <Compile Include="Core\ScreenshotTaker.cs" />
     <Compile Include="ExceptionReporter.cs" />
+    <Compile Include="Mail\SilentSendEvent.cs" />
+    <Compile Include="Mail\WebServiceSender.cs" />
     <Compile Include="Views\ExceptionReportPresenter.cs" />
     <Compile Include="Mail\EmailTextBuilder.cs" />
     <Compile Include="Mail\MailSender.cs" />
@@ -132,7 +136,7 @@
     <Compile Include="Core\WinformsClipboard.cs" />
     <Compile Include="Mail\AttachAdapter.cs" />
     <Compile Include="Mail\EmailSendEvent.cs" />
-    <Compile Include="Core\IEmailSendEvent.cs" />
+    <Compile Include="Mail\IEmailSendEvent.cs" />
     <Compile Include="Mail\Attacher.cs" />
     <Compile Include="Mail\Zipper.cs" />
     <Compile Include="Core\FileService.cs" />
@@ -145,7 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

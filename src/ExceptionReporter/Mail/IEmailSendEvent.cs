@@ -1,5 +1,6 @@
-﻿using System;
-namespace ExceptionReporting.Core
+using System;
+
+namespace ExceptionReporting.Mail
 {
 	/// <summary>
 	/// Email send event.
