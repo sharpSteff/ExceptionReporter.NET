@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 // ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 #pragma warning disable 1591
 
@@ -127,21 +129,6 @@ namespace ExceptionReporting.Core
 		/// </summary>
 		public string EmailReportAddress { get; set; }
 
-		/// <summary>
-		/// Default is <see cref="DefaultLabelMessages.DefaultExplanationLabel"/>
-		/// </summary>
-		public string UserExplanationLabel { get; set; }
-
-		public string ContactMessageTop { get; set; }
-
-		public bool ShowFlatButtons { get; set; }
-
-		public bool ShowLessMoreDetailButton { get; set; }
-
-		public bool ShowFullDetail { get; set; }
-
-		public bool ShowButtonIcons { get; set; }
-
 		private bool _silentReportSend;
 
 		/// <summary>
@@ -160,6 +147,11 @@ namespace ExceptionReporting.Core
 		/// The string that would normally be the body of an email report, will be in the root JSON property 'ExceptionReport'
 		/// </summary>
 		public string WebServiceUrl { get; set; }
+
+		/// <summary>
+		/// Timeout (in seconds) for the WebService
+		/// </summary>
+		public int WebServiceTimeout { get; set; } = 15;
 
 		private bool _showEmailButton;
 
@@ -231,6 +223,13 @@ namespace ExceptionReporting.Core
 			get { return _attachmentFilename.EndsWith(".zip") ? _attachmentFilename : _attachmentFilename + ".zip"; }
 			set { _attachmentFilename = value; }
 		}
+
+		public string UserExplanationLabel { get; set; }
+		public string ContactMessageTop { get; set; }
+		public bool ShowFlatButtons { get; set; }
+		public bool ShowLessMoreDetailButton { get; set; }
+		public bool ShowFullDetail { get; set; }
+		public bool ShowButtonIcons { get; set; }
 
 		public ExceptionReportInfo()
 		{

@@ -135,8 +135,8 @@
     <Compile Include="Views\IExceptionReportView.cs" />
     <Compile Include="Core\WinformsClipboard.cs" />
     <Compile Include="Mail\AttachAdapter.cs" />
-    <Compile Include="Mail\EmailSendEvent.cs" />
-    <Compile Include="Mail\IEmailSendEvent.cs" />
+    <Compile Include="Mail\ReportSendEvent.cs" />
+    <Compile Include="Mail\IReportSendEvent.cs" />
     <Compile Include="Mail\Attacher.cs" />
     <Compile Include="Mail\Zipper.cs" />
     <Compile Include="Core\FileService.cs" />

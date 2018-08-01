@@ -130,19 +130,18 @@ namespace ExceptionReporting.Views
 
 		void SendSmtpMail()
 		{
-			var emailText = BuildReportString();
-
 			_view.ProgressMessage = "Sending email via SMTP...";
 			_view.EnableEmailButton = false;
 			_view.ShowProgressBar = true;
 
 			try
 			{
+				var emailText = BuildReportString();
 				var mailSender = new MailSender(ReportInfo, _view);
 				mailSender.SendSmtp(emailText);
 			}
 			catch (Exception exception)
-			{
+			{		// this would be an exception in the setup, the sending has it's own failure event
 				_view.Completed(false);
 				_view.ShowError("Unable to send email using SMTP" + Environment.NewLine + exception.Message, exception);
 			}
@@ -153,30 +152,22 @@ namespace ExceptionReporting.Views
 			_view.ProgressMessage = "Connecting to WebService...";
 			_view.EnableEmailButton = false;
 
-			var report = BuildReportString();
-			var success = false;
-
 			try
 			{
+				var report = BuildReportString();
+
 				var webService = new WebServiceSender(ReportInfo, _view);
 				webService.Send(report);
-				success = true;
 			}
 			catch (Exception exception)
 			{
-				success = true;
 				_view.Completed(false);
-				_view.ShowError("Unable to contact WebService" + Environment.NewLine + exception.Message, exception);
-			}
-			finally
-			{
-				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
+				_view.ShowError("Unable to setup contact with WebService" + Environment.NewLine + exception.Message, exception);
 			}
 		}
 
 		void SendMapiEmail()
 		{
-			var emailText = BuildReportString();
 
 			_view.ProgressMessage = "Launching email program...";
 			_view.EnableEmailButton = false;
@@ -185,6 +176,7 @@ namespace ExceptionReporting.Views
 
 			try
 			{
+				var emailText = BuildReportString();
 				var mailSender = new MailSender(ReportInfo, _view);
 				mailSender.SendMapi(emailText);
 				success = true;

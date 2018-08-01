@@ -52,12 +52,12 @@ namespace ExceptionReporting.Core
 
 		/// <summary>
 		/// Sends the report by email (assumes SMTP - a silent/async send)
-		/// <param name="emailSendEvent">Implementation of cref="IEmailSendEvent"/ to receive completed event and error object, if any</param>
+		/// <param name="reportSendEvent">Implementation of cref="IEmailSendEvent"/ to receive completed event and error object, if any</param>
 		/// <returns>whether the initial mail connection setup succeeded - not mail sent - use emailSendEvent to determine send/success</returns>
 		/// </summary>
-		public void SendReportByEmail(IEmailSendEvent emailSendEvent = null) 
+		public void SendReportByEmail(IReportSendEvent reportSendEvent = null) 
 		{
-			var mailSender = new MailSender(_reportInfo, emailSendEvent ?? new EmailSendEvent());
+			var mailSender = new MailSender(_reportInfo, reportSendEvent ?? new ReportSendEvent());
 			var report = CreateExceptionReport();
 			var reportString = report.ToString();
 			mailSender.SendSmtp(reportString);

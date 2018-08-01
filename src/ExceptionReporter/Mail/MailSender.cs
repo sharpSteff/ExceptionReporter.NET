@@ -11,13 +11,13 @@ namespace ExceptionReporting.Mail
 	internal class MailSender
 	{
 		private readonly ExceptionReportInfo _config;
-		private readonly IEmailSendEvent _emailEvent;
+		private readonly IReportSendEvent _reportEvent;
 		private readonly Attacher _attacher;
 
-		internal MailSender(ExceptionReportInfo reportInfo, IEmailSendEvent emailEvent)
+		internal MailSender(ExceptionReportInfo reportInfo, IReportSendEvent reportEvent)
 		{
 			_config = reportInfo;
-			_emailEvent = emailEvent;
+			_reportEvent = reportEvent;
 			_attacher = new Attacher(reportInfo);
 		}
 
@@ -51,14 +51,14 @@ namespace ExceptionReporting.Mail
 			{
 				try
 				{
-					if (e.Error != null)
+					if (e.Error == null)
 					{
-						_emailEvent.Completed(success: false);
-						_emailEvent.ShowError(e.Error.Message, e.Error);
+						_reportEvent.Completed(success: true);
 					}
 					else
 					{
-						_emailEvent.Completed(success: true);
+						_reportEvent.Completed(success: false);
+						_reportEvent.ShowError(e.Error.Message, e.Error);
 					}
 				}
 				finally 
