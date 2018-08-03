@@ -11,35 +11,35 @@ namespace WebService.ExceptionReporter.Controllers
 	[ApiController]
 	public class ExceptionReportController : Controller
 	{
-		private readonly ExceptionReportContext _context;
+		private readonly ExceptionReportContext _db;
 		public ExceptionReportController(ExceptionReportContext context)
 		{
-			_context = context;
+			_db = context;
 
-			if (!_context.ExceptionReportItems.Any())
+			if (!_db.ExceptionReportItems.Any())
 			{
-				_context.ExceptionReportItems.Add(new ExceptionReportItem
+				_db.ExceptionReportItems.Add(new ExceptionReportItem
 				{
 					AppName = "Sample App",
 					AppVersion = "1.0.0",
 					ExceptionMessage = "NullReferenceException: Object reference not set to an instance of an object.",
 					ExceptionReport = "Stack Trace: at WinFormsDemoApp.DemoAppView.AndAnotherOne() in Z:\\src\\DemoAppView.cs:line 110\n..."
 				});
-				_context.SaveChanges();
+				_db.SaveChanges();
 			}
 		}
 
-		[HttpGet]
+		[HttpGet(Name = "GetAll")]
 		public ActionResult<List<ExceptionReportItem>> GetAll()
 		{
-			return _context.ExceptionReportItems.ToList();
+			return _db.ExceptionReportItems.ToList();
 		}
 
 		// GET api/<controller>/5
 		[HttpGet("{id}", Name = "GetReport")]
 		public ActionResult<ExceptionReportItem> GetById(long id)
 		{
-			var item = _context.ExceptionReportItems.Find(id);
+			var item = _db.ExceptionReportItems.Find(id);
 			if (item == null)
 			{
 				return NotFound();
@@ -50,17 +50,11 @@ namespace WebService.ExceptionReporter.Controllers
 		[HttpPost]
 		public IActionResult Create(ExceptionReportItem item)
 		{
-			_context.ExceptionReportItems.Add(item);
-			_context.SaveChanges();
+			_db.ExceptionReportItems.Add(item);
+			_db.SaveChanges();
 
 			return CreatedAtRoute("GetReport", new { id = item.ID }, item);
 		}
-
-		//		// POST api/<controller>
-		//		[HttpPost]
-		//		public void Post([FromBody] string value)
-		//		{
-		//		}
 
 		// PUT api/<controller>/5
 		[HttpPut("{id}")]
