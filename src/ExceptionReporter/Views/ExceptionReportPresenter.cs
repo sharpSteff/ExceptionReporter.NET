@@ -155,7 +155,6 @@ namespace ExceptionReporting.Views
 			try
 			{
 				var report = BuildReportString();
-
 				var webService = new WebServiceSender(ReportInfo, _view);
 				webService.Send(report);
 			}

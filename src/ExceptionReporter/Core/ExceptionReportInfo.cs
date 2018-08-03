@@ -52,6 +52,8 @@ namespace ExceptionReporting.Core
 		}
 
 		public string CustomMessage { get; set; }
+		
+		// SMTP settings
 		public string SmtpUsername { get; set; }
 		public string SmtpPassword { get; set; }
 		public string SmtpFromAddress { get; set; }
