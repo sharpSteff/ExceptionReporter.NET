@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Specialized;
+using System.IO;
 using System.Net;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using ExceptionReporting.Core;
 
@@ -24,9 +25,9 @@ namespace ExceptionReporting.Mail
 				Encoding = Encoding.UTF8,
 			};
 
-			client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-
-			client.UploadValuesCompleted += (sender, e) =>
+			client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+			client.Headers.Add(HttpRequestHeader.Accept, "application/json");
+			client.UploadStringCompleted += (sender, e) =>
 			{
 				try
 				{
@@ -46,14 +47,18 @@ namespace ExceptionReporting.Mail
 				}
 			};
 
-			client.UploadValuesAsync(new Uri(_reportInfo.WebServiceUrl), "POST", new NameValueCollection
+			using (var json = new MemoryStream())
 			{
-				{"ExceptionReport", report},
-				{"ExceptionMessage", _reportInfo.MainException.Message},
-				{"AppName", _reportInfo.AppName},
-				{"AppVersion", _reportInfo.AppVersion},
-			});
-			
+				var sz = new DataContractJsonSerializer(typeof(ExceptionReportItem));
+				sz.WriteObject(json, new ExceptionReportItem()
+				{
+					AppName = _reportInfo.AppName,
+					AppVersion = _reportInfo.AppVersion,
+					ExceptionMessage = _reportInfo.MainException.Message,
+					ExceptionReport = report
+				});
+				client.UploadStringAsync(new Uri(_reportInfo.WebServiceUrl), json.ToString());
+			}
 		}
 	}
 
