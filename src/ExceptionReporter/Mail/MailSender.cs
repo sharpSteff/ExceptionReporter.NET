@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using ExceptionReporting.Core;
-using ExceptionReporting.Extensions;
 using Win32Mapi;
 
 namespace ExceptionReporting.Mail
@@ -28,7 +27,7 @@ namespace ExceptionReporting.Mail
 		/// </summary>
 		public void SendSmtp(string exceptionReport)
 		{
-			var smtpClient = new SmtpClient(_config.SmtpServer)
+			var smtp = new SmtpClient(_config.SmtpServer)
 			{
 				DeliveryMethod = SmtpDeliveryMethod.Network,
 				Port = _config.SmtpPort,
@@ -37,7 +36,7 @@ namespace ExceptionReporting.Mail
 				Credentials = new NetworkCredential(_config.SmtpUsername, _config.SmtpPassword),
 			};
 
-			var mailMessage = new MailMessage(_config.SmtpFromAddress, _config.EmailReportAddress)
+			var message = new MailMessage(_config.SmtpFromAddress, _config.EmailReportAddress)
 			{
 				BodyEncoding = Encoding.UTF8,
 				SubjectEncoding = Encoding.UTF8,
@@ -45,9 +44,9 @@ namespace ExceptionReporting.Mail
 				Subject = EmailSubject
 			};
 
-			_attacher.AttachFiles(new AttachAdapter(mailMessage));
+			_attacher.AttachFiles(new AttachAdapter(message));
 
-			smtpClient.SendCompleted += (sender, e) =>
+			smtp.SendCompleted += (sender, e) =>
 			{
 				try
 				{
@@ -63,12 +62,12 @@ namespace ExceptionReporting.Mail
 				}
 				finally 
 				{
-					mailMessage.Dispose();
-					smtpClient.Dispose();
+					message.Dispose();
+					smtp.Dispose();
 				}
 			};
 
-			smtpClient.SendAsync(mailMessage, "Exception Report");
+			smtp.SendAsync(message, "Exception Report");
 		}
 
 		/// <summary>

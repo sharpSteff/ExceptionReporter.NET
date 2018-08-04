@@ -10,9 +10,8 @@ using System.Reflection;
 
 namespace ExceptionReporting.Core
 {
-	/// <inheritdoc />
 	/// <summary>
-	/// a bag of information (some of which is stored and retrieved from config)
+	/// A bag of configuration properties
 	/// </summary>
 	public class ExceptionReportInfo : Disposable
 	{
@@ -62,18 +61,18 @@ namespace ExceptionReporting.Core
 		public bool SmtpUseSsl { get; set; }
 
 		/// <summary>
-		/// Email that is displayed in the 'Contact Information'. /> 
+		/// Email that is displayed in the 'Contact Information'
 		/// (ie not the email for sending the report to)
 		/// </summary>
 		public string ContactEmail { get; set; }
 
 		/// <summary>
-		/// The name of the running application calling the exception report />
+		/// The name of the running application calling the exception report
 		/// </summary>
 		public string AppName { get; set; }
 
 		/// <summary>
-		/// The version of the running application calling the exception report />
+		/// The version of the running application calling the exception report
 		/// </summary>
 		public string AppVersion { get; set; }
 
@@ -98,6 +97,7 @@ namespace ExceptionReporting.Core
 		/// </summary>
 		public Assembly AppAssembly { get; set; }
 
+		// user/company details to make available
 		public string WebUrl { get; set; }
 		public string Phone { get; set; }
 		public string Fax { get; set; }
@@ -108,10 +108,12 @@ namespace ExceptionReporting.Core
 		/// </summary>
 		public string CompanyName { get; set; }
 
+		// whether to show certain tabs in the 'More Detail' mode of the main dialog
 		public bool ShowGeneralTab { get; set; }
 		public bool ShowContactTab { get; set; }
 		public bool ShowExceptionsTab { get; set; }
 
+		// cater for mono, which can't access the windows api's to get SysInfo and Assemblies
 		private bool _showSysInfoTab;
 		public bool ShowSysInfoTab
 		{
@@ -155,7 +157,7 @@ namespace ExceptionReporting.Core
 		/// </summary>
 		public int WebServiceTimeout { get; set; } = 15;
 
-		private bool _showEmailButton;
+		private bool _showEmailButton = true;
 
 		/// <summary>
 		/// Whether or not to show/display the button labelled "Email"
@@ -205,6 +207,7 @@ namespace ExceptionReporting.Core
 
 		/// <summary>
 		/// Show the Exception Reporter as a "TopMost" window (ie TopMost property on a WinForm)
+		/// This can be quite important in some environments (eg Office Addins) where it might get covered by other UI
 		/// </summary>
 		public bool TopMost { get; set; }
 
@@ -253,7 +256,7 @@ namespace ExceptionReporting.Core
 			UserExplanationLabel = DefaultLabelMessages.DefaultExplanationLabel;
 			ContactMessageTop = DefaultLabelMessages.DefaultContactMessageTop;
 			EmailReportAddress = "support@acompany.com"; // SimpleMAPI won't work if this is blank, so show dummy place-holder
-			TitleText = "Exception Report";
+			TitleText = "Error Report";
 			UserExplanationFontSize = 12f;
 			TakeScreenshot = false;
 			TopMost = false;

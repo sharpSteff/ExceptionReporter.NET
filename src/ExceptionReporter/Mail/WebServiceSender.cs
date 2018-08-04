@@ -9,18 +9,18 @@ namespace ExceptionReporting.Mail
 {
 	internal class WebServiceSender
 	{
-		private readonly ExceptionReportInfo _reportInfo;
+		private readonly ExceptionReportInfo _info;
 		private readonly IReportSendEvent _sendEvent;
 
-		internal WebServiceSender(ExceptionReportInfo reportInfo, IReportSendEvent sendEvent)
+		internal WebServiceSender(ExceptionReportInfo info, IReportSendEvent sendEvent)
 		{
-			_reportInfo = reportInfo;
+			_info = info;
 			_sendEvent = sendEvent;
 		}
 
 		public void Send(string report)
 		{
-			var client = new ExceptionReporterWebClient(_reportInfo.WebServiceTimeout)
+			var client = new ExceptionReporterWebClient(_info.WebServiceTimeout)
 			{
 				Encoding = Encoding.UTF8,
 			};
@@ -38,7 +38,7 @@ namespace ExceptionReporting.Mail
 					else
 					{
 						_sendEvent.Completed(success: false);
-						_sendEvent.ShowError(e.Error.Message, e.Error);
+						_sendEvent.ShowError("WebService: " + (e.Error.InnerException != null ? e.Error.InnerException.Message : e.Error.Message), e.Error);
 					}
 				}
 				finally
@@ -47,17 +47,18 @@ namespace ExceptionReporting.Mail
 				}
 			};
 
-			using (var json = new MemoryStream())
+			using (var jsonStream = new MemoryStream())
 			{
 				var sz = new DataContractJsonSerializer(typeof(ExceptionReportItem));
-				sz.WriteObject(json, new ExceptionReportItem()
+				sz.WriteObject(jsonStream, new ExceptionReportItem
 				{
-					AppName = _reportInfo.AppName,
-					AppVersion = _reportInfo.AppVersion,
-					ExceptionMessage = _reportInfo.MainException.Message,
+					AppName = _info.AppName,
+					AppVersion = _info.AppVersion,
+					ExceptionMessage = _info.MainException.Message,
 					ExceptionReport = report
 				});
-				client.UploadStringAsync(new Uri(_reportInfo.WebServiceUrl), json.ToString());
+				var jsonString = Encoding.UTF8.GetString(jsonStream.ToArray());
+				client.UploadStringAsync(new Uri(_info.WebServiceUrl), jsonString);
 			}
 		}
 	}
