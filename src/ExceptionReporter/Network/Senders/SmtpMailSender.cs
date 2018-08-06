@@ -6,12 +6,13 @@ using ExceptionReporting.Network.Events;
 
 namespace ExceptionReporting.Network.Senders
 {
-	internal class SmtpSender : MailSender, IReportSender
+	internal class SmtpMailSender : MailSender, IReportSender
 	{
-		public SmtpSender(ExceptionReportInfo reportInfo, IReportSendEvent sendEvent) : base(reportInfo, sendEvent)
+		public SmtpMailSender(ExceptionReportInfo reportInfo, IReportSendEvent sendEvent) : 
+			base(reportInfo, sendEvent)
 		{ }
 		
-		public string Description
+		public override string Description
 		{
 			get { return "SMTP"; }
 		}
@@ -57,7 +58,7 @@ namespace ExceptionReporting.Network.Senders
 					else
 					{
 						_sendEvent.Completed(success: false);
-						_sendEvent.ShowError("SMTP: " +
+						_sendEvent.ShowError(string.Format("{0}: ", Description) +
 							(e.Error.InnerException != null ? e.Error.InnerException.Message : e.Error.Message), e.Error);
 					}
 				}

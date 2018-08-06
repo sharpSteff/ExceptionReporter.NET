@@ -75,7 +75,7 @@ namespace ExceptionReporting
 		/// </summary>
 		public void SendReportByEmail(IReportSendEvent reportSendEvent = null) 
 		{
-			var mailSender = new SmtpSender(_reportInfo, reportSendEvent ?? new SilentSendEvent());
+			var mailSender = new SmtpMailSender(_reportInfo, reportSendEvent ?? new SilentSendEvent());
 			mailSender.Send(CreateExceptionReport().ToString());
 		}
 

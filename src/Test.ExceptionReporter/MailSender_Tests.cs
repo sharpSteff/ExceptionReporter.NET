@@ -15,7 +15,7 @@ namespace ExceptionReporting.Tests
 			var exception = new Exception("hello");
 			var reportInfo = new ExceptionReportInfo { TitleText = "test" };
 			reportInfo.SetExceptions(new[] { exception });
-			var mailSender = new MapiSender(reportInfo, null);
+			var mailSender = new MapiMailSender(reportInfo, null);
 
 			Assert.That(mailSender.EmailSubject, Is.EqualTo("hello"));
 		}
@@ -28,7 +28,7 @@ namespace ExceptionReporting.Tests
 		{
 			var reportInfo = new ExceptionReportInfo();
 			reportInfo.SetExceptions(new[] { new Exception("hello\r\nagain") });
-			var mailSender = new MapiSender(reportInfo, null);
+			var mailSender = new MapiMailSender(reportInfo, null);
 
 			Assert.That(mailSender.EmailSubject, Does.Not.Contain("\r"));
 			Assert.That(mailSender.EmailSubject, Does.Not.Contain("\n"));
@@ -37,7 +37,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Create_Subject_If_Exception_Is_Null()
 		{
-			var mailSender = new MapiSender(new ExceptionReportInfo(), null);		// no exceptions set, so message will be null, does mail cater for it?
+			var mailSender = new MapiMailSender(new ExceptionReportInfo(), null);		// no exceptions set, so message will be null, does mail cater for it?
 
 			Assert.That(mailSender.EmailSubject, Is.EqualTo("Exception Report"));		// reverts to a default message
 		}

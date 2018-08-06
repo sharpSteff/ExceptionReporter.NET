@@ -17,6 +17,13 @@ namespace ExceptionReporting.Network.Senders
 			_attacher = new Attacher(reportInfo);
 		}
 
+		public abstract string Description { get; }
+
+		public virtual string ConnectingMessage
+		{
+			get { return string.Format("Connecting {0}...", Description); }
+		}
+
 		public string EmailSubject
 		{
 			get { return _config.MainException?.Message

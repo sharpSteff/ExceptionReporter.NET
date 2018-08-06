@@ -106,8 +106,8 @@
     <Compile Include="Network\ExceptionReportPacket.cs" />
     <Compile Include="Network\IReportSender.cs" />
     <Compile Include="Network\Senders\MailSender.cs" />
-    <Compile Include="Network\Senders\MapiSender.cs" />
-    <Compile Include="Network\Senders\SmtpSender.cs" />
+    <Compile Include="Network\Senders\MapiMailSender.cs" />
+    <Compile Include="Network\Senders\SmtpMailSender.cs" />
     <Compile Include="Network\Senders\WebServiceSender.cs" />
     <Compile Include="Views\ExceptionReportPresenter.cs" />
     <Compile Include="Mail\EmailTextBuilder.cs" />
