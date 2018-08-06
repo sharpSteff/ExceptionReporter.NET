@@ -3,10 +3,11 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using ExceptionReporting.Network.Events;
 
-namespace ExceptionReporting.Mail
+namespace ExceptionReporting.Network.Senders
 {
-	internal class WebServiceSender
+	internal class WebServiceSender : IReportSender
 	{
 		private const string JSON = "application/json";
 		private readonly ExceptionReportInfo _info;
@@ -16,6 +17,11 @@ namespace ExceptionReporting.Mail
 		{
 			_info = info;
 			_sendEvent = sendEvent;
+		}
+		
+		public string Description
+		{
+			get { return "WebService"; }
 		}
 
 		public void Send(string report)
@@ -27,6 +33,7 @@ namespace ExceptionReporting.Mail
 
 			webClient.Headers.Add(HttpRequestHeader.ContentType, JSON);
 			webClient.Headers.Add(HttpRequestHeader.Accept, JSON);
+			
 			webClient.UploadStringCompleted += OnUploadCompleted(webClient);
 
 			using (var jsonStream = new MemoryStream())

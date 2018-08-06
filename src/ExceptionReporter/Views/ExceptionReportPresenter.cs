@@ -5,8 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 using ExceptionReporting.Core;
 using ExceptionReporting.Mail;
+using ExceptionReporting.Network;
+using ExceptionReporting.Network.Senders;
 using ExceptionReporting.SystemInfo;
 
 namespace ExceptionReporting.Views
@@ -80,17 +83,17 @@ namespace ExceptionReporting.Views
 		{
 			if (ReportInfo.SendMethod == ReportSendMethod.WebService)
 			{
-				SendToWebService();
+				Send(new WebServiceSender(ReportInfo, _view));
 			}
 			else if (ReportInfo.SendMethod == ReportSendMethod.SMTP ||
 			         ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SMTP)		// backwards compatibility
 			{
-				SendSmtpMail();
+				Send(new SmtpSender(ReportInfo, _view));
 			}
 			else if (ReportInfo.SendMethod == ReportSendMethod.SimpleMAPI ||
 			    ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SimpleMAPI)		// backwards compatibility
 			{		// this option must be last for compatibility because MailMethod.SimpleMAPI was previously 0/default
-				SendMapiEmail();
+				Send(new MapiSender(ReportInfo, _view));
 			}
 		}
 
@@ -125,35 +128,34 @@ namespace ExceptionReporting.Views
 			return entireEmailText.ToString();
 		}
 
-		private void SendSmtpMail()
-		{
-			_view.ProgressMessage = "Sending email via SMTP...";
-			_view.EnableEmailButton = false;
-			_view.ShowProgressBar = true;
+//		private void SendSmtpMail()
+//		{
+//			_view.ProgressMessage = "Sending email via SMTP...";
+//			_view.EnableEmailButton = false;
+//			_view.ShowProgressBar = true;
+//
+//			try
+//			{
+//				var emailText = BuildReportString();
+//				var mailSender = new MailSender(ReportInfo, _view);
+//				mailSender.SendSmtp(emailText);
+//			}
+//			catch (Exception exception)
+//			{		// most/all exceptions will be thrown in the MailSender - this is just a double backup
+//				_view.Completed(false);
+//				_view.ShowError("Unable to setup email using SMTP" + Environment.NewLine + exception.Message, exception);
+//			}
+//		}
 
-			try
-			{
-				var emailText = BuildReportString();
-				var mailSender = new MailSender(ReportInfo, _view);
-				mailSender.SendSmtp(emailText);
-			}
-			catch (Exception exception)
-			{		// most/all exceptions will be thrown in the MailSender - this is just a double backup
-				_view.Completed(false);
-				_view.ShowError("Unable to setup email using SMTP" + Environment.NewLine + exception.Message, exception);
-			}
-		}
-
-		private void SendToWebService()
+		private void Send(IReportSender sender)
 		{
-			_view.ProgressMessage = "Connecting to WebService...";
+			_view.ProgressMessage = string.Format("Connecting to {0}...", sender.Description);
 			_view.EnableEmailButton = false;
 
 			try
 			{
 				var report = BuildReportString();
-				var webService = new WebServiceSender(ReportInfo, _view);
-				webService.Send(report);
+				sender.Send(report);
 			}
 			catch (Exception exception)
 			{		// most/all exceptions will be thrown in the WebServiceSender - this is just a double backup
@@ -162,36 +164,36 @@ namespace ExceptionReporting.Views
 			}
 		}
 
-		private void SendMapiEmail()
-		{
-			if (ReportInfo.EmailReportAddress.IsEmpty())
-			{
-				_view.ShowError("EmailReportAddress not set", new ConfigurationErrorsException("EmailReportAddress"));
-				return;
-			}
-
-			_view.ProgressMessage = "Launching Email client...";
-			_view.EnableEmailButton = false;
-
-			var success = false;
-
-			try
-			{
-				var emailText = BuildReportString();
-				var mailSender = new MailSender(ReportInfo, _view);
-				mailSender.SendMapi(emailText);
-				success = true;
-			}
-			catch (Exception exception)
-			{
-				success = false;
-				_view.ShowError("Unable to setup Email client\r\nPlease create an Email manually and use Copy Details button", exception);
-			}
-			finally
-			{
-				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
-			}
-		}
+//		private void SendMapiEmail()
+//		{
+//			if (ReportInfo.EmailReportAddress.IsEmpty())
+//			{
+//				_view.ShowError("EmailReportAddress not set", new ConfigurationErrorsException("EmailReportAddress"));
+//				return;
+//			}
+//
+//			_view.ProgressMessage = "Launching Email client...";
+//			_view.EnableEmailButton = false;
+//
+//			var success = false;
+//
+//			try
+//			{
+//				var emailText = BuildReportString();
+//				var mailSender = new MailSender(ReportInfo, _view);
+//				mailSender.SendMapi(emailText);
+//				success = true;
+//			}
+//			catch (Exception exception)
+//			{
+//				success = false;
+//				_view.ShowError("Unable to setup Email client\r\nPlease create an Email manually and use Copy Details button", exception);
+//			}
+//			finally
+//			{
+//				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
+//			}
+//		}
 
 		/// <summary>
 		/// Fetch the WMI system information
@@ -241,7 +243,7 @@ namespace ExceptionReporting.Views
 
 				_view.PopulateExceptionTab(ReportInfo.Exceptions);
 				_view.PopulateAssembliesTab();
-				if (!ExceptionReporter.IsRunningMono())
+				if (ExceptionReporter.NotRunningMono())
 					_view.PopulateSysInfoTab();
 			}
 			finally

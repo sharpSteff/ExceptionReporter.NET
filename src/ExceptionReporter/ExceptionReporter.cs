@@ -1,4 +1,4 @@
-/**
+/*
  * https://github.com/PandaWood/ExceptionReporter.NET
  */
 
@@ -106,6 +106,8 @@ namespace ExceptionReporting
 
 		/// <returns><c>true</c>, if running mono <c>false</c> otherwise.</returns>
 		public static bool IsRunningMono() { return _isRunningMono; }
+		/// <returns><c>true</c>, if not running mono <c>false</c> otherwise.</returns>
+		public static bool NotRunningMono() { return !_isRunningMono; }
 
 	}
 }

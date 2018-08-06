@@ -1,4 +1,4 @@
-/**
+/*
  * https://github.com/PandaWood/ExceptionReporter.NET
  */
 

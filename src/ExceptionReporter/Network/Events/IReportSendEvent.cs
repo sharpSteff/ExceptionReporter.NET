@@ -1,6 +1,6 @@
 using System;
 
-namespace ExceptionReporting.Mail
+namespace ExceptionReporting.Network.Events
 {
 	/// <summary>
 	/// Email send event.

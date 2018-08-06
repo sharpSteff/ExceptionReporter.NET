@@ -1,14 +1,17 @@
-/**
+/*
  * https://github.com/PandaWood/ExceptionReporter.NET
  */
 
 using System;
 using System.Collections.Generic;
-using System.Deployment.Application;
+//using System.Deployment.Application;
 using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
 using ExceptionReporting.Mail;
+using ExceptionReporting.Network;
+using ExceptionReporting.Network.Events;
+using ExceptionReporting.Network.Senders;
 using ExceptionReporting.SystemInfo;
 
 #pragma warning disable 1591
@@ -45,8 +48,9 @@ namespace ExceptionReporting
 
 		private string GetAppVersion()
 		{
-			return ApplicationDeployment.IsNetworkDeployed ? 
-				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+//			return ApplicationDeployment.IsNetworkDeployed ? 
+//				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+			return Application.ProductVersion;
 		}
 
 		/// <summary>
@@ -71,8 +75,8 @@ namespace ExceptionReporting
 		/// </summary>
 		public void SendReportByEmail(IReportSendEvent reportSendEvent = null) 
 		{
-			var mailSender = new MailSender(_reportInfo, reportSendEvent ?? new SilentSendEvent());
-			mailSender.SendSmtp(CreateExceptionReport().ToString());
+			var mailSender = new SmtpSender(_reportInfo, reportSendEvent ?? new SilentSendEvent());
+			mailSender.Send(CreateExceptionReport().ToString());
 		}
 
 		public void SendReportToWebService(IReportSendEvent reportSendEvent = null)

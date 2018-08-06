@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ExceptionReporting.Mail;
+using ExceptionReporting.Network.Events;
 
 #pragma warning disable 1591
 
