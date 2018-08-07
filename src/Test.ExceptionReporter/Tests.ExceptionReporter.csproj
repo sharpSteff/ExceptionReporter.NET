@@ -99,7 +99,7 @@
     <Compile Include="ExceptionReportInfo_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Extensions_Test.cs">
+    <Compile Include="Extensions_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MailSender_Tests.cs">
@@ -109,6 +109,7 @@
     <Compile Include="ScreenshotTaker_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SenderFactory_Tests.cs" />
     <Compile Include="SysInfoResult_Tests.cs">
       <SubType>Code</SubType>
     </Compile>

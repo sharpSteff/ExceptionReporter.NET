@@ -9,17 +9,15 @@ using ExceptionReporting.SystemInfo;
 
 #pragma warning disable 1591
 
-namespace ExceptionReporting.Views
+namespace ExceptionReporting.MVP.Views
 {
 	/// <summary>
 	/// The main ExceptionReporter dialog
 	/// </summary>
-	// ReSharper disable UnusedMember.Global
 	public partial class ExceptionReportView : Form, IExceptionReportView
-	// ReSharper restore UnusedMember.Global
 	{
-		bool _isDataRefreshRequired;
-		readonly ExceptionReportPresenter _presenter;
+		private bool _isDataRefreshRequired;
+		private readonly ExceptionReportPresenter _presenter;
 
 		public ExceptionReportView(ExceptionReportInfo reportInfo)
 		{
@@ -99,8 +97,10 @@ namespace ExceptionReporting.Views
 					reportInfo.ScreenshotImage = ScreenshotTaker.TakeScreenShot();
 				}
 				catch { }
-				// not too concerned about the specifics at the moment, just that an exception here doesn't prevent the entire mechansim from working
-				// specifically, if we are raising this exception as the result of an out-of-memory exception, we have little chance of a screenshot succeeding
+				// not too concerned about the specifics at the moment, just that an exception here doesn't prevent the
+				// entire mechansim from working
+				// specifically, if we are raising this exception as the result of an out-of-memory exception, we have
+				// little chance of a screenshot succeeding
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace ExceptionReporting.Views
 			this.btnSimpleCopy.Location = btnSimpleEmail.Location;
 		}
 
-		void RemoveButtonIcons()
+		private void RemoveButtonIcons()
 		{
 			// removing the icons, requires a bit of reshuffling of positions
 			btnCopy.Image = btnEmail.Image = btnSave.Image = null;
@@ -210,13 +210,13 @@ namespace ExceptionReporting.Views
 			btnEmail.Enabled = true;
 		}
 
-		public void SetEmailCompletedState_WithMessageIfSuccess(bool success, string successMessage)
+		public void SetEmailCompletedState_WithMessageIfSuccess(bool success, string message)
 		{
 			Completed(success);
 
 			if (success)
 			{
-				ProgressMessage = successMessage;
+				ProgressMessage = message;
 			}
 		}
 
@@ -392,7 +392,6 @@ namespace ExceptionReporting.Views
 				_presenter.SaveReportToFile(saveDialog.FileName);
 			}
 		}
-
 
 		private void UrlLink_Clicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{

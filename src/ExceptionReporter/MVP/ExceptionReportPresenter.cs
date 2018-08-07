@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Text;
 using ExceptionReporting.Core;
-using ExceptionReporting.Mail;
+using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
-using ExceptionReporting.Network.Senders;
 using ExceptionReporting.SystemInfo;
 
-namespace ExceptionReporting.Views
+namespace ExceptionReporting.MVP
 {
 	/// <summary>
 	/// The Presenter in this MVP (Model-View-Presenter) implementation 
@@ -18,6 +15,7 @@ namespace ExceptionReporting.Views
 	internal class ExceptionReportPresenter
 	{
 		private readonly IExceptionReportView _view;
+		private readonly IFileService _fileService;
 		private readonly ExceptionReportGenerator _reportGenerator;
 
 		/// <summary>
@@ -27,6 +25,7 @@ namespace ExceptionReporting.Views
 		{
 			_view = view;
 			_reportGenerator = new ExceptionReportGenerator(info);
+			_fileService = new FileService();
 			ReportInfo = info;
 		}
 
@@ -57,42 +56,38 @@ namespace ExceptionReporting.Views
 		{
 			if (string.IsNullOrEmpty(fileName)) return;
 
-			var exceptionReport = CreateExceptionReport();
-
-			try
+			var report = CreateExceptionReport().ToString();
+			var result = _fileService.Write(fileName, report);
+			if (!result.Saved)
 			{
-				using (var stream = File.OpenWrite(fileName))
-				{
-					var writer = new StreamWriter(stream);
-					writer.Write(exceptionReport);
-					writer.Flush();
-				}
-			}
-			catch (Exception exception)
-			{
-				_view.ShowError(string.Format("Unable to save file '{0}'", fileName), exception);
+				_view.ShowError(string.Format("Unable to save file '{0}'", fileName), result.Exception);
 			}
 		}
 
 		/// <summary>
-		/// Send the exception report via email, using the configured email method/type
+		/// Send the exception report using the configured send method
 		/// </summary>
 		public void SendReport()
 		{
-			if (ReportInfo.SendMethod == ReportSendMethod.WebService)
+			var sender = new SenderFactory(ReportInfo, _view).Get();
+			
+			_view.ProgressMessage = sender.ConnectingMessage;
+			_view.EnableEmailButton = false;
+			_view.ShowProgressBar = true;
+			
+			try
 			{
-				Send(new WebServiceSender(ReportInfo, _view));
+				var report = CreateExceptionReport().ToString();
+				sender.Send(report);
 			}
-			else if (ReportInfo.SendMethod == ReportSendMethod.SMTP ||
-			         ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SMTP)		// backwards compatibility
-			{
-				Send(new SmtpMailSender(ReportInfo, _view));
+			catch (Exception exception)
+			{		// most exceptions will be thrown in the Sender - this is just a backup
+				_view.Completed(false);
+				_view.ShowError(string.Format("Unable to setup {0}", sender.Description) + 
+				                Environment.NewLine + exception.Message, exception);
 			}
-			else if (ReportInfo.SendMethod == ReportSendMethod.SimpleMAPI ||
-			    ReportInfo.MailMethod == ExceptionReportInfo.EmailMethod.SimpleMAPI)		// backwards compatibility
-			{		// this option must be last for compatibility because MailMethod.SimpleMAPI was previously 0/default
-				Send(new MapiMailSender(ReportInfo, _view));
-			}
+			//todo cater for setting text to nothing for MAPI
+			//todo cater for setting extra report content for case of email sender
 		}
 
 		/// <summary>
@@ -114,35 +109,17 @@ namespace ExceptionReporting.Views
 			_view.ToggleShowFullDetail();
 		}
 
-		private string BuildReportString()
-		{
-			var emailTextBuilder = new EmailTextBuilder();
-			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
-			var entireEmailText = new StringBuilder(emailIntroString);
-
-			var report = CreateExceptionReport();
-			entireEmailText.Append(report);
-
-			return entireEmailText.ToString();
-		}
-
-		private void Send(IReportSender sender)
-		{
-			_view.ProgressMessage = sender.ConnectingMessage;
-			_view.EnableEmailButton = false;
-			_view.ShowProgressBar = true;
-			
-			try
-			{
-				var report = BuildReportString();
-				sender.Send(report);
-			}
-			catch (Exception exception)
-			{		// most/all exceptions will be thrown in the WebServiceSender - this is just a double backup
-				_view.Completed(false);
-				_view.ShowError(string.Format("Unable to setup {0}", sender.Description) + Environment.NewLine + exception.Message, exception);
-			}
-		}
+//		private string BuildEmailReportString()
+//		{
+//			var emailTextBuilder = new EmailTextBuilder();
+//			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
+//			var entireEmailText = new StringBuilder(emailIntroString);
+//
+//			var report = CreateExceptionReport();
+//			entireEmailText.Append(report);
+//
+//			return entireEmailText.ToString();
+//		}
 
 //			finally
 //			{

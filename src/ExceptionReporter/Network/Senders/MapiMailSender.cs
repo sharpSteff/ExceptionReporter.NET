@@ -17,6 +17,11 @@ namespace ExceptionReporting.Network.Senders
 			get { return "Email Client"; }
 		}
 		
+		public override string ConnectingMessage
+		{
+			get { return string.Format("Launching {0}...", Description); }
+		}
+		
 		/// <summary>
 		/// Try send via installed Email client
 		/// Uses Simple-MAPI.NET library - https://github.com/PandaWood/Simple-MAPI.NET

@@ -1,7 +1,4 @@
 using System;
-using ExceptionReporting.Core;
-using ExceptionReporting.Mail;
-using ExceptionReporting.Network;
 using ExceptionReporting.Network.Senders;
 using NUnit.Framework;
 

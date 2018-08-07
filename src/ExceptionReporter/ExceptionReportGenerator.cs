@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
-using ExceptionReporting.Mail;
-using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
 using ExceptionReporting.Network.Senders;
 using ExceptionReporting.SystemInfo;
@@ -79,12 +77,6 @@ namespace ExceptionReporting
 			mailSender.Send(CreateExceptionReport().ToString());
 		}
 
-		public void SendReportToWebService(IReportSendEvent reportSendEvent = null)
-		{
-			var webService = new WebServiceSender(_reportInfo, reportSendEvent ?? new SilentSendEvent());
-			webService.Send(CreateExceptionReport().ToString());
-		}
-
 		internal IList<SysInfoResult> GetOrFetchSysInfoResults()
 		{
 			if (ExceptionReporter.IsRunningMono()) return new List<SysInfoResult>();
@@ -94,7 +86,7 @@ namespace ExceptionReporting
 			return _sysInfoResults.AsReadOnly();
 		}
 
-		static IEnumerable<SysInfoResult> CreateSysInfoResults()
+		private static IEnumerable<SysInfoResult> CreateSysInfoResults()
 		{
 			var retriever = new SysInfoRetriever();
 			var results = new List<SysInfoResult>

@@ -31,7 +31,7 @@ namespace ExceptionReporting.Network.Senders
 				UseDefaultCredentials = _config.SmtpUseDefaultCredentials,
 			};
 
-			if (_config.SmtpPort != 0)		// the default port (25) is used if not set in config
+			if (_config.SmtpPort != 0)		// the default port is used if not set in config
 				smtp.Port = _config.SmtpPort;
 			if (!_config.SmtpUseDefaultCredentials)
 				smtp.Credentials = new NetworkCredential(_config.SmtpUsername, _config.SmtpPassword);
