@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using ExceptionReporting.Core;
+using ExceptionReporting.Mail;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.SystemInfo;
@@ -42,10 +44,10 @@ namespace ExceptionReporting.MVP
 		/// </summary>
 		public ExceptionReportInfo ReportInfo { get; }
 
-		private ExceptionReport CreateExceptionReport()
+		private string CreateReport()
 		{
 			ReportInfo.UserExplanation = _view.UserExplanation;
-			return _reportGenerator.CreateExceptionReport();
+			return _reportGenerator.Generate().ToString();
 		}
 
 		/// <summary>
@@ -56,8 +58,9 @@ namespace ExceptionReporting.MVP
 		{
 			if (string.IsNullOrEmpty(fileName)) return;
 
-			var report = CreateExceptionReport().ToString();
+			var report = CreateReport();
 			var result = _fileService.Write(fileName, report);
+			
 			if (!result.Saved)
 			{
 				_view.ShowError(string.Format("Unable to save file '{0}'", fileName), result.Exception);
@@ -69,15 +72,15 @@ namespace ExceptionReporting.MVP
 		/// </summary>
 		public void SendReport()
 		{
-			var sender = new SenderFactory(ReportInfo, _view).Get();
-			
-			_view.ProgressMessage = sender.ConnectingMessage;
 			_view.EnableEmailButton = false;
 			_view.ShowProgressBar = true;
 			
+			var sender = new SenderFactory(ReportInfo, _view).Get();
+			_view.ProgressMessage = sender.ConnectingMessage;
+			
 			try
 			{
-				var report = CreateExceptionReport().ToString();
+				var report = ReportInfo.IsSimpleMAPI() ? CreateMapiReport() : CreateReport();
 				sender.Send(report);
 			}
 			catch (Exception exception)
@@ -86,8 +89,13 @@ namespace ExceptionReporting.MVP
 				_view.ShowError(string.Format("Unable to setup {0}", sender.Description) + 
 				                Environment.NewLine + exception.Message, exception);
 			}
-			//todo cater for setting text to nothing for MAPI
-			//todo cater for setting extra report content for case of email sender
+			finally
+			{
+				if (ReportInfo.IsSimpleMAPI())
+				{
+					_view.Mapi_Completed();
+				}
+			}
 		}
 
 		/// <summary>
@@ -95,9 +103,9 @@ namespace ExceptionReporting.MVP
 		/// </summary>
 		public void CopyReportToClipboard()
 		{
-			var exceptionReport = CreateExceptionReport();
-			WinFormsClipboard.CopyTo(exceptionReport.ToString());
-			_view.ProgressMessage = string.Format("{0} copied to clipboard", ReportInfo.TitleText);
+			var report = CreateReport();
+			WinFormsClipboard.CopyTo(report);
+			_view.ProgressMessage = "Copied to clipboard";
 		}
 
 		/// <summary>
@@ -109,23 +117,17 @@ namespace ExceptionReporting.MVP
 			_view.ToggleShowFullDetail();
 		}
 
-//		private string BuildEmailReportString()
-//		{
-//			var emailTextBuilder = new EmailTextBuilder();
-//			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
-//			var entireEmailText = new StringBuilder(emailIntroString);
-//
-//			var report = CreateExceptionReport();
-//			entireEmailText.Append(report);
-//
-//			return entireEmailText.ToString();
-//		}
+		private string CreateMapiReport()
+		{
+			var emailTextBuilder = new EmailTextBuilder();
+			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
+			var entireEmailText = new StringBuilder(emailIntroString);
 
-//			finally
-//			{
-//				_view.SetEmailCompletedState_WithMessageIfSuccess(success, string.Empty);
-//			}
-//		}
+			var report = CreateReport();
+			entireEmailText.Append(report);
+
+			return entireEmailText.ToString();
+		}
 
 		/// <summary>
 		/// Fetch the WMI system information

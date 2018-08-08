@@ -294,13 +294,21 @@ namespace ExceptionReporting
 			AttachmentFilename = "ExceptionReport";
 		}
 
+		public bool IsSimpleMAPI()
+		{
+			return SendMethod == ReportSendMethod.SimpleMAPI ||
+			       MailMethod == EmailMethod.SimpleMAPI;		// backwards compatible
+		}
+
 		/// <summary>
 		/// Supported e-mail mechanisms 
 		/// </summary>
 		[Obsolete("Replace 'ExceptionReportInfo.EmailMethod' with 'ReportSendMethod'")]
 		public enum EmailMethod
 		{
+			///<summary>Tries to launch the installed Email client on Windows (default) </summary>
 			SimpleMAPI,
+			///<summary>Sends Email via an SMTP server - requires other config (host/port etc) properties starting with 'Smtp'</summary>
 			SMTP
 		}
 		
@@ -325,7 +333,7 @@ namespace ExceptionReporting
 		///<summary>Tries to use the Windows default Email client eg Outlook</summary>
 		SimpleMAPI,
 
-		///<summary>Connects to an SMTP server - requires other config (host/port etc) properties starting with 'Smtp'</summary>
+		///<summary>Sends Email via an SMTP server - requires other config (host/port etc) properties starting with 'Smtp'</summary>
 		SMTP,
 
 		/// <summary>

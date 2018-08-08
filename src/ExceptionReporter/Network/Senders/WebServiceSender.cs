@@ -9,7 +9,7 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal class WebServiceSender : IReportSender
 	{
-		private const string JSON = "application/json";
+		private const string APPLICATION_JSON = "application/json";
 		private readonly ExceptionReportInfo _info;
 		private readonly IReportSendEvent _sendEvent;
 
@@ -26,7 +26,7 @@ namespace ExceptionReporting.Network.Senders
 		
 		public string ConnectingMessage
 		{
-			get { return "Connecting to WebService..."; }
+			get { return string.Format("Connecting to {0}", Description); }
 		}
 
 		public void Send(string report)
@@ -36,8 +36,8 @@ namespace ExceptionReporting.Network.Senders
 				Encoding = Encoding.UTF8
 			};
 
-			webClient.Headers.Add(HttpRequestHeader.ContentType, JSON);
-			webClient.Headers.Add(HttpRequestHeader.Accept, JSON);
+			webClient.Headers.Add(HttpRequestHeader.ContentType, APPLICATION_JSON);
+			webClient.Headers.Add(HttpRequestHeader.Accept, APPLICATION_JSON);
 			
 			webClient.UploadStringCompleted += OnUploadCompleted(webClient);
 

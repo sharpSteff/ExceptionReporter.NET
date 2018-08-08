@@ -210,14 +210,10 @@ namespace ExceptionReporting.MVP.Views
 			btnEmail.Enabled = true;
 		}
 
-		public void SetEmailCompletedState_WithMessageIfSuccess(bool success, string message)
+		public void Mapi_Completed()
 		{
-			Completed(success);
-
-			if (success)
-			{
-				ProgressMessage = message;
-			}
+			Completed(true);
+			ProgressMessage = string.Empty;
 		}
 
 		/// <summary>

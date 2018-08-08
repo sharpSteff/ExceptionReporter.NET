@@ -32,7 +32,7 @@ namespace ExceptionReporting.MVP
 				return new MapiMailSender(_config, _sendEvent);
 			}
 			
-			// default
+			// default (only required by obsolete MailMethod who's default was 0/SimpleMAPI)
 			return new MapiMailSender(_config, _sendEvent);
 		}
 	}
