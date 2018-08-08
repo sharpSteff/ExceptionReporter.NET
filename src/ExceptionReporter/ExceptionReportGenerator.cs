@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-//using System.Deployment.Application;
+using System.Deployment.Application;
 using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
@@ -48,9 +48,8 @@ namespace ExceptionReporting
 
 		private string GetAppVersion()
 		{
-//			return ApplicationDeployment.IsNetworkDeployed ? 
-//				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-			return Application.ProductVersion;
+			return ApplicationDeployment.IsNetworkDeployed ? 
+				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
 		}
 
 		/// <summary>
