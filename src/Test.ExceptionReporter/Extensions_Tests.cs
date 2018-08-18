@@ -6,9 +6,15 @@ namespace ExceptionReporting.Tests
 	public class Extensions_Test
 	{
 		[Test]
-		public void Can_Truncate()
+		public void Can_Truncate_Over_Arg()
 		{
-			Assert.That("A message too long".Truncate(9), Is.EqualTo("A message"));
+			Assert.That("123456789abc".Truncate(9), Is.EqualTo("123456789"));
+		}
+		
+		[Test]
+		public void Can_Not_Truncate_Under_Arg()
+		{
+			Assert.That("123".Truncate(4), Is.EqualTo("123"));
 		}
 	}
 }

@@ -1,0 +1,34 @@
+===============
+
+[General Info]
+ 
+Application: {{App.Name}}
+Version:     {{App.Version}}
+Region:      {{App.Region}}
+Machine:     {{App.Machine}}
+User:        {{App.User}}
+Date: {{Exception.Date}}
+Time: {{Exception.Time}}
+ 
+{{#Exception.Explanation}}
+User Explanation:  {{Exception.Explanation}}
+{{/Exception.Explanation}}  
+
+Message: {{Exception.Message}}
+ 
+[Strack Traces] 
+
+  {{Exception.StackTrace}} 
+ 
+[Assembly Info]
+ 
+  {{#App.Assemblies}}
+    {{Name}} - {{Version}}
+  {{/App.Assemblies}}
+
+
+[System Info]
+ 
+  {{SystemInfo}}
+ 
+===============

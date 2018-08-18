@@ -34,6 +34,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -71,6 +72,11 @@
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Handlebars, Version=1.9.5.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661">
+      <HintPath>..\..\packages\Handlebars.Net.1.9.5\lib\net452\Handlebars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -100,7 +106,6 @@
     <Compile Include="MVP\Presenters\ExceptionReportPresenter.cs" />
     <Compile Include="Network\SenderFactory.cs" />
     <Compile Include="Network\Senders\GhostSender.cs" />
-    <Compile Include="ReportGenerator.cs" />
     <Compile Include="ExceptionReportInfo.cs" />
     <Compile Include="MVP\Views\ExceptionDetailControl.cs">
       <SubType>UserControl</SubType>
@@ -131,6 +136,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReportGenerator.cs" />
+    <Compile Include="Templates\ReportModel.cs" />
+    <Compile Include="Templates\TemplateFormat.cs" />
+    <Compile Include="Templates\TemplateRenderer.cs" />
     <Compile Include="SystemInfo\SysInfoQueries.cs" />
     <Compile Include="SystemInfo\SysInfoQuery.cs" />
     <Compile Include="SystemInfo\SysInfoResult.cs" />
@@ -156,6 +165,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\ReportTemplate.html" />
+    <EmbeddedResource Include="Templates\ReportTemplate.md" />
+    <EmbeddedResource Include="Templates\ReportTemplate.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

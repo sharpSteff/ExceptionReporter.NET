@@ -116,6 +116,7 @@
     <Compile Include="Attacher_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TemplateRenderer_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExceptionReporter\ExceptionReporter.csproj">

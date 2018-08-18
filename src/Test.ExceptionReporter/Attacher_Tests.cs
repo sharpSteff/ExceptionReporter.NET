@@ -124,7 +124,9 @@ namespace ExceptionReporting.Tests
 			var screenshot = new Mock<IScreenshotTaker>();
 			var attacher =
 				new Attacher(new ExceptionReportInfo {TakeScreenshot = true})
-				{ ScreenshotTaker = screenshot.Object };
+				{
+					ScreenshotTaker = screenshot.Object
+				};
 
 			attacher.AttachFiles(_iattach.Object);
 
@@ -137,7 +139,9 @@ namespace ExceptionReporting.Tests
 			var screenshot = new Mock<IScreenshotTaker>();
 			var attacher =
 				new Attacher(new ExceptionReportInfo { TakeScreenshot = false })
-				{ ScreenshotTaker = screenshot.Object };
+				{
+					ScreenshotTaker = screenshot.Object
+				};
 
 			attacher.AttachFiles(_iattach.Object);
 

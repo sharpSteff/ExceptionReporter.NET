@@ -45,7 +45,7 @@ namespace ExceptionReporting
 		{
 			get { return _reportInfo; }
 		}
-
+		
 		/// <summary>
 		/// Gets the sys info results
 		/// </summary>
