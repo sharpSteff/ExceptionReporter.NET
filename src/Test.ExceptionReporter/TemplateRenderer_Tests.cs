@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExceptionReporting.Report;
 using ExceptionReporting.Templates;
 using NUnit.Framework;
 
@@ -17,7 +18,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Render_Text_Template_Baseline_1_Of_Everything()
 		{
-			var renderer = new TemplateRenderer(new TemplateModel
+			var renderer = new TemplateRenderer(new ReportModel
 			{
 				Error = new Error
 				{
@@ -29,7 +30,7 @@ namespace ExceptionReporting.Tests
 					Name = TestApp,
 					User = User,
 					Version = Version,
-					Assemblies = new List<AssemblyRef>
+					AssemblyRefs = new List<AssemblyRef>
 					{
 						new AssemblyRef
 						{
@@ -54,7 +55,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Render_Text_Template_Without_Sections()
 		{
-			var renderer = new TemplateRenderer(new TemplateModel
+			var renderer = new TemplateRenderer(new ReportModel
 			{
 				Error = new Error
 				{
@@ -68,9 +69,10 @@ namespace ExceptionReporting.Tests
 			});
 
 			var result = renderer.Render();
+			Assert.That(result, Does.Contain(string.Format("Application: {0}", TestApp)));
+			Assert.That(result, Does.Contain(string.Format("Version:     {0}", Version)));
 			Assert.That(result, Does.Not.Contain("User Explanation:"));		// the whole section is not shown  
 		}
-
 	}
 }
 

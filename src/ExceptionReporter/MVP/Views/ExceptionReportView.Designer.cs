@@ -637,7 +637,6 @@ namespace ExceptionReporting.MVP.Views
 			this.txtExceptionMessageLarge2.Size = new System.Drawing.Size(299, 53);
 			this.txtExceptionMessageLarge2.TabIndex = 0;
 			this.txtExceptionMessageLarge2.Text = "No message";
-			this.txtExceptionMessageLarge2.TextChanged += new System.EventHandler(this.txtExceptionMessageLarge2_TextChanged);
 			// 
 			// lessDetail_alertIcon
 			// 

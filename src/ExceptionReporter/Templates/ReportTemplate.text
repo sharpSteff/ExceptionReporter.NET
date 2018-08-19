@@ -16,7 +16,7 @@ Message: {{Error.Message}}
  
 [Strack Traces] 
 
-  {{Error.StackTrace}} 
+  {{Error.FullStackTrace}} 
  
 {{#if Error.InnerException}}
   Error.InnerException

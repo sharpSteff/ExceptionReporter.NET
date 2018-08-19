@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
+using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -34,12 +35,10 @@ namespace ExceptionReporting
 		{
 			// this is going to be a dev/learning mistake, so let them now fast and hard
 			_reportInfo = reportInfo ?? throw new ReportGeneratorException("reportInfo cannot be null");
-
+			
+			_reportInfo.AppName = string.IsNullOrEmpty(_reportInfo.AppName) ? Application.ProductName : string.Empty;
+			_reportInfo.AppVersion = string.IsNullOrEmpty(_reportInfo.AppVersion) ? GetAppVersion() : string.Empty;
 			_reportInfo.ExceptionDate = _reportInfo.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
-			_reportInfo.RegionInfo = Application.CurrentCulture.DisplayName;
-
-			_reportInfo.AppName = string.IsNullOrEmpty(_reportInfo.AppName) ? Application.ProductName : _reportInfo.AppName;
-			_reportInfo.AppVersion = string.IsNullOrEmpty(_reportInfo.AppVersion) ? GetAppVersion() : _reportInfo.AppVersion;
 			
 			if (_reportInfo.AppAssembly == null)
 				_reportInfo.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
@@ -60,24 +59,12 @@ namespace ExceptionReporting
 		/// <summary>
 		/// Generate the exception report
 		/// </summary>
-		/// <returns><see cref="ExceptionReport"/>object</returns>
-		public ExceptionReport Generate()
+		/// <returns><see cref="ReportModel"/>object</returns>
+		public ReportModel Generate()
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
 			var builder = new ReportBuilder(_reportInfo, sysInfoResults);
 			return builder.Build();
-		}
-
-		/// <summary>
-		/// Create an exception report
-		/// NB This method re-uses the same information retrieved from the system on subsequent calls
-		/// Create a new ExceptionReportGenerator if you need to refresh system information from the computer
-		/// </summary>
-		/// <returns></returns>
-		[Obsolete("Use Generate() instead")]
-		public ExceptionReport CreateExceptionReport()
-		{
-			return Generate();
 		}
 
 		internal IList<SysInfoResult> GetOrFetchSysInfoResults()

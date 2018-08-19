@@ -36,10 +36,7 @@ namespace ExceptionReporting.MVP.Views
 		private void PopulateReportInfo(ExceptionReportInfo reportInfo)
 		{
 			urlEmail.Text = reportInfo.ContactEmail;
-			txtFax.Text = reportInfo.Fax;
 			lblContactMessageTop.Text = reportInfo.ContactMessageTop;
-			txtPhone.Text = reportInfo.Phone;
-			urlWeb.Text = reportInfo.WebUrl;
 			lblExplanation.Text = reportInfo.UserExplanationLabel;
 			ShowFullDetail = reportInfo.ShowFullDetail;
 			ToggleShowFullDetail();
@@ -131,7 +128,6 @@ namespace ExceptionReporting.MVP.Views
 			btnSimpleDetailToggle.Click += Detail_Click;
 			urlEmail.LinkClicked += EmailLink_Clicked;
 			btnSave.Click += Save_Click;
-			urlWeb.LinkClicked += UrlLink_Clicked;
 			KeyPreview = true;
 			KeyDown += ExceptionReportView_KeyDown;
 		}
@@ -387,11 +383,6 @@ namespace ExceptionReporting.MVP.Views
 			}
 		}
 
-		private void UrlLink_Clicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			_presenter.NavigateToWebsite();
-		}
-
 		private void EmailLink_Clicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			_presenter.SendContactEmail();
@@ -400,11 +391,6 @@ namespace ExceptionReporting.MVP.Views
 		public void ShowError(string message, Exception exception)
 		{
 			MessageBox.Show(message, "Error sending report", MessageBoxButtons.OK, MessageBoxIcon.Error); 
-		}
-
-		private void txtExceptionMessageLarge2_TextChanged(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

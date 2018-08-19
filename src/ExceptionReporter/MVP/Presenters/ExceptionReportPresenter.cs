@@ -146,14 +146,6 @@ namespace ExceptionReporting.MVP.Presenters
 			ShellExecute(string.Format("mailto:{0}", ReportInfo.ContactEmail));
 		}
 
-		/// <summary>
-		/// Navigate to the website configured
-		/// </summary>
-		public void NavigateToWebsite()
-		{
-			ShellExecute(ReportInfo.WebUrl);
-		}
-
 		private void ShellExecute(string executeString)
 		{
 			try

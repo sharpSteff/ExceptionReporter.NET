@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using ExceptionReporting.Core;
+using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
 using NUnit.Framework;
 

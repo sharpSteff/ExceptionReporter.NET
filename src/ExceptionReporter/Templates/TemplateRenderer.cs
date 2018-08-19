@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Text;
+using ExceptionReporting.Report;
 using HandlebarsDotNet;
 
 // ReSharper disable UnusedMember.Global
@@ -10,9 +11,9 @@ namespace ExceptionReporting.Templates
 {
 	public class TemplateRenderer
 	{
-		private readonly TemplateModel _model;
+		private readonly ReportModel _model;
 
-		public TemplateRenderer(TemplateModel model)
+		public TemplateRenderer(ReportModel model)
 		{
 			_model = model;
 		}

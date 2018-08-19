@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Mail;
 using System.Reflection;
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -112,6 +113,11 @@ namespace ExceptionReporting
 		/// Region information - set automatically
 		/// </summary>
 		public string RegionInfo { get; set; }
+		
+		/// <summary>
+		/// User Name - optional - not set automatically
+		/// </summary>
+		public string UserName { get; set; }
 
 		/// <summary>
 		/// Date/time of the exception being raised - set automatically
@@ -134,11 +140,6 @@ namespace ExceptionReporting
 		/// If not set, will default to <see cref="Assembly.GetEntryAssembly()"/> ?? <see cref="Assembly.GetCallingAssembly()"/>
 		/// </summary>
 		public Assembly AppAssembly { get; set; }
-
-		// user/company details to make available
-		public string WebUrl { get; set; }
-		public string Phone { get; set; }
-		public string Fax { get; set; }
 
 		/// <summary>
 		/// The company/owner of the running application.
