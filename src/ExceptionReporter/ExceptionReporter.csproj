@@ -34,7 +34,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -72,8 +72,8 @@
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Handlebars, Version=1.9.5.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661">
-      <HintPath>..\..\packages\Handlebars.Net.1.9.5\lib\net452\Handlebars.dll</HintPath>
+    <Reference Include="Handlebars, Version=1.8.1.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661">
+      <HintPath>..\..\packages\Handlebars.Net.1.9.0\lib\net40\Handlebars.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

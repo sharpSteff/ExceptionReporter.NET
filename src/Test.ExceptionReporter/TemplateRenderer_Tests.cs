@@ -48,6 +48,7 @@ namespace ExceptionReporting.Tests
 			Assert.That(result, Does.Contain(string.Format("User Explanation: {0}", UserExplanation)));
 			Assert.That(result, Does.Contain(string.Format("{0}, Version={1}", AssemblyName, AssemblyVersion)));
 			Assert.That(result, Does.Contain(string.Format("Date: {0}", DateTime.Now.ToShortDateString())));
+			Assert.That(result, Does.Contain(string.Format("Time: {0}", DateTime.Now.ToShortTimeString())));
 		}
 		
 		[Test]

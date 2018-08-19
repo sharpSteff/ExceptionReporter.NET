@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
+using System.Text;
 using HandlebarsDotNet;
 
 // ReSharper disable UnusedMember.Global
@@ -32,7 +32,7 @@ namespace ExceptionReporting.Templates
 
 			using (var stream = assembly.GetManifestResourceStream(resource))
 			{
-				using (var reader = new StreamReader(stream))
+				using (var reader = new StreamReader(stream, Encoding.UTF8))
 				{
 					var template = reader.ReadToEnd();
 					return template;
