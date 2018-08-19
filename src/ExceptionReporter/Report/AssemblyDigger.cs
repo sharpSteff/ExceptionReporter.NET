@@ -4,28 +4,33 @@ using System.Reflection;
 
 namespace ExceptionReporting.Report
 {
+	internal interface IAssemblyDigger
+	{
+		IEnumerable<AssemblyRef> GetAssemblyRefs();
+	}
+
 	/// <summary>
-	/// Used to find and do things with referenced assemblies
+	/// Used to find referenced assemblies
 	/// </summary>
-	public class AssemblyDigger
+	internal class AssemblyDigger : IAssemblyDigger
 	{
 		private readonly Assembly _assembly;
 
-		///<summary>Initialise with assembly</summary>
+		///<summary>Initialise with root/main assembly</summary>
 		public AssemblyDigger(Assembly assembly)
 		{
 			_assembly = assembly;
 		}
 
-		/// <summary> Finds all assemblies referenced and return a string </summary>
-		/// <returns>line-delimited string of referenced assemblies</returns>
-		public IEnumerable<AssemblyRef> AssemblyRefs()
+		/// <summary> returns all referenced assemblies and returns a custom array used in <see cref="ReportModel"/></summary>
+		public IEnumerable<AssemblyRef> GetAssemblyRefs()
 		{
-			return _assembly.GetReferencedAssemblies().Select(a => new AssemblyRef
-			{
-				Name = a.Name,
-				Version = a.Version.ToString()
-			});
+			return from a in _assembly.GetReferencedAssemblies()
+				select new AssemblyRef
+				{
+					Name = a.Name,
+					Version = a.Version.ToString()
+				};
 		}
 	}
 }

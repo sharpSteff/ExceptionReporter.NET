@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ExceptionReporting.SystemInfo;
 
 namespace ExceptionReporting.Report
@@ -6,12 +5,17 @@ namespace ExceptionReporting.Report
 	internal class ReportBuilder
 	{
 		private readonly ExceptionReportInfo _info;
-		private readonly IEnumerable<SysInfoResult> _sysInfoResults;
+		private readonly IAssemblyDigger _assemblyDigger;
+		private readonly IStackTraceMaker _stackTraceMaker;
+		private readonly ISysInfoResultMapper _sysInfoMapper;
 
-		public ReportBuilder(ExceptionReportInfo info, IEnumerable<SysInfoResult> sysInfoResults)
+		public ReportBuilder(ExceptionReportInfo info,
+			IAssemblyDigger assemblyDigger, IStackTraceMaker stackTraceMaker, ISysInfoResultMapper sysInfoMapper)
 		{
 			_info = info;
-			_sysInfoResults = sysInfoResults;
+			_assemblyDigger = assemblyDigger;
+			_stackTraceMaker = stackTraceMaker;
+			_sysInfoMapper = sysInfoMapper;
 		}
 		
 		public ReportModel Build()
@@ -24,15 +28,15 @@ namespace ExceptionReporting.Report
 					Version= _info.AppVersion,
 					Region = _info.RegionInfo,
 					User = _info.UserName,
-					AssemblyRefs = new AssemblyDigger(this._info.AppAssembly).AssemblyRefs()
+					AssemblyRefs = _assemblyDigger.GetAssemblyRefs()
 				},
-				SystemInfo = SysInfoResultMapper.CreateStringList(_sysInfoResults),
+				SystemInfo = _sysInfoMapper.CreateTreeString(),
 				Error = new Error
 				{
 					Exception = _info.MainException,
 					Explanation = _info.UserExplanation,
 					When = _info.ExceptionDate,
-					FullStackTrace = new StackTraceMaker(_info.Exceptions).FullStackTrace()
+					FullStackTrace = _stackTraceMaker.FullStackTrace()
 				}
 			};
 		}

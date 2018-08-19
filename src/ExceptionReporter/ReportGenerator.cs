@@ -7,7 +7,6 @@ using System.Collections.Generic;
 //using System.Deployment.Application;
 using System.Reflection;
 using System.Windows.Forms;
-using ExceptionReporting.Core;
 using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
 
@@ -23,7 +22,7 @@ namespace ExceptionReporting
 	/// </summary>
 	public class ReportGenerator : Disposable
 	{
-		private readonly ExceptionReportInfo _reportInfo;
+		private readonly ExceptionReportInfo _info;
 		private readonly List<SysInfoResult> _sysInfoResults = new List<SysInfoResult>();
 
 		/// <summary>
@@ -34,14 +33,14 @@ namespace ExceptionReporting
 		public ReportGenerator(ExceptionReportInfo reportInfo)
 		{
 			// this is going to be a dev/learning mistake, so let them now fast and hard
-			_reportInfo = reportInfo ?? throw new ReportGeneratorException("reportInfo cannot be null");
+			_info = reportInfo ?? throw new ReportGeneratorException("reportInfo cannot be null");
 			
-			_reportInfo.AppName = string.IsNullOrEmpty(_reportInfo.AppName) ? Application.ProductName : string.Empty;
-			_reportInfo.AppVersion = string.IsNullOrEmpty(_reportInfo.AppVersion) ? GetAppVersion() : string.Empty;
-			_reportInfo.ExceptionDate = _reportInfo.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
+			_info.AppName = string.IsNullOrEmpty(_info.AppName) ? Application.ProductName : string.Empty;
+			_info.AppVersion = string.IsNullOrEmpty(_info.AppVersion) ? GetAppVersion() : string.Empty;
+			_info.ExceptionDate = _info.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
 			
-			if (_reportInfo.AppAssembly == null)
-				_reportInfo.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+			if (_info.AppAssembly == null)
+				_info.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 		}
 
 //		private string GetAppVersion()
@@ -63,11 +62,16 @@ namespace ExceptionReporting
 		public ReportModel Generate()
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
-			var builder = new ReportBuilder(_reportInfo, sysInfoResults);
+			
+			var builder = new ReportBuilder(_info,  
+				new AssemblyDigger(_info.AppAssembly), 
+				new StackTraceMaker(_info.Exceptions),
+				new SysInfoResultMapper(sysInfoResults));
+			
 			return builder.Build();
 		}
 
-		internal IList<SysInfoResult> GetOrFetchSysInfoResults()
+		internal IEnumerable<SysInfoResult> GetOrFetchSysInfoResults()
 		{
 			if (ExceptionReporter.IsRunningMono()) return new List<SysInfoResult>();
 			if (_sysInfoResults.Count == 0)

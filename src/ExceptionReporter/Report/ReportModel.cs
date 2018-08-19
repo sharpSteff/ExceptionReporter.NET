@@ -11,6 +11,9 @@ using System.Globalization;
 
 namespace ExceptionReporting.Report
 {
+	/// <summary>
+	/// The model/object passed to report templates
+	/// </summary>
 	public class ReportModel
 	{
 		public App App { get; set; }
@@ -29,14 +32,16 @@ namespace ExceptionReporting.Report
 
 	public class Error
 	{
+		// required variables
 		public Exception Exception { get; set; }
 		
 		public DateTime When { get; set; } = DateTime.Now;
-
+		
 		public string FullStackTrace { get; set; }
 		
 		public string Explanation { get; set; }
 		
+		// known variables
 		public string Message { get { return Exception.Message; } }
 		
 		public string Date { get { return When.ToShortDateString(); } }

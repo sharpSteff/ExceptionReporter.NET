@@ -32,26 +32,22 @@ namespace ExceptionReporting.Tests
 			var report = _reportGenerator.Generate();
 			var reportString = report.ToString();
 
-			Assert.That(reportString, Does.StartWith("-"));
 			Assert.That(reportString, Does.Contain("Application:"));
+			Assert.That(reportString, Does.Contain("Version:"));
 			Assert.That(reportString, Does.Contain("TotalPhysicalMemory ="));
-		}
-
-		[Test]
-		public void Can_Create_Report_With_Same_Result_If_Called_Twice()
-		{
-			var report1 = _reportGenerator.Generate();
-			var report2 = _reportGenerator.Generate();
-
-			Assert.That(report1, Is.EqualTo(report2));
 		}
 
 		[Test]
 		public void Can_Create_Report_With_Local_Datetime()
 		{
-			var config = new ExceptionReportInfo { ExceptionDateKind = DateTimeKind.Local, MainException = new Exception() };
-			var report = new ReportGenerator(config);
-			Assert.That(config.ExceptionDate.Kind == DateTimeKind.Local);
+			var reportInfo = new ExceptionReportInfo
+			{
+				ExceptionDateKind = DateTimeKind.Local, 
+				MainException = new Exception()
+			};
+			// ReSharper disable once ObjectCreationAsStatement
+			new ReportGenerator(reportInfo);
+			Assert.That(reportInfo.ExceptionDate.Kind, Is.EqualTo(DateTimeKind.Local));
 		}
 	}
 }

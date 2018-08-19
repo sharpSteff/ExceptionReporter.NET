@@ -4,7 +4,12 @@ using System.Text;
 
 namespace ExceptionReporting.Report
 {
-	internal class StackTraceMaker
+	internal interface IStackTraceMaker
+	{
+		string FullStackTrace();
+	}
+
+	internal class StackTraceMaker : IStackTraceMaker
 	{
 		private readonly IList<Exception> _exceptions;
 

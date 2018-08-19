@@ -71,7 +71,8 @@ namespace ExceptionReporting.Tests
 			var result = renderer.Render();
 			Assert.That(result, Does.Contain(string.Format("Application: {0}", TestApp)));
 			Assert.That(result, Does.Contain(string.Format("Version:     {0}", Version)));
-			Assert.That(result, Does.Not.Contain("User Explanation:"));		// the whole section is not shown  
+			Assert.That(result, Does.Not.Contain("User Explanation:"));		// whole section not shown  
+			Assert.That(result, Does.Not.Contain("User:"));								// whole section not shown  
 		}
 	}
 }
