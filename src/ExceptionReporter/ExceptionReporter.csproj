@@ -137,7 +137,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReportGenerator.cs" />
-    <Compile Include="Templates\ReportModel.cs" />
+    <Compile Include="Templates\TemplateModel.cs" />
     <Compile Include="Templates\TemplateFormat.cs" />
     <Compile Include="Templates\TemplateRenderer.cs" />
     <Compile Include="SystemInfo\SysInfoQueries.cs" />
@@ -168,8 +168,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Templates\ReportTemplate.html" />
-    <EmbeddedResource Include="Templates\ReportTemplate.md" />
-    <EmbeddedResource Include="Templates\ReportTemplate.txt" />
+    <EmbeddedResource Include="Templates\ReportTemplate.markdown" />
+    <EmbeddedResource Include="Templates\ReportTemplate.text" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

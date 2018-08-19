@@ -7,39 +7,76 @@ namespace ExceptionReporting.Tests
 {
 	public class TemplateRenderer_Tests
 	{
+		private const string TestApp = "TestApp";
+		private const string Version = "4.0.1";
+		private const string User = "Bob";
+		private const string AssemblyName = "MyAssembly";
+		private const string AssemblyVersion = "1.2.3";
+		private const string UserExplanation = "crashed suddenly";
+
 		[Test]
-		public void Can_Render_Text_Template()
+		public void Can_Render_Text_Template_Baseline_1_Of_Everything()
 		{
-			var renderer = new TemplateRenderer(new ReportModel
+			var renderer = new TemplateRenderer(new TemplateModel
 			{
-				Exception = new Error
+				Error = new Error
 				{
 					Exception = new TestException(),
-					When = DateTime.Today
+					Explanation = UserExplanation
 				},
 				App = new App
 				{
-					Name = "TestApp",
-					User = "Bob",
-					Version = "4.0.1",
-					Assemblies = new List<Assembly>
+					Name = TestApp,
+					User = User,
+					Version = Version,
+					Assemblies = new List<AssemblyRef>
 					{
-						new Assembly
+						new AssemblyRef
 						{
-							Name = "Assembly 1",
-							Version = "1.2.3"
+							Name = AssemblyName,
+							Version = AssemblyVersion
 						}
 					}
 				}
 			});
+
 			var result = renderer.Render();
-			Assert.That(result.Contains("Message: Test Exception"));
+			Assert.That(result, Does.Contain(string.Format("Application: {0}", TestApp)));
+			Assert.That(result, Does.Contain(string.Format("Version:     {0}", Version)));
+			Assert.That(result, Does.Contain(string.Format("User:        {0}", User)));
+			Assert.That(result, Does.Contain(string.Format("Message: {0}", TestException.ErrorMessage)));
+			Assert.That(result, Does.Contain(string.Format("User Explanation: {0}", UserExplanation)));
+			Assert.That(result, Does.Contain(string.Format("{0}, Version={1}", AssemblyName, AssemblyVersion)));
+			Assert.That(result, Does.Contain(string.Format("Date: {0}", DateTime.Now.ToShortDateString())));
 		}
+		
+		[Test]
+		public void Can_Render_Text_Template_Without_Sections()
+		{
+			var renderer = new TemplateRenderer(new TemplateModel
+			{
+				Error = new Error
+				{
+					Exception = new TestException()
+				},
+				App = new App
+				{
+					Name = TestApp,
+					Version = Version
+				}
+			});
+
+			var result = renderer.Render();
+			Assert.That(result, Does.Not.Contain("User Explanation:"));		// the whole section is not shown  
+		}
+
 	}
 }
 
 public class TestException : Exception
 {
-	public TestException() : base("Test Exception")
+	public const string ErrorMessage = "NullRef";
+
+	public TestException() : base(ErrorMessage)
 	{ }
 }

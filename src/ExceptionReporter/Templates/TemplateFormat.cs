@@ -3,7 +3,7 @@
 namespace ExceptionReporting.Templates
 {
 	/// <summary>
-	/// 
+	/// Output format of the report
 	/// </summary>
 	public enum TemplateFormat
 	{
@@ -12,6 +12,6 @@ namespace ExceptionReporting.Templates
 		/// <summary> </summary>
 		Html = 1,
 		/// <summary> </summary>
-		Markdown = 3
+		Markdown = 2
 	}
 }

@@ -5,25 +5,27 @@
 Application: {{App.Name}}
 Version:     {{App.Version}}
 Region:      {{App.Region}}
-Machine:     {{App.Machine}}
 User:        {{App.User}}
-Date: {{Exception.Date}}
-Time: {{Exception.Time}}
- 
-{{#Exception.Explanation}}
-User Explanation:  {{Exception.Explanation}}
-{{/Exception.Explanation}}  
+Date: {{Error.Date}}
+Time: {{Error.Time}}
+{{#if Error.Explanation}}
+User Explanation: {{Error.Explanation}}
+{{/if}}
 
-Message: {{Exception.Message}}
+Message: {{Error.Message}}
  
 [Strack Traces] 
 
-  {{Exception.StackTrace}} 
+  {{Error.StackTrace}} 
+ 
+{{#if Error.InnerException}}
+  Error.InnerException
+{{/if}}
  
 [Assembly Info]
  
   {{#App.Assemblies}}
-    {{Name}} - {{Version}}
+    {{Name}}, Version={{Version}}
   {{/App.Assemblies}}
 
 
