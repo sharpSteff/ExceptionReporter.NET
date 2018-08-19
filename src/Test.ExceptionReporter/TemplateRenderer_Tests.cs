@@ -53,7 +53,7 @@ namespace ExceptionReporting.Tests
 		}
 		
 		[Test]
-		public void Can_Render_Text_Template_Without_Sections()
+		public void Can_Render_Text_Template_Without_Some_Sections()
 		{
 			var renderer = new TemplateRenderer(new ReportModel
 			{
@@ -77,7 +77,7 @@ namespace ExceptionReporting.Tests
 	}
 }
 
-public class TestException : Exception
+internal class TestException : Exception
 {
 	public const string ErrorMessage = "NullRef";
 
