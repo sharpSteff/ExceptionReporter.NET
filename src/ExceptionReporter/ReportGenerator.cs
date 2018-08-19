@@ -59,7 +59,7 @@ namespace ExceptionReporting
 		/// Generate the exception report
 		/// </summary>
 		/// <returns><see cref="ReportModel"/>object</returns>
-		public ReportModel Generate()
+		public string Generate()
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
 			
@@ -68,7 +68,7 @@ namespace ExceptionReporting
 				new StackTraceMaker(_info.Exceptions),
 				new SysInfoResultMapper(sysInfoResults));
 			
-			return builder.Build();
+			return builder.Report();
 		}
 
 		internal IEnumerable<SysInfoResult> GetOrFetchSysInfoResults()

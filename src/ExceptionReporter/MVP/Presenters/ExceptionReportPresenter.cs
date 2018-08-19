@@ -48,7 +48,7 @@ namespace ExceptionReporting.MVP.Presenters
 		private string CreateReport()
 		{
 			ReportInfo.UserExplanation = View.UserExplanation;
-			return _reportGenerator.Generate().ToString();
+			return _reportGenerator.Generate();
 		}
 
 		/// <summary>

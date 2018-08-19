@@ -20,7 +20,7 @@ namespace ExceptionReporting.Tests
 			info.AppVersion = "1.0";
 			info.MainException = new TestException();
 
-			var model = reportBuilder.Build();
+			var model = reportBuilder.Model();
 			
 			Assert.That(model.App.Name, Is.EqualTo("TestApp"));
 			Assert.That(model.App.Version, Is.EqualTo("1.0"));
@@ -44,7 +44,7 @@ namespace ExceptionReporting.Tests
 			moqer.GetMock<ISysInfoResultMapper>().Setup(si => si.CreateTreeString()).Returns("fake tree");
 			moqer.GetMock<IStackTraceMaker>().Setup(st => st.FullStackTrace()).Returns("fake stack trace");
 			
-			var model = reportBuilder.Build();
+			var model = reportBuilder.Model();
 			
 			Assert.That(model.App.AssemblyRefs.First().Name, Is.EqualTo("Assembly1"));
 			Assert.That(model.SystemInfo, Is.EqualTo("fake tree"));

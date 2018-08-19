@@ -1,4 +1,5 @@
 using ExceptionReporting.SystemInfo;
+using ExceptionReporting.Templates;
 
 namespace ExceptionReporting.Report
 {
@@ -17,8 +18,14 @@ namespace ExceptionReporting.Report
 			_stackTraceMaker = stackTraceMaker;
 			_sysInfoMapper = sysInfoMapper;
 		}
+
+		public string Report(TemplateFormat format = TemplateFormat.Text)
+		{
+			var renderer = new TemplateRenderer(this.Model());
+			return renderer.Render(format);
+		}
 		
-		public ReportModel Build()
+		public ReportModel Model()
 		{
 			return new ReportModel
 			{

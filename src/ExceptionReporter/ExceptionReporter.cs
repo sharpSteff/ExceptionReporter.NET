@@ -88,9 +88,9 @@ namespace ExceptionReporting
 		{
 			_reportInfo.SetExceptions(exceptions);
 			
-			var generator = new ReportGenerator(_reportInfo);
+			var report = new ReportGenerator(_reportInfo);
 			var sender = new SenderFactory(_reportInfo, sendEvent ?? new SilentSendEvent()).Get();
-			sender.Send(generator.Generate().ToString());
+			sender.Send(report.Generate());
 		}
 
 		/// <summary>
