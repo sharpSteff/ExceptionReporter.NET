@@ -6,7 +6,7 @@ namespace ExceptionReporting.SystemInfo
 {
 	internal interface ISysInfoResultMapper
 	{
-		string CreateTreeString();
+		string SysInfoString();
 	}
 
 	///<summary>
@@ -24,7 +24,7 @@ namespace ExceptionReporting.SystemInfo
 		/// <summary>
 		/// create a string representation of a list of SysInfoResults, customised specifically (eg 2-level deep)
 		/// </summary>
-		public string CreateTreeString()
+		public string SysInfoString()
 		{
 			var sb = new StringBuilder();
 

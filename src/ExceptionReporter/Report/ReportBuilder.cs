@@ -11,7 +11,9 @@ namespace ExceptionReporting.Report
 		private readonly ISysInfoResultMapper _sysInfoMapper;
 
 		public ReportBuilder(ExceptionReportInfo info,
-			IAssemblyDigger assemblyDigger, IStackTraceMaker stackTraceMaker, ISysInfoResultMapper sysInfoMapper)
+			IAssemblyDigger assemblyDigger, 
+			IStackTraceMaker stackTraceMaker, 
+			ISysInfoResultMapper sysInfoMapper)
 		{
 			_info = info;
 			_assemblyDigger = assemblyDigger;
@@ -37,7 +39,7 @@ namespace ExceptionReporting.Report
 					User = _info.UserName,
 					AssemblyRefs = _assemblyDigger.GetAssemblyRefs()
 				},
-				SystemInfo = _sysInfoMapper.CreateTreeString(),
+				SystemInfo = _sysInfoMapper.SysInfoString(),
 				Error = new Error
 				{
 					Exception = _info.MainException,

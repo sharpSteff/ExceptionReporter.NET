@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using ExceptionReporting.Report;
 using HandlebarsDotNet;
@@ -26,9 +27,9 @@ namespace ExceptionReporting.Templates
 			return report;
 		}
 
-		private static string GetTemplate(TemplateFormat format)
+		private string GetTemplate(TemplateFormat format)
 		{
-			var resource = string.Format("ExceptionReporting.Templates.ReportTemplate.{0}", format.ToString().ToLower());
+			var resource = string.Format("{0}.ReportTemplate.{1}", this.GetType().Namespace, format.ToString().ToLower());
 			var assembly = Assembly.GetExecutingAssembly();
 
 			using (var stream = assembly.GetManifestResourceStream(resource))

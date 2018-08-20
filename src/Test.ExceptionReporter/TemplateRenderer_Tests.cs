@@ -42,6 +42,7 @@ namespace ExceptionReporting.Tests
 			});
 
 			var result = renderer.Render();
+			
 			Assert.That(result, Does.Contain(string.Format("Application: {0}", TestApp)));
 			Assert.That(result, Does.Contain(string.Format("Version:     {0}", Version)));
 			Assert.That(result, Does.Contain(string.Format("User:        {0}", User)));
@@ -69,10 +70,34 @@ namespace ExceptionReporting.Tests
 			});
 
 			var result = renderer.Render();
+			
 			Assert.That(result, Does.Contain(string.Format("Application: {0}", TestApp)));
 			Assert.That(result, Does.Contain(string.Format("Version:     {0}", Version)));
 			Assert.That(result, Does.Not.Contain("User Explanation:"));		// whole section not shown  
 			Assert.That(result, Does.Not.Contain("User:"));								// whole section not shown  
+		}
+
+		[Test]
+		public void Can_Render_Markdown_Template()
+		{
+			var renderer = new TemplateRenderer(new ReportModel
+			{
+				Error = new Error
+				{
+					Exception = new TestException()
+				},
+				App = new App
+				{
+					Name = TestApp,
+					Version = Version
+				}
+			});
+
+			var result = renderer.Render(TemplateFormat.Markdown);
+			
+			Assert.That(result, Does.Contain("##Exception Report"));
+			Assert.That(result, Does.Contain(string.Format("**Application**: {0}", TestApp)));
+			Assert.That(result, Does.Contain(string.Format("**Version**:     {0}", Version)));
 		}
 	}
 }

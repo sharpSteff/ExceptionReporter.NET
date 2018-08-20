@@ -1,38 +1,33 @@
-====================
+========================================
 
 [General Info]
- 
-Application: {{App.Name}}
-Version:     {{App.Version}}
-Region:      {{App.Region}}
+
+  Application: {{App.Name}}
+  Version:     {{App.Version}}
+  Region:      {{App.Region}}
 {{#if App.User}}
-User:        {{App.User}}
+  User:        {{App.User}}
 {{/if}}
-Date: {{Error.Date}}
-Time: {{Error.Time}}
+  Date: {{Error.Date}}
+  Time: {{Error.Time}}
 {{#if Error.Explanation}}
-User Explanation: {{Error.Explanation}}
+  User Explanation: {{Error.Explanation}}
 {{/if}}
 
-Message: {{Error.Message}}
+Error Message: {{Error.Message}}
  
-[Strack Traces] 
-
+[Stack Traces]
+ 
   {{Error.FullStackTrace}} 
  
-{{#if Error.InnerException}}
-  Error.InnerException
-{{/if}}
+[Assembly References]
  
-[Assembly Info]
- 
-  {{#App.AssemblyRefs}}
-    {{Name}}, Version={{Version}}
-  {{/App.AssemblyRefs}}
-
+{{#App.AssemblyRefs}}
+  {{Name}}, Version={{Version}}
+{{/App.AssemblyRefs}}
 
 [System Info]
  
   {{SystemInfo}}
  
-====================
+========================================

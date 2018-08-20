@@ -13,6 +13,7 @@ namespace ExceptionReporting.Report
 {
 	/// <summary>
 	/// The model/object passed to report templates
+	/// Any defaults set here are overriden if called internally ie by <see cref="ReportGenerator"/>
 	/// </summary>
 	public class ReportModel
 	{
@@ -26,7 +27,10 @@ namespace ExceptionReporting.Report
 		public string Name { get; set; }
 		public string Version { get; set; }
 		public string Region { get; set; } = CultureInfo.CurrentCulture.DisplayName;
+		
+		/// <summary> optional - will not show field if null/empty </summary>
 		public string User { get; set; }
+		
 		public IEnumerable<AssemblyRef> AssemblyRefs{ get; set; }
 	}
 

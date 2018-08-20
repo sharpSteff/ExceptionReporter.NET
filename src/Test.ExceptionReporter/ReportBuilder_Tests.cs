@@ -41,7 +41,7 @@ namespace ExceptionReporting.Tests
 					Version = "2.1"
 				}
 			});
-			moqer.GetMock<ISysInfoResultMapper>().Setup(si => si.CreateTreeString()).Returns("fake tree");
+			moqer.GetMock<ISysInfoResultMapper>().Setup(si => si.SysInfoString()).Returns("fake tree");
 			moqer.GetMock<IStackTraceMaker>().Setup(st => st.FullStackTrace()).Returns("fake stack trace");
 			
 			var model = reportBuilder.Model();

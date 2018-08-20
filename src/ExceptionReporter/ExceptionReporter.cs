@@ -27,9 +27,10 @@ namespace ExceptionReporting
 		/// </summary>
 		public ExceptionReporter()
 		{
-			var callingAssembly = Assembly.GetCallingAssembly();
-
-			_reportInfo = new ExceptionReportInfo { AppAssembly = callingAssembly };
+			_reportInfo = new ExceptionReportInfo
+			{
+				AppAssembly = Assembly.GetCallingAssembly()
+			};
 		}
 
 		// One issue we have with Config property here is that we store the exception and other info on it as well
@@ -88,8 +89,8 @@ namespace ExceptionReporting
 		{
 			_reportInfo.SetExceptions(exceptions);
 			
-			var report = new ReportGenerator(_reportInfo);
 			var sender = new SenderFactory(_reportInfo, sendEvent ?? new SilentSendEvent()).Get();
+			var report = new ReportGenerator(_reportInfo);
 			sender.Send(report.Generate());
 		}
 
