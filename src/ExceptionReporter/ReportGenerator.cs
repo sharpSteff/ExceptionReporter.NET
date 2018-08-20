@@ -58,17 +58,21 @@ namespace ExceptionReporting
 		/// <summary>
 		/// Generate the exception report
 		/// </summary>
+		/// <remarks>
+		/// Generate doesn't do a lot beside feed the builder - this is just to keep the builder free of
+		/// too many concrete dependencies
+		/// </remarks>
 		/// <returns><see cref="ReportModel"/>object</returns>
 		public string Generate()
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
 			
-			var builder = new ReportBuilder(_info,  
+			var build = new ReportBuilder(_info,  
 				new AssemblyDigger(_info.AppAssembly), 
 				new StackTraceMaker(_info.Exceptions),
 				new SysInfoResultMapper(sysInfoResults));
 			
-			return builder.Report();
+			return build.Report();
 		}
 
 		internal IEnumerable<SysInfoResult> GetOrFetchSysInfoResults()

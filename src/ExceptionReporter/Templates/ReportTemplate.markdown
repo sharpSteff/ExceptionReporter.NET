@@ -1,15 +1,26 @@
------------------------------
-[General Info]
+##Exception Report
+
+**Application**: {{App.Name}}  
+**Version**:     {{App.Version}}  
+**Region**:      {{App.Region}}    
+{{#if App.User}}
+**User**:        {{App.User}}  
+{{/if}}    
+**Date**: {{Error.Date}}  
+**Time**: {{Error.Time}}  
+{{#if Error.Explanation}}
+**User Explanation**: {{Error.Explanation}}  
+{{/if}}
+
+**Error Message**: {{Error.Message}}
  
-**Application**: {{App.Name}}
-**Version**:     {{App.Version}}
-**Region**:      {{App.Region}}
-**Machine**:     {{App.Machine}}
-**User**:        {{App.User}}
-**Date**: {{Exception.Date}}
-**Time**: {{Exception.Time}}
+###Stack Traces
+{{Error.FullStackTrace}} 
  
-###User Explanation:
- 
-### {{Exception.Explanation}}
------------------------------
+###Assembly References
+{{#App.AssemblyRefs}}
+- {{Name}}, Version={{Version}}  
+{{/App.AssemblyRefs}}
+
+###System Info  
+{{SystemInfo}}
