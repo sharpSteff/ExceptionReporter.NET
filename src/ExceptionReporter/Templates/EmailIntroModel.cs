@@ -1,4 +1,6 @@
-﻿namespace ExceptionReporting.Templates
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace ExceptionReporting.Templates
 {
 	internal class EmailIntroModel
 	{

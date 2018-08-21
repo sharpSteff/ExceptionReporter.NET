@@ -85,7 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Disposable.cs" />
     <Compile Include="Core\ExceptionReporterExtensions.cs" />
     <Compile Include="Core\ScreenshotTaker.cs" />
     <Compile Include="ExceptionReporter.cs" />

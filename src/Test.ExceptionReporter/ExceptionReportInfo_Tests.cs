@@ -16,12 +16,6 @@ namespace ExceptionReporting.Tests
 			_exception = new Exception("test");
 		}
 
-		[TearDown]
-		public void TearDown()
-		{
-			_info.Dispose();
-		}
-
 		[Test]
 		public void Can_Get_And_Set_1_Exception_Without_Knowing_There_Can_Be_Many()
 		{

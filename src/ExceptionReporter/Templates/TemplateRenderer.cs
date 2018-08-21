@@ -1,9 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using ExceptionReporting.Core;
-using ExceptionReporting.Report;
 using HandlebarsDotNet;
 
 // ReSharper disable UnusedMember.Global
@@ -13,32 +10,32 @@ namespace ExceptionReporting.Templates
 {
 	internal class TemplateRenderer
 	{	
-		private readonly object _introModel;		// model object is kept generic but we force a kind of typing via constructors
-		private readonly string _templateName;
+		private readonly object _model;		// model object is kept generic but we force a kind of typing via constructors
+		private readonly string _name;
 
-		public TemplateRenderer(EmailIntroModel introModel)
+		public TemplateRenderer(EmailIntroModel model)
 		{
-			_introModel = introModel;
-			_templateName = "EmailIntroTemplate";
+			_model = model;
+			_name = "EmailIntroTemplate";
 		}
 
-		public TemplateRenderer(ReportModel introModel)
+		public TemplateRenderer(ReportModel model)
 		{
-			_introModel = introModel;
-			_templateName = "ReportTemplate";
+			_model = model;
+			_name = "ReportTemplate";
 		}
 
 		public string Render(TemplateFormat format = TemplateFormat.Text)
 		{
 			var template = GetTemplate(format);
 			var compiledTemplate = Handlebars.Compile(template);
-			var report = compiledTemplate(_introModel);
+			var report = compiledTemplate(_model);
 			return report;
 		}
 
 		private string GetTemplate(TemplateFormat format)
 		{
-			var resource = string.Format("{0}.{1}.{2}", this.GetType().Namespace, _templateName, format.ToString().ToLower());
+			var resource = string.Format("{0}.{1}.{2}", this.GetType().Namespace, _name, format.ToString().ToLower());
 			var assembly = Assembly.GetExecutingAssembly();
 
 			using (var stream = assembly.GetManifestResourceStream(resource))

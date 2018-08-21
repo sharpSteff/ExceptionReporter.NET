@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using ExceptionReporting.Core;
-using ExceptionReporting.Mail;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.SystemInfo;
@@ -121,7 +119,10 @@ namespace ExceptionReporting.MVP.Presenters
 
 		private string CreateEmailReport()
 		{
-			var template = new TemplateRenderer(new EmailIntroModel {ScreenshotTaken = ReportInfo.TakeScreenshot});
+			var template = new TemplateRenderer(new EmailIntroModel
+			{
+				ScreenshotTaken = ReportInfo.TakeScreenshot
+			});
 			var emailIntro = template.Render();
 			var report = CreateReport();
 
@@ -175,14 +176,6 @@ namespace ExceptionReporting.MVP.Presenters
 			{
 				View.SetProgressCompleteState();
 			}
-		}
-
-		/// <summary>
-		/// Close/cleanup
-		/// </summary>
-		public void Close()
-		{
-			_reportGenerator.Dispose();
 		}
 	}
 }

@@ -104,9 +104,6 @@
     <Compile Include="AssemblyDigger_Tests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Disposable_Tests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ReportBuilder_Tests.cs">
       <SubType>Code</SubType>
     </Compile>

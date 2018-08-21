@@ -323,12 +323,6 @@ namespace ExceptionReporting.MVP.Views
 			listviewAssemblies.Items.Add(listViewItem);
 		}
 
-		protected override void OnClosing(CancelEventArgs e)
-		{
-			_presenter.Close();
-			base.OnClosing(e);
-		}
-
 		private TreeNode CreateSysInfoTree()
 		{
 			var rootNode = new TreeNode("System");

@@ -21,7 +21,7 @@ namespace ExceptionReporting
 	/// ReportGenerator is the entry point to use 'ExceptionReporter.NET' to retrieve the report/data only.
 	/// ie if the user only requires the report info but has no need to use the show or send functionality available
 	/// </summary>
-	public class ReportGenerator : Disposable
+	public class ReportGenerator
 	{
 		private readonly ExceptionReportInfo _info;
 		private readonly List<SysInfoResult> _sysInfoResults = new List<SysInfoResult>();
@@ -34,7 +34,7 @@ namespace ExceptionReporting
 		public ReportGenerator(ExceptionReportInfo reportInfo)
 		{
 			// this is going to be a dev/learning mistake, so let them now fast and hard
-			_info = reportInfo ?? throw new ReportGeneratorException("reportInfo cannot be null");
+			_info = reportInfo ?? throw new ArgumentNullException("reportInfo cannot be null");
 			
 			_info.AppName = string.IsNullOrEmpty(_info.AppName) ? Application.ProductName : string.Empty;
 			_info.AppVersion = string.IsNullOrEmpty(_info.AppVersion) ? GetAppVersion() : string.Empty;
@@ -61,7 +61,7 @@ namespace ExceptionReporting
 		/// </summary>
 		/// <remarks>
 		/// Generate doesn't do a lot beside feed the builder - this is just to keep the builder free of
-		/// too many concrete dependencies
+		/// too many concrete (system-reliant) dependencies
 		/// </remarks>
 		/// <returns><see cref="ReportModel"/>object</returns>
 		public string Generate()
@@ -76,6 +76,9 @@ namespace ExceptionReporting
 			return build.Report();
 		}
 
+		/// <summary>
+		/// get system information and memoize
+		/// </summary>
 		internal IEnumerable<SysInfoResult> GetOrFetchSysInfoResults()
 		{
 			if (ExceptionReporter.IsRunningMono()) return new List<SysInfoResult>();
@@ -100,18 +103,9 @@ namespace ExceptionReporting
 				new[]
 				{
 					"TotalPhysicalMemory", "Manufacturer", "Model"
-				}),
+				})
 			};
 			return results;
 		}
-	}
-
-	/// <summary>
-	/// Exception report generator exception.
-	/// </summary>
-	public class ReportGeneratorException : Exception
-	{
-		public ReportGeneratorException(string message) : base(message)
-		{ }
 	}
 }

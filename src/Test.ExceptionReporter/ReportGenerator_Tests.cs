@@ -22,7 +22,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Deal_With_Null_In_Constructor()
 		{
-			Assert.Throws<ReportGeneratorException>(() => _reportGenerator = new ReportGenerator(null), "reportInfo cannot be null");
+			Assert.Throws<ArgumentNullException>(() => _reportGenerator = new ReportGenerator(null), "reportInfo cannot be null");
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace ExceptionReporting.Tests
 		{
 			if (ExceptionReporter.IsRunningMono()) return;
 			var report = _reportGenerator.Generate();
-			var reportString = report.ToString();
+			var reportString = report;
 
 			Assert.That(reportString, Does.Contain("Application:"));
 			Assert.That(reportString, Does.Contain("Version:"));

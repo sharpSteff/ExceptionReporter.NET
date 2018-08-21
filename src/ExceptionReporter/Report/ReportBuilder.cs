@@ -21,7 +21,7 @@ namespace ExceptionReporting.Report
 			_sysInfoMapper = sysInfoMapper;
 		}
 
-		public string Report(TemplateFormat format = TemplateFormat.Text)
+		public string Report()
 		{
 			var renderer = new TemplateRenderer(this.ReportModel());
 			return renderer.Render();

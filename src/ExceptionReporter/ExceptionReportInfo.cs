@@ -21,7 +21,7 @@ namespace ExceptionReporting
 	/// <summary>
 	/// A bag of configuration and data
 	/// </summary>
-	public class ExceptionReportInfo : Disposable
+	public class ExceptionReportInfo
 	{
 		readonly List<Exception> _exceptions = new List<Exception>();
 
@@ -32,7 +32,9 @@ namespace ExceptionReporting
 		/// </summary>
 		public Exception MainException
 		{
-			get { return _exceptions.Count > 0 ? _exceptions[0] : new ConfigurationErrorsException("ExceptionReporter given 0 exceptions"); }
+			get { return _exceptions.Count > 0 ? 
+				_exceptions[0] : 
+				new ConfigurationErrorsException("ExceptionReporter given 0 exceptions"); }
 			set
 			{
 				_exceptions.Clear();
