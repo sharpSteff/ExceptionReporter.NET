@@ -85,7 +85,7 @@ namespace ExceptionReporting.Tests
 			Assert.That(_info.Exceptions.Count, Is.EqualTo(1));
 		}
 		
-		[TestCase("test", ExpectedResult = "test.zip")]
+		[TestCase("test",     ExpectedResult = "test.zip")]
 		[TestCase("test.zip", ExpectedResult = "test.zip")]
 		public string Can_Determine_AttachmentFilename(string attachment)
 		{
@@ -93,9 +93,9 @@ namespace ExceptionReporting.Tests
 			return _info.AttachmentFilename;
 		}
 
-		[TestCase(ReportSendMethod.None, ExpectedResult = false)]
+		[TestCase(ReportSendMethod.None,       ExpectedResult = false)]
 		[TestCase(ReportSendMethod.SimpleMAPI, ExpectedResult = true)]
-		[TestCase(ReportSendMethod.SMTP, ExpectedResult = false)]
+		[TestCase(ReportSendMethod.SMTP,       ExpectedResult = false)]
 		[TestCase(ReportSendMethod.WebService, ExpectedResult = false)]
 		public bool Can_Determine_IsSimpleMAPI(ReportSendMethod method)
 		{
@@ -103,9 +103,9 @@ namespace ExceptionReporting.Tests
 			return _info.IsSimpleMAPI();
 		}
 		
-		[TestCase(ReportSendMethod.None, true, ExpectedResult = false)]
-		[TestCase(ReportSendMethod.SMTP, true, ExpectedResult = true)]
-		[TestCase(ReportSendMethod.SMTP, false, ExpectedResult = false)]
+		[TestCase(ReportSendMethod.None, true,       ExpectedResult = false)]
+		[TestCase(ReportSendMethod.SMTP, true,       ExpectedResult = true)]
+		[TestCase(ReportSendMethod.SMTP, false,      ExpectedResult = false)]
 		[TestCase(ReportSendMethod.SimpleMAPI, true, ExpectedResult = true)]
 		[TestCase(ReportSendMethod.WebService, true, ExpectedResult = true)]
 		public bool Can_Determine_ShowEmailButton(ReportSendMethod method, bool show)

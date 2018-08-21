@@ -297,18 +297,6 @@ namespace ExceptionReporting
 		{
 			return SendMethod == ReportSendMethod.SimpleMAPI;
 		}
-
-		[Obsolete("Replace 'ExceptionReportInfo.EmailMethod' with 'ReportSendMethod'")]
-		public enum EmailMethod
-		{
-			///<summary>Tries to launch the installed Email client on Windows (default) </summary>
-			SimpleMAPI,
-			///<summary>Sends Email via an SMTP server - requires other config (host/port etc) properties starting with 'Smtp'</summary>
-			SMTP
-		}
-		
-		[Obsolete("use 'SendMethod' property instead")]
-		public EmailMethod MailMethod { get; set; }
 	}
 	
 	/// <summary>

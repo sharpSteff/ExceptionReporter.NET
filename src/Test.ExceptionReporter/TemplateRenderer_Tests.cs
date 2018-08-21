@@ -95,7 +95,7 @@ namespace ExceptionReporting.Tests
 
 			var result = renderer.Render(TemplateFormat.Markdown);
 			
-			Assert.That(result, Does.Contain("##Exception Report"));
+			Assert.That(result, Does.Contain("#Exception Report"));
 			Assert.That(result, Does.Contain(string.Format("**Application**: {0}", TestApp)));
 			Assert.That(result, Does.Contain(string.Format("**Version**:     {0}", Version)));
 		}

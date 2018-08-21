@@ -1,4 +1,4 @@
-##Exception Report
+#Exception Report
 
 **Application**: {{App.Name}}  
 **Version**:     {{App.Version}}  
@@ -14,13 +14,13 @@
 
 **Error Message**: {{Error.Message}}
  
-###Stack Traces
+##Stack Traces
 {{Error.FullStackTrace}} 
  
-###Assembly References
+##Assembly References
 {{#App.AssemblyRefs}}
  - {{Name}}, Version={{Version}}  
 {{/App.AssemblyRefs}}
 
-###System Info  
+##System Info  
 {{SystemInfo}}

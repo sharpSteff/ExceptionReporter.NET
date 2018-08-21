@@ -3,18 +3,17 @@ using NUnit.Framework;
 
 namespace ExceptionReporting.Tests
 {
-	public class Extensions_Test
+	public class Extensions_Tests
 	{
-		[Test]
-		public void Can_Truncate_Over_Arg()
+		[TestCase("123",  4, ExpectedResult = "123")]
+		[TestCase("1234", 4, ExpectedResult = "1234")]
+		[TestCase("1234", 5, ExpectedResult = "1234")]
+		[TestCase("1234", 3, ExpectedResult = "123")]
+		[TestCase("", 3,     ExpectedResult = "")]
+		[TestCase(null, 3,   ExpectedResult = null)]
+		public string Can_Truncate(string test, int count)
 		{
-			Assert.That("123456789abc".Truncate(9), Is.EqualTo("123456789"));
-		}
-		
-		[Test]
-		public void Can_Not_Truncate_Under_Arg()
-		{
-			Assert.That("123".Truncate(4), Is.EqualTo("123"));
+			return test.Truncate(count);
 		}
 	}
 }
