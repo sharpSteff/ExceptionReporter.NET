@@ -2,7 +2,7 @@ namespace ExceptionReporting.Core
 {
 	/// <summary>
 	/// All extension methods for ExceptionReporter
-	/// It's important this class is internal/not public - else it will pollute the extensions available
+	/// It's important this class is internal/not public - else it will pollute the assembly consumer's extensions
 	/// </summary>
 	internal static class ExceptionReporterExtensions
 	{
@@ -12,7 +12,7 @@ namespace ExceptionReporting.Core
 		}
 
 		/// <summary>
-		/// Truncate the specified value and maxLength.
+		/// Truncate the specified value and length
 		/// </summary>
 		public static string Truncate(this string value, int maxLength)
 		{

@@ -52,20 +52,27 @@ namespace ExceptionReporting
 		/// <remarks>The <see cref="ExceptionReporter"/> will analyze the <see cref="Exception"/>s and 
 		/// create and show the report dialog.</remarks>
 		/// <param name="exceptions">The <see cref="Exception"/>s to show.</param>
-		public void Show(params Exception[] exceptions)
+		public bool Show(params Exception[] exceptions)
 		{
-			if (exceptions == null) return;		// silently ignore this mistake of passing null - user won't care
+			// silently ignore the mistake of passing null
+			if (exceptions == null || exceptions.Length >= 1 && exceptions[0] == null) return false;		
+			
+			bool status;
 
 			try
 			{
 				_reportInfo.SetExceptions(exceptions);
 				var view = new ExceptionReportView(_reportInfo);
 				view.ShowExceptionReport();
+				status = true;
 			}
 			catch (Exception internalException)
 			{
+				status = false;
 				MessageBox.Show(internalException.Message, "Failed trying to report an Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+
+			return status;
 		}
 
 		/// <summary>
