@@ -23,11 +23,11 @@ namespace ExceptionReporting.Report
 
 		public string Report(TemplateFormat format = TemplateFormat.Text)
 		{
-			var renderer = new TemplateRenderer(this.Model());
-			return renderer.Render(format);
+			var renderer = new TemplateRenderer(this.ReportModel());
+			return renderer.Render();
 		}
 		
-		public ReportModel Model()
+		public ReportModel ReportModel()
 		{
 			return new ReportModel
 			{

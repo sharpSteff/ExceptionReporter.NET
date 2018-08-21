@@ -4,11 +4,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Net.Mail;
 using System.Reflection;
-// ReSharper disable UnusedMember.Global
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -25,13 +26,13 @@ namespace ExceptionReporting
 		readonly List<Exception> _exceptions = new List<Exception>();
 
 		/// <summary>
-		/// The Main (for the most part the 'only') exception, which is the subject of this exception 'report'
+		/// The Main (usually the 'only') exception, which is the subject of this exception 'report'
 		/// Setting this property will clear any previously set exceptions
 		/// <remarks>If multiple top-level exceptions are required, use <see cref="SetExceptions(IEnumerable{Exception})"/> instead</remarks>
 		/// </summary>
 		public Exception MainException
 		{
-			get { return _exceptions.Count > 0 ? _exceptions[0] : null; }
+			get { return _exceptions.Count > 0 ? _exceptions[0] : new ConfigurationErrorsException("ExceptionReporter given 0 exceptions"); }
 			set
 			{
 				_exceptions.Clear();
@@ -60,7 +61,7 @@ namespace ExceptionReporting
 		/// <summary>
 		/// Override the Exception.Message property
 		/// ie a custom message to show in place of the Exception Message
-		/// NB this can also be set in the 1st parameter of <see cref="ExceptionReporter.Show(string, Exception[]))"/>
+		/// NB this can also be set in the 1st parameter of <see cref="ExceptionReporter.Show(string, Exception[])"/>
 		/// </summary>
 		public string CustomMessage { get; set; }
 
@@ -152,7 +153,6 @@ namespace ExceptionReporting
 		public bool ShowContactTab { get; set; } = false;
 		public bool ShowExceptionsTab { get; set; } = true;
 
-		// cater for mono, which can't access the windows api's to get SysInfo and Assemblies
 		private bool _showSysInfoTab;
 		public bool ShowSysInfoTab
 		{
@@ -269,6 +269,11 @@ namespace ExceptionReporting
 		/// Whether to show relevant icons on the buttons
 		/// </summary>
 		public bool ShowButtonIcons { get; set; } = true;
+
+		/// <summary>
+		/// Format of the final report (string)
+		/// </summary>
+		public TemplateFormat TemplateFormat { get; set; } = TemplateFormat.Text;
 
 		public ExceptionReportInfo()
 		{

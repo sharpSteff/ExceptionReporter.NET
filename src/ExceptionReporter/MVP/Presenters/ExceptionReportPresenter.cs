@@ -8,6 +8,7 @@ using ExceptionReporting.Mail;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.SystemInfo;
+using ExceptionReporting.Templates;
 
 namespace ExceptionReporting.MVP.Presenters
 {
@@ -120,14 +121,11 @@ namespace ExceptionReporting.MVP.Presenters
 
 		private string CreateEmailReport()
 		{
-			var emailTextBuilder = new EmailTextBuilder();
-			var emailIntroString = emailTextBuilder.CreateIntro(ReportInfo.TakeScreenshot);
-			var entireEmailText = new StringBuilder(emailIntroString);
-
+			var template = new TemplateRenderer(new EmailIntroModel {ScreenshotTaken = ReportInfo.TakeScreenshot});
+			var emailIntro = template.Render();
 			var report = CreateReport();
-			entireEmailText.Append(report);
 
-			return entireEmailText.ToString();
+			return emailIntro + report;
 		}
 
 		/// <summary>

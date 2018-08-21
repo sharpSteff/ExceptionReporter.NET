@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMoq;
 using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
+using ExceptionReporting.Templates;
 using NUnit.Framework;
 
 namespace ExceptionReporting.Tests
@@ -20,7 +21,7 @@ namespace ExceptionReporting.Tests
 			info.AppVersion = "1.0";
 			info.MainException = new TestException();
 
-			var model = reportBuilder.Model();
+			var model = reportBuilder.ReportModel();
 			
 			Assert.That(model.App.Name, Is.EqualTo("TestApp"));
 			Assert.That(model.App.Version, Is.EqualTo("1.0"));
@@ -44,7 +45,7 @@ namespace ExceptionReporting.Tests
 			moqer.GetMock<ISysInfoResultMapper>().Setup(si => si.SysInfoString()).Returns("fake tree");
 			moqer.GetMock<IStackTraceMaker>().Setup(st => st.FullStackTrace()).Returns("fake stack trace");
 			
-			var model = reportBuilder.Model();
+			var model = reportBuilder.ReportModel();
 			
 			Assert.That(model.App.AssemblyRefs.First().Name, Is.EqualTo("Assembly1"));
 			Assert.That(model.SystemInfo, Is.EqualTo("fake tree"));

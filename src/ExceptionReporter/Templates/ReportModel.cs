@@ -9,7 +9,7 @@ using System.Globalization;
 
 #pragma warning disable 1591
 
-namespace ExceptionReporting.Report
+namespace ExceptionReporting.Templates
 {
 	/// <summary>
 	/// The model/object passed to report templates

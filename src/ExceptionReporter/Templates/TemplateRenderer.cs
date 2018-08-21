@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using ExceptionReporting.Core;
 using ExceptionReporting.Report;
 using HandlebarsDotNet;
 
@@ -10,26 +11,34 @@ using HandlebarsDotNet;
 
 namespace ExceptionReporting.Templates
 {
-	public class TemplateRenderer
-	{
-		private readonly ReportModel _model;
+	internal class TemplateRenderer
+	{	
+		private readonly object _introModel;		// model object is kept generic but we force a kind of typing via constructors
+		private readonly string _templateName;
 
-		public TemplateRenderer(ReportModel model)
+		public TemplateRenderer(EmailIntroModel introModel)
 		{
-			_model = model;
+			_introModel = introModel;
+			_templateName = "EmailIntroTemplate";
+		}
+
+		public TemplateRenderer(ReportModel introModel)
+		{
+			_introModel = introModel;
+			_templateName = "ReportTemplate";
 		}
 
 		public string Render(TemplateFormat format = TemplateFormat.Text)
 		{
 			var template = GetTemplate(format);
 			var compiledTemplate = Handlebars.Compile(template);
-			var report = compiledTemplate(_model);
+			var report = compiledTemplate(_introModel);
 			return report;
 		}
 
 		private string GetTemplate(TemplateFormat format)
 		{
-			var resource = string.Format("{0}.ReportTemplate.{1}", this.GetType().Namespace, format.ToString().ToLower());
+			var resource = string.Format("{0}.{1}.{2}", this.GetType().Namespace, _templateName, format.ToString().ToLower());
 			var assembly = Assembly.GetExecutingAssembly();
 
 			using (var stream = assembly.GetManifestResourceStream(resource))

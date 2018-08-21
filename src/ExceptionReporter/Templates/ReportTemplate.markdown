@@ -19,7 +19,7 @@
  
 ###Assembly References
 {{#App.AssemblyRefs}}
-- {{Name}}, Version={{Version}}  
+ - {{Name}}, Version={{Version}}  
 {{/App.AssemblyRefs}}
 
 ###System Info  
