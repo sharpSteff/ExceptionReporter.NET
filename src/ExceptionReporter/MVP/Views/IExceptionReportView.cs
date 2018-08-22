@@ -18,7 +18,7 @@ namespace ExceptionReporting.MVP.Views
 		string UserExplanation { get; }
 		void Mapi_Completed();
 		void SetInProgressState();
-		void PopulateExceptionTab(IList<Exception> exceptions);
+		void PopulateExceptionTab(IEnumerable<Exception> exceptions);
 		void PopulateAssembliesTab();
 		void PopulateSysInfoTab();
 		void SetProgressCompleteState();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace ExceptionReporting.Tests
@@ -20,7 +21,6 @@ namespace ExceptionReporting.Tests
 		public void Can_Get_And_Set_1_Exception_Without_Knowing_There_Can_Be_Many()
 		{
 			_info.MainException = _exception;
-
 			Assert.That(_info.MainException, Is.EqualTo(_exception));
 		}
 
@@ -30,7 +30,7 @@ namespace ExceptionReporting.Tests
 			_info.MainException = _exception;
 
 			Assert.That(_info.Exceptions.Count, Is.EqualTo(1));
-			Assert.That(_info.Exceptions[0], Is.EqualTo(_exception));
+			Assert.That(_info.Exceptions.First(), Is.EqualTo(_exception));
 		}
 
 		[Test]

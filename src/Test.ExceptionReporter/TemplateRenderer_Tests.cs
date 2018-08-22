@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExceptionReporting.Report;
 using ExceptionReporting.Templates;
 using NUnit.Framework;
 
@@ -100,12 +99,4 @@ namespace ExceptionReporting.Tests
 			Assert.That(result, Does.Contain(string.Format("**Version**:     {0}", Version)));
 		}
 	}
-}
-
-internal class TestException : Exception
-{
-	public const string ErrorMessage = "NullRef";
-
-	public TestException() : base(ErrorMessage)
-	{ }
 }

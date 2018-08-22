@@ -13,7 +13,7 @@ namespace ExceptionReporting.Report
 	{
 		private readonly IList<Exception> _exceptions;
 
-		public StackTraceMaker(IList<Exception> exceptions)
+		public StackTraceMaker(params Exception[] exceptions)
 		{
 			_exceptions = exceptions;
 		}
@@ -48,9 +48,9 @@ namespace ExceptionReporting.Report
 					stringBuilder.AppendLine("Inner Exception " + (count - 1));
 
 				stringBuilder
-					.AppendLine("Type:        " + currentException.GetType())
-					.AppendLine("Message:     " + currentException.Message)
-					.AppendLine("Source:      " + currentException.Source);
+					.AppendLine("Type:    " + currentException.GetType())
+					.AppendLine("Message: " + currentException.Message)
+					.AppendLine("Source:  " + currentException.Source);
 
 				if (currentException.StackTrace != null)
 				{

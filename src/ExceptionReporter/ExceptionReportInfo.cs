@@ -42,9 +42,9 @@ namespace ExceptionReporting
 			}
 		}
 
-		public IList<Exception> Exceptions
+		public Exception[] Exceptions
 		{
-			get { return _exceptions.AsReadOnly(); }
+			get { return _exceptions.ToArray(); }
 		}
 
 		/// <summary>
@@ -152,7 +152,6 @@ namespace ExceptionReporting
 
 		// whether to show certain tabs in the 'More Detail' mode of the main dialog
 		public bool ShowGeneralTab { get; set; } = true;
-		public bool ShowContactTab { get; set; } = false;
 		public bool ShowExceptionsTab { get; set; } = true;
 
 		private bool _showSysInfoTab;

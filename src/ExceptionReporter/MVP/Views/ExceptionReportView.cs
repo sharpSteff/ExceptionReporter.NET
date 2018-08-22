@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using ExceptionReporting.Core;
 using ExceptionReporting.MVP.Presenters;
 using ExceptionReporting.SystemInfo;
 
@@ -45,7 +44,7 @@ namespace ExceptionReporting.MVP.Views
 			//TODO: show all exception messages
 			txtExceptionMessageLarge.Text =
 					txtExceptionMessage.Text =
-					!string.IsNullOrEmpty(reportInfo.CustomMessage) ? reportInfo.CustomMessage : reportInfo.Exceptions[0].Message;
+					!string.IsNullOrEmpty(reportInfo.CustomMessage) ? reportInfo.CustomMessage : reportInfo.Exceptions.First().Message;
 
 			txtExceptionMessageLarge2.Text = txtExceptionMessageLarge.Text;
 
@@ -59,7 +58,7 @@ namespace ExceptionReporting.MVP.Views
 					btnDetailToggle.FlatStyle =
 					btnCopy.FlatStyle =
 					btnEmail.FlatStyle =
-					btnSave.FlatStyle = (reportInfo.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard);
+					btnSave.FlatStyle = reportInfo.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
 
 			listviewAssemblies.BackColor =
 					txtFax.BackColor =
@@ -231,10 +230,9 @@ namespace ExceptionReporting.MVP.Views
 			{
 				tabControl.TabPages.Remove(tabSysInfo);
 			}
-			if (!_presenter.ReportInfo.ShowContactTab)
-			{
-				tabControl.TabPages.Remove(tabContact);
-			}
+			//todo remove altogether
+			tabControl.TabPages.Remove(tabContact);
+			
 		}
 
 		//TODO consider putting on a background thread - and avoid the OnActivated event altogether
@@ -269,21 +267,22 @@ namespace ExceptionReporting.MVP.Views
 			Application.DoEvents();
 		}
 
-		public void PopulateExceptionTab(IList<Exception> exceptions)
+		public void PopulateExceptionTab(IEnumerable<Exception> exceptions)
 		{
-			if (exceptions.Count == 1)
+			var exs = exceptions as Exception[] ?? exceptions.ToArray();
+			if (exs.Length == 1)
 			{
-				var exception = exceptions[0];
+				var exception = exs.FirstOrDefault();
 				AddExceptionControl(tabExceptions, exception);
 			}
 			else
 			{
 				var innerTabControl = new TabControl { Dock = DockStyle.Fill };
 				tabExceptions.Controls.Add(innerTabControl);
-				for (var index = 0; index < exceptions.Count; index++)
+				for (var index = 0; index < exs.Length; index++)
 				{
-					var exception = exceptions[index];
-					var tabPage = new TabPage { Text = string.Format("Excepton {0}", index + 1) };
+					var exception = exs[index];
+					var tabPage = new TabPage { Text = string.Format("Exception {0}", index + 1) };
 					innerTabControl.TabPages.Add(tabPage);
 					AddExceptionControl(tabPage, exception);
 				}
