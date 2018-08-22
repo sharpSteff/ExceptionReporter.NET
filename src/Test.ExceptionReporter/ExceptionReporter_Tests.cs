@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using ExceptionReporting.MVP.Views;
+using Moq;
 using NUnit.Framework;
 
 namespace ExceptionReporting.Tests
@@ -22,8 +24,24 @@ namespace ExceptionReporting.Tests
 		[TestCase(default(List<Exception>), ExpectedResult = false)]
 		public bool Can_Prevent_Showing_If_Null_Exception(params Exception[] exceptions)
 		{
-			var er = new ExceptionReporter();
+			var er = new ExceptionReporter
+			{
+				ViewCreator = new Mock<IViewCreator>().Object
+			};
 			return er.Show(exceptions);
+		}
+		
+		[Test]
+		public void Can_Show()
+		{
+			var viewCreatorMock = new Mock<IViewCreator>();
+			viewCreatorMock.Setup(v => v.Create()).Returns(new Mock<IExceptionReportView>().Object);
+			
+			var er = new ExceptionReporter
+			{
+				ViewCreator = viewCreatorMock.Object
+			};
+			Assert.That(er.Show(new TestException()), Is.True);
 		}
 	}
 }

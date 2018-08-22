@@ -1,3 +1,4 @@
+using System;
 using ExceptionReporting.Report;
 using NUnit.Framework;
 
@@ -12,7 +13,9 @@ namespace ExceptionReporting.Tests
 			var stackTrace = maker.FullStackTrace();
 			
 			Assert.That(stackTrace, 
-				Is.EqualTo("Top-level Exception\nType:    ExceptionReporting.Tests.TestException\nMessage: NullRef\nSource:\n"));
+				Is.EqualTo(string.Format(
+					"Top-level Exception{0}Type:    ExceptionReporting.Tests.TestException{0}Message: NullRef{0}Source:{0}", 
+						Environment.NewLine)));
 		}
 	}
 }

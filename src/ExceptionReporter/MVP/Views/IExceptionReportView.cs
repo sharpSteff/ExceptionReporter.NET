@@ -23,6 +23,7 @@ namespace ExceptionReporting.MVP.Views
 		void PopulateSysInfoTab();
 		void SetProgressCompleteState();
 		void ToggleShowFullDetail();
+		void ShowExceptionReport();
 	}
 }
 

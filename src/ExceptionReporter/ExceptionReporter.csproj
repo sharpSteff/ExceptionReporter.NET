@@ -89,6 +89,7 @@
     <Compile Include="Core\ScreenshotTaker.cs" />
     <Compile Include="ExceptionReporter.cs" />
     <Compile Include="MVP\Presenters\ExceptionReportPresenter.cs" />
+    <Compile Include="MVP\Views\ViewCreator.cs" />
     <Compile Include="Network\SenderFactory.cs" />
     <Compile Include="Network\Senders\GhostSender.cs" />
     <Compile Include="ExceptionReportInfo.cs" />

@@ -21,7 +21,12 @@ namespace ExceptionReporting
 	public class ExceptionReporter
 	{
 		private readonly ExceptionReportInfo _reportInfo;
-
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public IViewCreator ViewCreator { get; set; }
+		
 		/// <summary>
 		/// Initialise the ExceptionReporter
 		/// </summary>
@@ -31,6 +36,7 @@ namespace ExceptionReporting
 			{
 				AppAssembly = Assembly.GetCallingAssembly()
 			};
+			ViewCreator = new ViewCreator(_reportInfo);
 		}
 
 		// One issue we have with Config property here is that we store the exception and other info on it as well
@@ -62,7 +68,8 @@ namespace ExceptionReporting
 			try
 			{
 				_reportInfo.SetExceptions(exceptions);
-				var view = new ExceptionReportView(_reportInfo);
+				
+				var view = ViewCreator.Create();
 				view.ShowExceptionReport();
 				status = true;
 			}
