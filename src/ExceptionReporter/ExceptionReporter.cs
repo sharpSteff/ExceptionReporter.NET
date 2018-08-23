@@ -22,7 +22,7 @@ namespace ExceptionReporting
 		private readonly ExceptionReportInfo _reportInfo;
 		
 		/// <summary>
-		/// 
+		/// Contract by which to show any dialogs/view
 		/// </summary>
 		public IViewMaker ViewMaker { get; set; }
 		

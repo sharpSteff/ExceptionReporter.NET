@@ -22,5 +22,12 @@ namespace ExceptionReporting.Tests
 			Assert.That(new AssemblyDigger(Assembly.GetExecutingAssembly()).GetAssemblyRefs(), 
 				Is.SameAs(new AssemblyDigger(Assembly.GetExecutingAssembly()).GetAssemblyRefs()));
 		}
+		
+		[Test]
+		public void Can_Prevent_Memoize_When_Created_With_Different_Assembly()
+		{
+			Assert.That(new AssemblyDigger(Assembly.Load("ExceptionReporter.NET")).GetAssemblyRefs(), 
+				Is.Not.EqualTo(new AssemblyDigger(Assembly.GetExecutingAssembly()).GetAssemblyRefs()));
+		}
 	}
 }
