@@ -36,7 +36,7 @@ namespace ExceptionReporting.Templates
 	{
 		//===== required variables =====
 		/// <summary> The top-level exception </summary>
-		public Exception Exception { get; set; }		//todo doesn't cater for multiple exceptions passed?
+		public Exception Exception { get; set; }		//todo cater for multiple exceptions passed?
 		
 		/// <summary> DateTime of exception - defaults to now but would normally set via config </summary>
 		public DateTime When { get; set; } = DateTime.Now;
@@ -49,11 +49,11 @@ namespace ExceptionReporting.Templates
 		//=====
 		
 		//===== calculated variables
-		public string Message { get { return Exception.Message; } }		//todo cater for multiple exceptions
+		public string Message { get { return Exception.Message; } }
 		
-		public string Date { get { return When.ToShortDateString(); } }		//todo maybe allow for user customizing date formats
+		public string Date { get { return When.ToShortDateString(); } }
 		
-		public string Time { get { return When.ToShortTimeString(); } }		//todo as above
+		public string Time { get { return When.ToShortTimeString(); } }
 		
 		public string InnerException
 		{

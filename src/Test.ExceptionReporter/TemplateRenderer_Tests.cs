@@ -98,5 +98,36 @@ namespace ExceptionReporting.Tests
 			Assert.That(result, Does.Contain(string.Format("**Application**: {0}", TestApp)));
 			Assert.That(result, Does.Contain(string.Format("**Version**:     {0}", Version)));
 		}
+		
+		[Test]
+		public void Can_Render_Html_Template()
+		{
+			var renderer = new TemplateRenderer(new ReportModel
+			{
+				Error = new Error
+				{
+					Exception = new TestException()
+				},
+				App = new App
+				{
+					Name = TestApp,
+					Version = Version,
+					AssemblyRefs = new List<AssemblyRef>
+					{
+						new AssemblyRef
+						{
+							Name = AssemblyName,
+							Version = AssemblyVersion
+						}
+					}
+				}
+			});
+
+			var result = renderer.Render(TemplateFormat.Html);
+			
+			Assert.That(result, Does.Contain("<title>Exception Report</title>"));
+			Assert.That(result, Does.Contain(string.Format("<input id=\"app-name\" readonly value=\"{0}\">", TestApp)));
+			Assert.That(result, Does.Contain(string.Format("<li> {0}, Version={1} </li>", AssemblyName, AssemblyVersion)));
+		}
 	}
 }
