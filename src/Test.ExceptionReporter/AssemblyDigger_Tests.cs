@@ -15,5 +15,12 @@ namespace ExceptionReporting.Tests
 
 			Assert.That(refs.Select(r => r.Name), Is.SupersetOf(new [] {"System.Core", "DotNetZip", "SimpleMapi"}));
 		}
+
+		[Test]
+		public void Can_Memoize_List()
+		{
+			Assert.That(new AssemblyDigger(Assembly.GetExecutingAssembly()).GetAssemblyRefs(), 
+				Is.SameAs(new AssemblyDigger(Assembly.GetExecutingAssembly()).GetAssemblyRefs()));
+		}
 	}
 }

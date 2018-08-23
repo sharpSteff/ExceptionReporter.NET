@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using ExceptionReporting.Core;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
+using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
 using ExceptionReporting.Templates;
 
@@ -176,6 +178,11 @@ namespace ExceptionReporting.MVP.Presenters
 			{
 				View.SetProgressCompleteState();
 			}
+		}
+
+		public List<AssemblyRef> GetReferencedAssemblies()
+		{
+			return new AssemblyDigger(AppAssembly).GetAssemblyRefs().ToList();
 		}
 	}
 }

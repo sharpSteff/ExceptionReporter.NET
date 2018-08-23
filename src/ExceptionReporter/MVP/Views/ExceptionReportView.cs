@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.MVP.Presenters;
 using ExceptionReporting.SystemInfo;
+using ExceptionReporting.Templates;
 
 #pragma warning disable 1591
 
@@ -304,21 +305,16 @@ namespace ExceptionReporting.MVP.Views
 			listviewAssemblies.Columns.Add("Name", 320, HorizontalAlignment.Left);
 			listviewAssemblies.Columns.Add("Version", 150, HorizontalAlignment.Left);
 
-			var assemblies = new List<AssemblyName>(_presenter.AppAssembly.GetReferencedAssemblies())
-			 {
-					 _presenter.AppAssembly.GetName()
-			 };
-			assemblies.Sort((x, y) => string.CompareOrdinal(x.Name, y.Name));
-			foreach (var assemblyName in assemblies)
-			{
-				AddAssembly(assemblyName);
-			}
+			_presenter.GetReferencedAssemblies().ForEach(this.AddAssembly);
 		}
 
-		private void AddAssembly(AssemblyName assemblyName)
+		private void AddAssembly(AssemblyRef assembly)
 		{
-			var listViewItem = new ListViewItem { Text = assemblyName.Name };
-			listViewItem.SubItems.Add(assemblyName.Version.ToString());
+			var listViewItem = new ListViewItem
+			{
+				Text = assembly.Name
+			};
+			listViewItem.SubItems.Add(assembly.Version);
 			listviewAssemblies.Items.Add(listViewItem);
 		}
 
