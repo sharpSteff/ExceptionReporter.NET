@@ -97,12 +97,6 @@ namespace ExceptionReporting
 		#endregion
 
 		/// <summary>
-		/// Email that is displayed in the 'Contact Information'
-		/// (ie not the email for sending the report to)
-		/// </summary>
-		public string ContactEmail { get; set; }
-
-		/// <summary>
 		/// The name of the running application calling the exception report
 		/// </summary>
 		public string AppName { get; set; }

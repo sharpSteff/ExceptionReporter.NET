@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using ExceptionReporting.Core;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
@@ -31,19 +29,10 @@ namespace ExceptionReporting.MVP.Presenters
 			ReportInfo = info;
 		}
 
-		/// <summary>
-		/// The application assembly - ie the main application using the exception reporter assembly
-		/// </summary>
-		public Assembly AppAssembly
-		{
-			get { return ReportInfo.AppAssembly; }
-		}
-
-		/// <summary>
-		/// Report configuration and data
-		/// </summary>
+		/// <summary> Report configuration and data  </summary>
 		public ExceptionReportInfo ReportInfo { get; }
 
+		/// <summary> The main dialog/view  </summary>
 		private IExceptionReportView View { get; }
 
 		private string CreateReport()
@@ -140,27 +129,6 @@ namespace ExceptionReporting.MVP.Presenters
 		}
 
 		/// <summary>
-		/// Send email (using ShellExecute) to the configured contact email address
-		/// </summary>
-		public void SendContactEmail()
-		{
-			ShellExecute(string.Format("mailto:{0}", ReportInfo.ContactEmail));
-		}
-
-		private void ShellExecute(string executeString)
-		{
-			try
-			{
-				var psi = new ProcessStartInfo(executeString) { UseShellExecute = true };
-				Process.Start(psi);
-			}
-			catch (Exception exception)
-			{
-				View.ShowError(string.Format("Unable to (Shell) Execute '{0}'", executeString), exception);
-			}
-		}
-
-		/// <summary>
 		/// The main entry point, populates the report with everything it needs
 		/// </summary>
 		public void PopulateReport()
@@ -182,7 +150,7 @@ namespace ExceptionReporting.MVP.Presenters
 
 		public List<AssemblyRef> GetReferencedAssemblies()
 		{
-			return new AssemblyDigger(AppAssembly).GetAssemblyRefs().ToList();
+			return new AssemblyDigger(ReportInfo.AppAssembly).GetAssemblyRefs().ToList();
 		}
 	}
 }

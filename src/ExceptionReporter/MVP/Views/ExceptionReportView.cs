@@ -35,8 +35,6 @@ namespace ExceptionReporting.MVP.Views
 
 		private void PopulateReportInfo(ExceptionReportInfo reportInfo)
 		{
-			urlEmail.Text = reportInfo.ContactEmail;
-			lblContactMessageTop.Text = reportInfo.ContactMessageTop;
 			lblExplanation.Text = reportInfo.UserExplanationLabel;
 			ShowFullDetail = reportInfo.ShowFullDetail;
 			ToggleShowFullDetail();
@@ -62,8 +60,6 @@ namespace ExceptionReporting.MVP.Views
 					btnSave.FlatStyle = reportInfo.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
 
 			listviewAssemblies.BackColor =
-					txtFax.BackColor =
-					txtPhone.BackColor =
 					txtRegion.BackColor =
 					txtTime.BackColor =
 					txtTime.BackColor =
@@ -126,7 +122,6 @@ namespace ExceptionReporting.MVP.Views
 			btnClose.Click += Close_Click;
 			btnDetailToggle.Click += Detail_Click;
 			btnSimpleDetailToggle.Click += Detail_Click;
-			urlEmail.LinkClicked += EmailLink_Clicked;
 			btnSave.Click += Save_Click;
 			KeyPreview = true;
 			KeyDown += ExceptionReportView_KeyDown;
@@ -231,9 +226,6 @@ namespace ExceptionReporting.MVP.Views
 			{
 				tabControl.TabPages.Remove(tabSysInfo);
 			}
-			//todo remove altogether
-			tabControl.TabPages.Remove(tabContact);
-			
 		}
 
 		//TODO consider putting on a background thread - and avoid the OnActivated event altogether
@@ -370,11 +362,6 @@ namespace ExceptionReporting.MVP.Views
 			{
 				_presenter.SaveReportToFile(saveDialog.FileName);
 			}
-		}
-
-		private void EmailLink_Clicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			_presenter.SendContactEmail();
 		}
 
 		public void ShowError(string message, Exception exception)
