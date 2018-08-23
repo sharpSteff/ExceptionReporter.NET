@@ -16,6 +16,7 @@ namespace ExceptionReporting.MVP.Views
 		bool ShowProgressBar { set; }
 		bool ShowFullDetail { get; set; }
 		string UserExplanation { get; }
+		
 		void Mapi_Completed();
 		void SetInProgressState();
 		void PopulateExceptionTab(IEnumerable<Exception> exceptions);
@@ -23,7 +24,7 @@ namespace ExceptionReporting.MVP.Views
 		void PopulateSysInfoTab();
 		void SetProgressCompleteState();
 		void ToggleShowFullDetail();
-		void ShowExceptionReport();
+		void ShowWindow();
 	}
 }
 

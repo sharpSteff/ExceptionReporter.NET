@@ -4,7 +4,6 @@
 
 using System;
 using System.Reflection;
-using System.Windows.Forms;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
@@ -25,7 +24,7 @@ namespace ExceptionReporting
 		/// <summary>
 		/// 
 		/// </summary>
-		public IViewCreator ViewCreator { get; set; }
+		public IViewMaker ViewMaker { get; set; }
 		
 		/// <summary>
 		/// Initialise the ExceptionReporter
@@ -36,7 +35,7 @@ namespace ExceptionReporting
 			{
 				AppAssembly = Assembly.GetCallingAssembly()
 			};
-			ViewCreator = new ViewCreator(_reportInfo);
+			ViewMaker = new ViewMaker(_reportInfo);
 		}
 
 		// One issue we have with Config property here is that we store the exception and other info on it as well
@@ -69,14 +68,14 @@ namespace ExceptionReporting
 			{
 				_reportInfo.SetExceptions(exceptions);
 				
-				var view = ViewCreator.Create();
-				view.ShowExceptionReport();
+				var view = ViewMaker.Create();
+				view.ShowWindow();
 				status = true;
 			}
-			catch (Exception internalException)
+			catch (Exception ex)
 			{
 				status = false;
-				MessageBox.Show(internalException.Message, "Failed trying to report an Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				ViewMaker.ShowError(ex.Message, "Failed trying to report an Error");
 			}
 
 			return status;

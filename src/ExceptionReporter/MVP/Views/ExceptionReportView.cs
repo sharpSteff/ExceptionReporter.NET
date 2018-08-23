@@ -253,7 +253,7 @@ namespace ExceptionReporting.MVP.Views
 			ShowProgressLabel = ShowProgressBar = false;
 		}
 
-		public void ShowExceptionReport()
+		public void ShowWindow()
 		{
 			_isDataRefreshRequired = true;
 			ShowDialog();
@@ -305,9 +305,9 @@ namespace ExceptionReporting.MVP.Views
 			listviewAssemblies.Columns.Add("Version", 150, HorizontalAlignment.Left);
 
 			var assemblies = new List<AssemblyName>(_presenter.AppAssembly.GetReferencedAssemblies())
-																 {
-																		 _presenter.AppAssembly.GetName()
-																 };
+			 {
+					 _presenter.AppAssembly.GetName()
+			 };
 			assemblies.Sort((x, y) => string.CompareOrdinal(x.Name, y.Name));
 			foreach (var assemblyName in assemblies)
 			{

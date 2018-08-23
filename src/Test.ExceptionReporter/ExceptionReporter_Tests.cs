@@ -26,7 +26,7 @@ namespace ExceptionReporting.Tests
 		{
 			var er = new ExceptionReporter
 			{
-				ViewCreator = new Mock<IViewCreator>().Object
+				ViewMaker = new Mock<IViewMaker>().Object
 			};
 			return er.Show(exceptions);
 		}
@@ -34,12 +34,12 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Show()
 		{
-			var viewCreatorMock = new Mock<IViewCreator>();
-			viewCreatorMock.Setup(v => v.Create()).Returns(new Mock<IExceptionReportView>().Object);
+			var viewMock = new Mock<IViewMaker>();
+			viewMock.Setup(v => v.Create()).Returns(new Mock<IExceptionReportView>().Object);
 			
 			var er = new ExceptionReporter
 			{
-				ViewCreator = viewCreatorMock.Object
+				ViewMaker = viewMock.Object
 			};
 			Assert.That(er.Show(new TestException()), Is.True);
 		}
