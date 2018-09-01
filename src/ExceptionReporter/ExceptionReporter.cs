@@ -21,7 +21,7 @@ namespace ExceptionReporting
 	public class ExceptionReporter
 	{
 		private readonly ReportConfig _config;
-		private readonly ErrorData _error;
+		private readonly ErrorDetail _error;
 		
 		/// <summary>
 		/// Contract by which to show any dialogs/view
@@ -34,11 +34,11 @@ namespace ExceptionReporting
 		public ExceptionReporter()
 		{
 			_config = new ReportConfig();
-			_error = new ErrorData
+			_error = new ErrorDetail
 			{
 				AppAssembly = Assembly.GetCallingAssembly()
 			};
-			ViewMaker = new ViewMaker(_config, _error);
+			ViewMaker = new ViewMaker(new ReportBag(_error, _config));
 		}
 
 		// One issue we have with Config property here is that we store the exception and other info on it as well
@@ -57,7 +57,7 @@ namespace ExceptionReporting
 		/// <summary>
 		/// Public access to exception/error
 		/// </summary>
-		public ErrorData Error
+		public ErrorDetail Error
 		{
 			get { return _error; }
 		}
@@ -112,9 +112,10 @@ namespace ExceptionReporting
 		public void Send(IReportSendEvent sendEvent = null, params Exception[] exceptions)
 		{
 			_error.SetExceptions(exceptions);
-			
-			var sender = new SenderFactory(_config, _error, sendEvent ?? new SilentSendEvent()).Get();
-			var report = new ReportGenerator(_config, _error);
+
+			var reportBag = new ReportBag(_error, _config);
+			var sender = new SenderFactory(reportBag, sendEvent ?? new SilentSendEvent()).Get();
+			var report = new ReportGenerator(reportBag);
 			sender.Send(report.Generate());
 		}
 
@@ -135,11 +136,11 @@ namespace ExceptionReporting
 		public string GetReport(params Exception[] exceptions)
 		{
 			_error.SetExceptions(exceptions);
-			var generator = new ReportGenerator(_config, _error);
+			var generator = new ReportGenerator(new ReportBag(_error, _config));
 			return generator.Generate();
 		}
 
-		static readonly bool _isRunningMono = Type.GetType("Mono.Runtime") != null;
+		private static readonly bool _isRunningMono = Type.GetType("Mono.Runtime") != null;
 
 		/// <returns><c>true</c>, if running mono <c>false</c> otherwise.</returns>
 		public static bool IsRunningMono() { return _isRunningMono; }

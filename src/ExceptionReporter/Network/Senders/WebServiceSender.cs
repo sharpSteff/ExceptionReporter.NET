@@ -10,14 +10,12 @@ namespace ExceptionReporting.Network.Senders
 	internal class WebServiceSender : IReportSender
 	{
 		private const string APPLICATION_JSON = "application/json";
-		private readonly ReportConfig _config;
-		private readonly ErrorData _error;
+		private readonly ReportBag _bag;
 		private readonly IReportSendEvent _sendEvent;
 
-		internal WebServiceSender(ReportConfig config, ErrorData error, IReportSendEvent sendEvent)
+		internal WebServiceSender(ReportBag bag, IReportSendEvent sendEvent)
 		{
-			_config = config;
-			_error = error;
+			_bag = bag;
 			_sendEvent = sendEvent;
 		}
 		
@@ -33,7 +31,7 @@ namespace ExceptionReporting.Network.Senders
 
 		public void Send(string report)
 		{
-			var webClient = new ExceptionReporterWebClient(_config.WebServiceTimeout)
+			var webClient = new ExceptionReporterWebClient(_bag.Config.WebServiceTimeout)
 			{
 				Encoding = Encoding.UTF8
 			};
@@ -48,13 +46,13 @@ namespace ExceptionReporting.Network.Senders
 				var sz = new DataContractJsonSerializer(typeof(ReportPacket));
 				sz.WriteObject(jsonStream, new ReportPacket
 				{
-					AppName = _config.AppName,
-					AppVersion = _config.AppVersion,
-					ExceptionMessage = _error.MainException.Message,
+					AppName = _bag.Config.AppName,
+					AppVersion = _bag.Config.AppVersion,
+					ExceptionMessage = _bag.Error.MainException.Message,
 					ExceptionReport = report
 				});
 				var jsonString = Encoding.UTF8.GetString(jsonStream.ToArray());
-				webClient.UploadStringAsync(new Uri(_config.WebServiceUrl), jsonString);
+				webClient.UploadStringAsync(new Uri(_bag.Config.WebServiceUrl), jsonString);
 			}
 		}
 

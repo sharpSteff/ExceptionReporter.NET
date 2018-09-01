@@ -9,9 +9,13 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal class SmtpMailSender : MailSender, IReportSender
 	{
-		public SmtpMailSender(ReportConfig reportConfig, ErrorData error, IReportSendEvent sendEvent) : 
-			base(reportConfig, error, sendEvent)
-		{ }
+		private readonly ReportConfig _config;
+
+		public SmtpMailSender(ReportBag bag, IReportSendEvent sendEvent) : 
+			base(bag, sendEvent)
+		{
+			_config = bag.Config;
+		}
 		
 		public override string Description
 		{

@@ -6,17 +6,15 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal abstract class MailSender
 	{
-		protected readonly ReportConfig _config;
-		private readonly ErrorData _error;
+		private readonly ReportBag _bag;
 		protected readonly IReportSendEvent _sendEvent;
 		protected readonly Attacher _attacher;
 
-		protected MailSender(ReportConfig reportConfig, ErrorData error, IReportSendEvent sendEvent)
+		protected MailSender(ReportBag bag, IReportSendEvent sendEvent)
 		{
-			_config = reportConfig;
-			_error = error;
-			_sendEvent = sendEvent;
-			_attacher = new Attacher(reportConfig);
+			_bag = bag;
+			_sendEvent = sendEvent ?? new SilentSendEvent();
+			_attacher = new Attacher(bag.Config);
 		}
 
 		public abstract string Description { get; }
@@ -28,7 +26,7 @@ namespace ExceptionReporting.Network.Senders
 
 		public string EmailSubject
 		{
-			get { return _error.MainException.Message
+			get { return _bag.Error.MainException.Message
 				             .Replace('\r', ' ')
 				             .Replace('\n', ' ')
 				             .Truncate(255) ?? "Exception Report"; }

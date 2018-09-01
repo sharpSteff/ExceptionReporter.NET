@@ -8,9 +8,13 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal class MapiMailSender : MailSender, IReportSender
 	{
-		public MapiMailSender(ReportConfig reportConfig, ErrorData error, IReportSendEvent sendEvent) : 
-			base(reportConfig, error, sendEvent)
-		{ }
+		private readonly ReportConfig _config;
+
+		public MapiMailSender(ReportBag bag, IReportSendEvent sendEvent = null) : 
+			base(bag, sendEvent)
+		{
+			_config = bag.Config;
+		}
 
 		public override string Description
 		{
@@ -30,7 +34,7 @@ namespace ExceptionReporting.Network.Senders
 		{
 			if (_config.EmailReportAddress.IsEmpty())
 			{
-				_sendEvent.ShowError("EmailReportAddress not set", new ConfigurationErrorsException("EmailReportAddress"));
+				_sendEvent.ShowError("EmailReportAddress not set", new ConfigurationErrorsException(nameof(_config.EmailReportAddress)));
 				return;
 			}
 			

@@ -86,7 +86,7 @@ namespace Demo.WinForms
 		void ConfigureSmtpEmail(ReportConfig config) 
 		{
 			//--- Test SMTP - recommend using MailSlurper https://github.com/mailslurper
-			config.SendMethod = ReportSendMethod.SMTP;		// obsolete deprecated property used here, will be removed in later version
+			config.SendMethod = ReportSendMethod.SMTP;		
 			config.SmtpServer = "127.0.0.1";
 			config.SmtpPort = 2500;
 			config.SmtpUsername = "";
@@ -105,17 +105,21 @@ namespace Demo.WinForms
 			}
 			catch (Exception exception)
 			{
-				var er = new ExceptionReporter();
-				er.Config.SendMethod = ReportSendMethod.SimpleMAPI;
-				er.Config.EmailReportAddress = "support@acme.com";
-				er.Config.CompanyName = "Acme";   // this goes alongside email button text
-				er.Config.TitleText = "Acme Error Report";
-				
-				// er.Config.ShowFullDetail = false;
-				er.Config.ShowLessDetailButton = true;
-				er.Config.ReportTemplateFormat = TemplateFormat.Text;
-				// er.Config.ShowEmailButton = false;		// just for testing that removing email button works
-				// er.Config.TemplateFormat = TemplateFormat.Markdown;
+				var er = new ExceptionReporter
+				{
+					Config =
+					{
+						SendMethod = ReportSendMethod.SimpleMAPI,
+						EmailReportAddress = "support@acme.com",
+						CompanyName = "Acme", // this goes alongside email button text
+						TitleText = "Acme Error Report",
+
+						// ShowFullDetail = false,
+						ShowLessDetailButton = true,
+						ReportTemplateFormat = TemplateFormat.Text,
+						// TemplateFormat = TemplateFormat.Markdown
+					}
+				};
 				
 				er.Show(exception);
 			}

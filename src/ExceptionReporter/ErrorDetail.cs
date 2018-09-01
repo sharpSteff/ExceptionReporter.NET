@@ -6,11 +6,11 @@ using System.Reflection;
 namespace ExceptionReporting
 {
 	/// <summary>
-	/// 
+	/// Details/data related to the exception
 	/// </summary>
-	public class ErrorData
+	public class ErrorDetail
 	{
-		readonly List<Exception> _exceptions = new List<Exception>();
+		private readonly List<Exception> _exceptions = new List<Exception>();
 
 		/// <summary>
 		/// The Main (usually the 'only') exception, which is the subject of this exception 'report'
@@ -24,7 +24,7 @@ namespace ExceptionReporting
 			get { return _exceptions.Count > 0 ? 
 				_exceptions[0] : 
 				// while we generally don't want to allow our own exceptions, I'll make an exception here - it would be too silly
-				// for a user to set a null exception
+				// for a user to set a null exception and have to cater for it at this point
 				new ConfigurationErrorsException("ExceptionReporter given 0 exceptions"); }
 			set
 			{
@@ -34,7 +34,7 @@ namespace ExceptionReporting
 		}
 
 		/// <summary>
-		/// 
+		/// Exceptions in a list (catering for multiple)
 		/// </summary>
 		public Exception[] Exceptions
 		{

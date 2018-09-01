@@ -6,6 +6,8 @@ namespace ExceptionReporting.MVP.Views
 {
 	internal partial class ExceptionDetailControl : UserControl
 	{
+		private Exception TheException { get; set; }
+
 		public ExceptionDetailControl()
 		{
 			InitializeComponent();
@@ -16,11 +18,11 @@ namespace ExceptionReporting.MVP.Views
 		public void SetControlBackgrounds(Color color)
 		{
 			listviewExceptions.BackColor =
-					txtExceptionTabMessage.BackColor =
+				txtExceptionTabMessage.BackColor =
 					txtExceptionTabStackTrace.BackColor = color;
 		}
 
-		//TODO Label='EH' - move this logic out (is duplicated almost entirely (without ListView) in ExceptionReportBuilder)
+		//TODO Label='EH' - move this logic out (is duplicated almost entirely (without ListView) in StackTraceMaker)
 		public void PopulateExceptionTab(Exception rootException)
 		{
 			TheException = rootException;
@@ -102,8 +104,5 @@ namespace ExceptionReporting.MVP.Views
 			txtExceptionTabStackTrace.Text = displayException.StackTrace;
 			txtExceptionTabMessage.Text = displayException.Message;
 		}
-
-		public Exception TheException { get; set; }
 	}
-
 }

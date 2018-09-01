@@ -23,29 +23,22 @@ namespace ExceptionReporting
 	/// </summary>
 	internal class ReportGenerator
 	{
-		private readonly ReportConfig _config;
-		private readonly ErrorData _error;
+		private readonly ReportBag _bag;
 		private readonly List<SysInfoResult> _sysInfoResults = new List<SysInfoResult>();
 
 		/// <summary>
 		/// Initialises some ExceptionReportInfo properties related to the application/system
 		/// </summary>
-		/// <param name="config">an ExceptionReportInfo, can be pre-populated with config</param>
-		/// <param name="error">an ExceptionReportInfo, can be pre-populated with config however 'base'
-		/// properties such as MachineName</param>
-		public ReportGenerator(ReportConfig config, ErrorData error)
+		public ReportGenerator(ReportBag bag)
 		{
-			// this is going to be a dev/learning mistake - fail fast and hard
-			_config = config ?? throw new ArgumentNullException(nameof(config));
-
-			_error = error;
-			_error.ExceptionDate = _config.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
+			_bag = bag;
+			_bag.Error.ExceptionDate = _bag.Config.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
 			
-			_config.AppName =    _config.AppName.IsEmpty() ? Application.ProductName : _config.AppName;
-			_config.AppVersion = _config.AppVersion.IsEmpty() ? GetAppVersion() : _config.AppVersion;
+			_bag.Config.AppName =    _bag.Config.AppName.IsEmpty() ? Application.ProductName : _bag.Config.AppName;
+			_bag.Config.AppVersion = _bag.Config.AppVersion.IsEmpty() ? GetAppVersion() : _bag.Config.AppVersion;
 			
-			if (_error.AppAssembly == null)
-				_error.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+			if (_bag.Error.AppAssembly == null)
+				_bag.Error.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 		}
 
 //		private string GetAppVersion()
@@ -72,12 +65,12 @@ namespace ExceptionReporting
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
 			
-			var build = new ReportBuilder(_config, _error,
-				new AssemblyDigger(_error.AppAssembly), 
-				new StackTraceMaker(_error.Exceptions),
+			var build = new ReportBuilder(
+				new AssemblyDigger(_bag.Error.AppAssembly), 
+				new StackTraceMaker(_bag.Error.Exceptions),
 				new SysInfoResultMapper(sysInfoResults));
 			
-			return build.Report();
+			return build.Report(_bag);
 		}
 
 		/// <summary>

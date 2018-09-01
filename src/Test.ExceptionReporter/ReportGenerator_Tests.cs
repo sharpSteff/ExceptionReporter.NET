@@ -11,18 +11,11 @@ namespace ExceptionReporting.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			_reportGenerator = new ReportGenerator(new ReportConfig(), new ErrorData
+			_reportGenerator = new ReportGenerator(new ReportBag(new ErrorDetail
 			{
 				MainException = new Exception(),
 				AppAssembly = Assembly.GetExecutingAssembly()
-			});
-		}
-
-		[Test]
-		public void Can_Deal_With_Null_In_Constructor()
-		{
-			Assert.Throws<ArgumentNullException>(
-				() => _reportGenerator = new ReportGenerator(null, new ErrorData()), "reportInfo cannot be null");
+			}, new ReportConfig()));
 		}
 
 		[Test]
@@ -40,15 +33,15 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Create_Report_With_Local_Datetime()
 		{
-			var error = new ErrorData
+			var error = new ErrorDetail
 			{
 				MainException = new Exception()
 			};
 			// ReSharper disable once ObjectCreationAsStatement
-			new ReportGenerator(new ReportConfig
+			new ReportGenerator(new ReportBag(error, new ReportConfig
 			{
 				ExceptionDateKind = DateTimeKind.Local
-			}, error);
+			}));
 			Assert.That(error.ExceptionDate.Kind, Is.EqualTo(DateTimeKind.Local));
 		}
 	}

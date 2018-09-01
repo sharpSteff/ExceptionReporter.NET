@@ -9,13 +9,13 @@ namespace ExceptionReporting.Tests
 	{
 		private ReportConfig _config;
 		private Exception _exception;
-		private ErrorData _error;
+		private ErrorDetail _error;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_config = new ReportConfig();
-			_error = new ErrorData();
+			_error = new ErrorDetail();
 			_exception = new Exception("test");
 		}
 

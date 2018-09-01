@@ -18,49 +18,52 @@ namespace ExceptionReporting.MVP.Views
 	/// </summary>
 	public partial class ExceptionReportView : Form, IExceptionReportView
 	{
-		private readonly ErrorData _error;
+		private readonly ErrorDetail _error;
+		private readonly ReportConfig _config;
 		private bool _isDataRefreshRequired;
 		private readonly ExceptionReportPresenter _presenter;
 
-		public ExceptionReportView(ReportConfig config, ErrorData error)
+		public ExceptionReportView(ReportBag bag)
 		{
-			_error = error;
+			_error = bag.Error;
+			_config = bag.Config;
+			
 			ShowFullDetail = true;
 			InitializeComponent();
-			TopMost = config.TopMost;
+			TopMost = _config.TopMost;
 
-			_presenter = new ExceptionReportPresenter(this, config, error);		//todo  new this up outside and give properties
+			_presenter = new ExceptionReportPresenter(this, bag);
 
 			WireUpEvents();
 			PopulateTabs();
-			PopulateReportInfo(config);
+			PopulateReportInfo();
 		}
 
-		private void PopulateReportInfo(ReportConfig reportConfig)
+		private void PopulateReportInfo()
 		{
-			lblExplanation.Text = reportConfig.UserExplanationLabel;
-			ShowFullDetail = reportConfig.ShowFullDetail;
+			lblExplanation.Text = _config.UserExplanationLabel;
+			ShowFullDetail = _config.ShowFullDetail;
 			ToggleShowFullDetail();
-			btnDetailToggle.Visible = reportConfig.ShowLessDetailButton;
+			btnDetailToggle.Visible = _config.ShowLessDetailButton;
 
 			//TODO: show all exception messages
 			txtExceptionMessageLarge.Text =
-					txtExceptionMessage.Text =
-					!string.IsNullOrEmpty(reportConfig.CustomMessage) ? reportConfig.CustomMessage : _error.Exceptions.First().Message;
+				txtExceptionMessage.Text =
+					!string.IsNullOrEmpty(_config.CustomMessage) ? _config.CustomMessage : _error.Exceptions.First().Message;
 
 			txtExceptionMessageLarge2.Text = txtExceptionMessageLarge.Text;
 
 			txtDate.Text = _error.ExceptionDate.ToShortDateString();
 			txtTime.Text = _error.ExceptionDate.ToShortTimeString();
-			txtRegion.Text = reportConfig.RegionInfo;
-			txtApplicationName.Text = reportConfig.AppName;
-			txtVersion.Text = reportConfig.AppVersion;
+			txtRegion.Text = _config.RegionInfo;
+			txtApplicationName.Text = _config.AppName;
+			txtVersion.Text = _config.AppVersion;
 
 			btnClose.FlatStyle =
 					btnDetailToggle.FlatStyle =
 					btnCopy.FlatStyle =
 					btnEmail.FlatStyle =
-					btnSave.FlatStyle = reportConfig.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
+					btnSave.FlatStyle = _config.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
 
 			listviewAssemblies.BackColor =
 					txtRegion.BackColor =
@@ -70,26 +73,26 @@ namespace ExceptionReporting.MVP.Views
 					txtApplicationName.BackColor =
 					txtDate.BackColor =
 					txtExceptionMessageLarge.BackColor =
-					txtExceptionMessage.BackColor = reportConfig.BackgroundColor;
+					txtExceptionMessage.BackColor = _config.BackgroundColor;
 
-			if (!reportConfig.ShowButtonIcons)
+			if (!_config.ShowButtonIcons)
 			{
 				RemoveButtonIcons();
 			}
 
-			if (!reportConfig.ShowEmailButton)
+			if (!_config.ShowEmailButton)
 			{
 				RemoveEmailButton();
 			}
 
-			Text = reportConfig.TitleText;
-			txtUserExplanation.Font = new Font(txtUserExplanation.Font.FontFamily, reportConfig.UserExplanationFontSize);
-			lblContactCompany.Text = string.Format("If this problem persists, please contact {0} support.", reportConfig.CompanyName);
+			Text = _config.TitleText;
+			txtUserExplanation.Font = new Font(txtUserExplanation.Font.FontFamily, _config.UserExplanationFontSize);
+			lblContactCompany.Text = string.Format("If this problem persists, please contact {0} support.", _config.CompanyName);
 			btnSimpleEmail.Text = 
 				string.Format("{0} {1}", 
-				reportConfig.SendMethod == ReportSendMethod.WebService ? "Send" : "Email",
-				reportConfig.SendMethod == ReportSendMethod.WebService && !reportConfig.CompanyName.IsEmpty() ? "to " + reportConfig.CompanyName : reportConfig.CompanyName);
-			btnEmail.Text = reportConfig.SendMethod == ReportSendMethod.WebService ? "Send" : "Email";
+				_config.SendMethod == ReportSendMethod.WebService ? "Send" : "Email",
+				_config.SendMethod == ReportSendMethod.WebService && !_config.CompanyName.IsEmpty() ? "to " + _config.CompanyName : _config.CompanyName);
+			btnEmail.Text = _config.SendMethod == ReportSendMethod.WebService ? "Send" : "Email";
 		}
 
 		private void RemoveEmailButton()

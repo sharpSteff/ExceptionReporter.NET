@@ -11,20 +11,28 @@ namespace ExceptionReporting.Tests
 {
 	public class ReportBuilder_Tests
 	{
+		private ReportBag _bag;
+
+		[SetUp]
+		public void SetUp()
+		{
+			_bag = new ReportBag(new ErrorDetail
+			{
+				MainException = new TestException()
+			}, new ReportConfig
+			{
+				AppName = "TestApp",
+				AppVersion = "1.0"
+			});
+		}
+		
 		[Test]
 		public void Can_Build_Basic_Model_Properties()
 		{
 			var moqer = new AutoMoqer();
 			var reportBuilder = moqer.Create<ReportBuilder>();
-			
-			var info = moqer.GetMock<ReportConfig>().Object;
-			info.AppName = "TestApp";
-			info.AppVersion = "1.0";
-			
-			var error = moqer.GetMock<ErrorData>().Object;
-			error.MainException = new TestException();
-			
-			var model = reportBuilder.ReportModel();
+
+			var model = reportBuilder.ReportModel(_bag);
 			
 			Assert.That(model.App.Name, Is.EqualTo("TestApp"));
 			Assert.That(model.App.Version, Is.EqualTo("1.0"));
@@ -48,7 +56,7 @@ namespace ExceptionReporting.Tests
 			moqer.GetMock<ISysInfoResultMapper>().Setup(si => si.SysInfoString()).Returns("fake tree");
 			moqer.GetMock<IStackTraceMaker>().Setup(st => st.FullStackTrace()).Returns("fake stack trace");
 			
-			var model = reportBuilder.ReportModel();
+			var model = reportBuilder.ReportModel(_bag);
 			
 			Assert.That(model.App.AssemblyRefs.First().Name, Is.EqualTo("Assembly1"));
 			Assert.That(model.SystemInfo, Is.EqualTo("fake tree"));

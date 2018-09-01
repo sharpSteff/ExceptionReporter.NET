@@ -6,51 +6,48 @@ namespace ExceptionReporting.Report
 {
 	internal class ReportBuilder
 	{
-		private readonly ReportConfig _config;
-		private readonly ErrorData _error;
 		private readonly IAssemblyDigger _assemblyDigger;
 		private readonly IStackTraceMaker _stackTraceMaker;
 		private readonly ISysInfoResultMapper _sysInfoMapper;
 
-		public ReportBuilder(ReportConfig config, ErrorData error,
+		public ReportBuilder(
 			IAssemblyDigger assemblyDigger, 
 			IStackTraceMaker stackTraceMaker, 
 			ISysInfoResultMapper sysInfoMapper)
 		{
-			_config = config;
-			_error = error;
+			
 			_assemblyDigger = assemblyDigger;
 			_stackTraceMaker = stackTraceMaker;
 			_sysInfoMapper = sysInfoMapper;
 		}
 
-		public string Report()
+		public string Report(ReportBag bag)
 		{
-			var renderer = new TemplateRenderer(this.ReportModel());
-			return _config.ReportCustomTemplate.IsEmpty()
-				? renderer.RenderPreset(_config.ReportTemplateFormat)
-				: renderer.RenderCustom(_config.ReportCustomTemplate);
+			var renderer = new TemplateRenderer(this.ReportModel(bag));
+			return bag.Config.ReportCustomTemplate.IsEmpty()
+				? renderer.RenderPreset(bag.Config.ReportTemplateFormat)
+				: renderer.RenderCustom(bag.Config.ReportCustomTemplate);
 		}
 		
-		public ReportModel ReportModel()
+		public ReportModel ReportModel(ReportBag bag)
 		{
 			return new ReportModel
 			{
 				App = new App
 				{
-					Title =   _config.TitleText,
-					Name =    _config.AppName,
-					Version = _config.AppVersion,
-					Region =  _config.RegionInfo,
-					User =    _config.UserName,
+					Title =   bag.Config.TitleText,
+					Name =    bag.Config.AppName,
+					Version = bag.Config.AppVersion,
+					Region =  bag.Config.RegionInfo,
+					User =    bag.Config.UserName,
 					AssemblyRefs = _assemblyDigger.GetAssemblyRefs()
 				},
 				SystemInfo = _sysInfoMapper.SysInfoString(),
 				Error = new Error
 				{
-					Exception = _error.MainException,
-					Explanation = _config.UserExplanation,
-					When = _error.ExceptionDate,
+					Exception = bag.Error.MainException,
+					Explanation = bag.Config.UserExplanation,
+					When = bag.Error.ExceptionDate,
 					FullStackTrace = _stackTraceMaker.FullStackTrace()
 				}
 			};

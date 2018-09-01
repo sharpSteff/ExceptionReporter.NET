@@ -21,22 +21,26 @@ namespace ExceptionReporting.MVP.Presenters
 		/// <summary>
 		/// constructor accepting a view and the data/config of the report
 		/// </summary>
-		public ExceptionReportPresenter(IExceptionReportView view, ReportConfig config, ErrorData error)
+		public ExceptionReportPresenter(IExceptionReportView view, ReportBag bag)
 		{
-			_reportGenerator = new ReportGenerator(config, error);
+			_reportGenerator = new ReportGenerator(bag);
 			_fileService = new FileService();
 			View = view;
-			Config = config;
-			Error = error;
+			Config = bag.Config;
+			Error = bag.Error;
 		}
 
-		/// <summary> Report configuration and data  </summary>
+		/// <summary> Report configuration </summary>
 		public ReportConfig Config { get; }
-		private ErrorData Error { get; }
+		
+		/// <summary> exception/error data </summary>
+		private ErrorDetail Error { get; }
 
 		/// <summary> The main dialog/view  </summary>
 		private IExceptionReportView View { get; }
 
+		/// <summary> convenience method for creating the report </summary>
+		/// <returns>report as a string</returns>
 		private string CreateReport()
 		{
 			Config.UserExplanation = View.UserExplanation;
@@ -68,7 +72,7 @@ namespace ExceptionReporting.MVP.Presenters
 			View.EnableEmailButton = false;
 			View.ShowProgressBar = true;
 			
-			var sender = new SenderFactory(Config, Error, View).Get();
+			var sender = new SenderFactory(new ReportBag(Error, Config), View).Get();
 			View.ProgressMessage = sender.ConnectingMessage;
 			
 			try
