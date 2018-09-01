@@ -16,8 +16,8 @@ namespace ExceptionReporting.Tests
 		public void Can_Init_App_Assembly()
 		{
 			var er = new ExceptionReporter();
-			Assert.That(er.Config.AppAssembly, Is.Not.Null);
-			Assert.That(er.Config.AppAssembly.FullName, Does.Contain("ExceptionReporter.Tests"));
+			Assert.That(er.Error.AppAssembly, Is.Not.Null);
+			Assert.That(er.Error.AppAssembly.FullName, Does.Contain("ExceptionReporter.Tests"));
 		}
 
 		[TestCase(null,                     ExpectedResult = false)]

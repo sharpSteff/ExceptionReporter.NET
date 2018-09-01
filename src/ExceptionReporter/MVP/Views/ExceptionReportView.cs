@@ -18,47 +18,49 @@ namespace ExceptionReporting.MVP.Views
 	/// </summary>
 	public partial class ExceptionReportView : Form, IExceptionReportView
 	{
+		private readonly ErrorData _error;
 		private bool _isDataRefreshRequired;
 		private readonly ExceptionReportPresenter _presenter;
 
-		public ExceptionReportView(ExceptionReportInfo reportInfo)
+		public ExceptionReportView(ReportConfig config, ErrorData error)
 		{
+			_error = error;
 			ShowFullDetail = true;
 			InitializeComponent();
-			TopMost = reportInfo.TopMost;
+			TopMost = config.TopMost;
 
-			_presenter = new ExceptionReportPresenter(this, reportInfo);
+			_presenter = new ExceptionReportPresenter(this, config, error);		//todo  new this up outside and give properties
 
 			WireUpEvents();
 			PopulateTabs();
-			PopulateReportInfo(reportInfo);
+			PopulateReportInfo(config);
 		}
 
-		private void PopulateReportInfo(ExceptionReportInfo reportInfo)
+		private void PopulateReportInfo(ReportConfig reportConfig)
 		{
-			lblExplanation.Text = reportInfo.UserExplanationLabel;
-			ShowFullDetail = reportInfo.ShowFullDetail;
+			lblExplanation.Text = reportConfig.UserExplanationLabel;
+			ShowFullDetail = reportConfig.ShowFullDetail;
 			ToggleShowFullDetail();
-			btnDetailToggle.Visible = reportInfo.ShowLessDetailButton;
+			btnDetailToggle.Visible = reportConfig.ShowLessDetailButton;
 
 			//TODO: show all exception messages
 			txtExceptionMessageLarge.Text =
 					txtExceptionMessage.Text =
-					!string.IsNullOrEmpty(reportInfo.CustomMessage) ? reportInfo.CustomMessage : reportInfo.Exceptions.First().Message;
+					!string.IsNullOrEmpty(reportConfig.CustomMessage) ? reportConfig.CustomMessage : _error.Exceptions.First().Message;
 
 			txtExceptionMessageLarge2.Text = txtExceptionMessageLarge.Text;
 
-			txtDate.Text = reportInfo.ExceptionDate.ToShortDateString();
-			txtTime.Text = reportInfo.ExceptionDate.ToShortTimeString();
-			txtRegion.Text = reportInfo.RegionInfo;
-			txtApplicationName.Text = reportInfo.AppName;
-			txtVersion.Text = reportInfo.AppVersion;
+			txtDate.Text = _error.ExceptionDate.ToShortDateString();
+			txtTime.Text = _error.ExceptionDate.ToShortTimeString();
+			txtRegion.Text = reportConfig.RegionInfo;
+			txtApplicationName.Text = reportConfig.AppName;
+			txtVersion.Text = reportConfig.AppVersion;
 
 			btnClose.FlatStyle =
 					btnDetailToggle.FlatStyle =
 					btnCopy.FlatStyle =
 					btnEmail.FlatStyle =
-					btnSave.FlatStyle = reportInfo.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
+					btnSave.FlatStyle = reportConfig.ShowFlatButtons ? FlatStyle.Flat : FlatStyle.Standard;
 
 			listviewAssemblies.BackColor =
 					txtRegion.BackColor =
@@ -68,26 +70,26 @@ namespace ExceptionReporting.MVP.Views
 					txtApplicationName.BackColor =
 					txtDate.BackColor =
 					txtExceptionMessageLarge.BackColor =
-					txtExceptionMessage.BackColor = reportInfo.BackgroundColor;
+					txtExceptionMessage.BackColor = reportConfig.BackgroundColor;
 
-			if (!reportInfo.ShowButtonIcons)
+			if (!reportConfig.ShowButtonIcons)
 			{
 				RemoveButtonIcons();
 			}
 
-			if (!reportInfo.ShowEmailButton)
+			if (!reportConfig.ShowEmailButton)
 			{
 				RemoveEmailButton();
 			}
 
-			Text = reportInfo.TitleText;
-			txtUserExplanation.Font = new Font(txtUserExplanation.Font.FontFamily, reportInfo.UserExplanationFontSize);
-			lblContactCompany.Text = string.Format("If this problem persists, please contact {0} support.", reportInfo.CompanyName);
+			Text = reportConfig.TitleText;
+			txtUserExplanation.Font = new Font(txtUserExplanation.Font.FontFamily, reportConfig.UserExplanationFontSize);
+			lblContactCompany.Text = string.Format("If this problem persists, please contact {0} support.", reportConfig.CompanyName);
 			btnSimpleEmail.Text = 
 				string.Format("{0} {1}", 
-				reportInfo.SendMethod == ReportSendMethod.WebService ? "Send" : "Email",
-				reportInfo.SendMethod == ReportSendMethod.WebService && !reportInfo.CompanyName.IsEmpty() ? "to " + reportInfo.CompanyName : reportInfo.CompanyName);
-			btnEmail.Text = reportInfo.SendMethod == ReportSendMethod.WebService ? "Send" : "Email";
+				reportConfig.SendMethod == ReportSendMethod.WebService ? "Send" : "Email",
+				reportConfig.SendMethod == ReportSendMethod.WebService && !reportConfig.CompanyName.IsEmpty() ? "to " + reportConfig.CompanyName : reportConfig.CompanyName);
+			btnEmail.Text = reportConfig.SendMethod == ReportSendMethod.WebService ? "Send" : "Email";
 		}
 
 		private void RemoveEmailButton()
@@ -213,19 +215,19 @@ namespace ExceptionReporting.MVP.Views
 		/// </summary>
 		private void PopulateTabs()
 		{
-			if (!_presenter.ReportInfo.ShowGeneralTab)
+			if (!_presenter.Config.ShowGeneralTab)
 			{
 				tabControl.TabPages.Remove(tabGeneral);
 			}
-			if (!_presenter.ReportInfo.ShowExceptionsTab)
+			if (!_presenter.Config.ShowExceptionsTab)
 			{
 				tabControl.TabPages.Remove(tabExceptions);
 			}
-			if (!_presenter.ReportInfo.ShowAssembliesTab)
+			if (!_presenter.Config.ShowAssembliesTab)
 			{
 				tabControl.TabPages.Remove(tabAssemblies);
 			}
-			if (!_presenter.ReportInfo.ShowSysInfoTab)
+			if (!_presenter.Config.ShowSysInfoTab)
 			{
 				tabControl.TabPages.Remove(tabSysInfo);
 			}
@@ -288,7 +290,7 @@ namespace ExceptionReporting.MVP.Views
 		private void AddExceptionControl(Control control, Exception exception)
 		{
 			var exceptionDetail = new ExceptionDetailControl();
-			exceptionDetail.SetControlBackgrounds(_presenter.ReportInfo.BackgroundColor);
+			exceptionDetail.SetControlBackgrounds(_presenter.Config.BackgroundColor);
 			exceptionDetail.PopulateExceptionTab(exception);
 			exceptionDetail.Dock = DockStyle.Fill;
 			control.Controls.Add(exceptionDetail);

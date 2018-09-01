@@ -4,13 +4,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Deployment.Application;
+//using System.Deployment.Application;
 using System.Reflection;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
 using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
-using ExceptionReporting.Templates;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -22,40 +21,44 @@ namespace ExceptionReporting
 	/// ReportGenerator is the entry point to use 'ExceptionReporter.NET' to retrieve the report/data only.
 	/// ie if the user only requires the report info but has no need to use the show or send functionality available
 	/// </summary>
-	public class ReportGenerator
+	internal class ReportGenerator
 	{
-		private readonly ExceptionReportInfo _info;
+		private readonly ReportConfig _config;
+		private readonly ErrorData _error;
 		private readonly List<SysInfoResult> _sysInfoResults = new List<SysInfoResult>();
 
 		/// <summary>
 		/// Initialises some ExceptionReportInfo properties related to the application/system
 		/// </summary>
-		/// <param name="reportInfo">an ExceptionReportInfo, can be pre-populated with config
-		/// however 'base' properties such as MachineName</param>
-		public ReportGenerator(ExceptionReportInfo reportInfo)
+		/// <param name="config">an ExceptionReportInfo, can be pre-populated with config</param>
+		/// <param name="error">an ExceptionReportInfo, can be pre-populated with config however 'base'
+		/// properties such as MachineName</param>
+		public ReportGenerator(ReportConfig config, ErrorData error)
 		{
 			// this is going to be a dev/learning mistake - fail fast and hard
-			_info = reportInfo ?? throw new ArgumentNullException(nameof(reportInfo));
+			_config = config ?? throw new ArgumentNullException(nameof(config));
+
+			_error = error;
+			_error.ExceptionDate = _config.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
 			
-			_info.AppName =    _info.AppName.IsEmpty() ? Application.ProductName : _info.AppName;
-			_info.AppVersion = _info.AppVersion.IsEmpty() ? GetAppVersion() : _info.AppVersion;
-			_info.ExceptionDate = _info.ExceptionDateKind != DateTimeKind.Local ? DateTime.UtcNow : DateTime.Now;
+			_config.AppName =    _config.AppName.IsEmpty() ? Application.ProductName : _config.AppName;
+			_config.AppVersion = _config.AppVersion.IsEmpty() ? GetAppVersion() : _config.AppVersion;
 			
-			if (_info.AppAssembly == null)
-				_info.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+			if (_error.AppAssembly == null)
+				_error.AppAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 		}
 
-		private string GetAppVersion()
-		{
-			return ApplicationDeployment.IsNetworkDeployed ? 
-				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-		}
-		
-//		leave commented out for mono to toggle in/out to be able to compile
 //		private string GetAppVersion()
 //		{
-//			return Application.ProductVersion;
+//			return ApplicationDeployment.IsNetworkDeployed ? 
+//				ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
 //		}
+		
+//		leave commented out for mono to toggle in/out to be able to compile
+		private string GetAppVersion()
+		{
+			return Application.ProductVersion;
+		}
 
 		/// <summary>
 		/// Generate the exception report
@@ -69,9 +72,9 @@ namespace ExceptionReporting
 		{
 			var sysInfoResults = GetOrFetchSysInfoResults();
 			
-			var build = new ReportBuilder(_info,  
-				new AssemblyDigger(_info.AppAssembly), 
-				new StackTraceMaker(_info.Exceptions),
+			var build = new ReportBuilder(_config, _error,
+				new AssemblyDigger(_error.AppAssembly), 
+				new StackTraceMaker(_error.Exceptions),
 				new SysInfoResultMapper(sysInfoResults));
 			
 			return build.Report();

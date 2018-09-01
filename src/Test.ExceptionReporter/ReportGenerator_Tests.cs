@@ -6,23 +6,23 @@ namespace ExceptionReporting.Tests
 {
 	public class ReportGenerator_Tests
 	{
-		private ExceptionReportInfo _info;
 		private ReportGenerator _reportGenerator;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_info = new ExceptionReportInfo { MainException = new Exception() };
-			_reportGenerator = new ReportGenerator(_info);
-
-			// set for testing because the AppAssembly filled by default, is null in a test environment
-			_info.AppAssembly = Assembly.GetExecutingAssembly();
+			_reportGenerator = new ReportGenerator(new ReportConfig(), new ErrorData
+			{
+				MainException = new Exception(),
+				AppAssembly = Assembly.GetExecutingAssembly()
+			});
 		}
 
 		[Test]
 		public void Can_Deal_With_Null_In_Constructor()
 		{
-			Assert.Throws<ArgumentNullException>(() => _reportGenerator = new ReportGenerator(null), "reportInfo cannot be null");
+			Assert.Throws<ArgumentNullException>(
+				() => _reportGenerator = new ReportGenerator(null, new ErrorData()), "reportInfo cannot be null");
 		}
 
 		[Test]
@@ -40,14 +40,16 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Create_Report_With_Local_Datetime()
 		{
-			var reportInfo = new ExceptionReportInfo
+			var error = new ErrorData
 			{
-				ExceptionDateKind = DateTimeKind.Local, 
 				MainException = new Exception()
 			};
 			// ReSharper disable once ObjectCreationAsStatement
-			new ReportGenerator(reportInfo);
-			Assert.That(reportInfo.ExceptionDate.Kind, Is.EqualTo(DateTimeKind.Local));
+			new ReportGenerator(new ReportConfig
+			{
+				ExceptionDateKind = DateTimeKind.Local
+			}, error);
+			Assert.That(error.ExceptionDate.Kind, Is.EqualTo(DateTimeKind.Local));
 		}
 	}
 }

@@ -71,19 +71,19 @@ namespace Demo.WinForms
 			return exceptionReporter;
 		}
 
-		void ConfigureSimpleMAPI(ExceptionReportInfo config)
+		void ConfigureSimpleMAPI(ReportConfig config)
 		{
 			config.EmailReportAddress = "demo@exceptionreporter.com";
 			config.SendMethod = ReportSendMethod.SimpleMAPI;
 		}
 
-		void ConfigureWebService(ExceptionReportInfo config)
+		void ConfigureWebService(ReportConfig config)
 		{
 			config.SendMethod = ReportSendMethod.WebService;
 			config.WebServiceUrl = "http://localhost:24513/api/er";
 		}
 
-		void ConfigureSmtpEmail(ExceptionReportInfo config) 
+		void ConfigureSmtpEmail(ReportConfig config) 
 		{
 			//--- Test SMTP - recommend using MailSlurper https://github.com/mailslurper
 			config.SendMethod = ReportSendMethod.SMTP;		// obsolete deprecated property used here, will be removed in later version

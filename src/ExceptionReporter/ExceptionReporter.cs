@@ -4,6 +4,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
@@ -19,7 +20,8 @@ namespace ExceptionReporting
 	/// </summary>
 	public class ExceptionReporter
 	{
-		private readonly ExceptionReportInfo _reportInfo;
+		private readonly ReportConfig _config;
+		private readonly ErrorData _error;
 		
 		/// <summary>
 		/// Contract by which to show any dialogs/view
@@ -31,11 +33,12 @@ namespace ExceptionReporting
 		/// </summary>
 		public ExceptionReporter()
 		{
-			_reportInfo = new ExceptionReportInfo
+			_config = new ReportConfig();
+			_error = new ErrorData
 			{
 				AppAssembly = Assembly.GetCallingAssembly()
 			};
-			ViewMaker = new ViewMaker(_reportInfo);
+			ViewMaker = new ViewMaker(_config, _error);
 		}
 
 		// One issue we have with Config property here is that we store the exception and other info on it as well
@@ -46,9 +49,17 @@ namespace ExceptionReporting
 		/// <summary>
 		/// Public access to configuration/settings
 		/// </summary>
-		public ExceptionReportInfo Config
+		public ReportConfig Config
 		{
-			get { return _reportInfo; }
+			get { return _config; }
+		}
+		
+		/// <summary>
+		/// Public access to exception/error
+		/// </summary>
+		public ErrorData Error
+		{
+			get { return _error; }
 		}
 
 		/// <summary>
@@ -66,7 +77,7 @@ namespace ExceptionReporting
 
 			try
 			{
-				_reportInfo.SetExceptions(exceptions);
+				_error.SetExceptions(exceptions);
 				
 				var view = ViewMaker.Create();
 				view.ShowWindow();
@@ -88,28 +99,28 @@ namespace ExceptionReporting
 		/// <param name="exceptions">The exception/s to display in the exception report</param>
 		public void Show(string customMessage, params Exception[] exceptions)
 		{
-			_reportInfo.CustomMessage = customMessage;
+			_config.CustomMessage = customMessage;
 			Show(exceptions);
 		}
 
 		/// <summary>
 		/// Send the report, asynchronously, without showing a dialog (silent send)
-		/// <see cref="ExceptionReportInfo.SendMethod"/>must be SMTP or WebService, else this is ignored (silently)
+		/// For this <see cref="ReportConfig.SendMethod"/> must be SMTP or WebService, else this is ignored (silently)
 		/// </summary>
 		/// <param name="sendEvent">Provide implementation of IReportSendEvent to receive error/updates on calling thread</param>
 		/// <param name="exceptions">The exception/s to include in the report</param>
 		public void Send(IReportSendEvent sendEvent = null, params Exception[] exceptions)
 		{
-			_reportInfo.SetExceptions(exceptions);
+			_error.SetExceptions(exceptions);
 			
-			var sender = new SenderFactory(_reportInfo, sendEvent ?? new SilentSendEvent()).Get();
-			var report = new ReportGenerator(_reportInfo);
+			var sender = new SenderFactory(_config, _error, sendEvent ?? new SilentSendEvent()).Get();
+			var report = new ReportGenerator(_config, _error);
 			sender.Send(report.Generate());
 		}
 
 		/// <summary>
 		/// Send the report, asynchronously, without showing a dialog (silent send)
-		/// <see cref="ExceptionReportInfo.SendMethod"/>must be SMTP or WebService, else this is ignored (silently)
+		/// For this <see cref="ReportConfig.SendMethod"/> must be SMTP or WebService, else this is ignored (silently)
 		/// </summary>
 		/// <param name="exceptions">The exception/s to include in the report</param>
 		public void Send(params Exception[] exceptions)
@@ -117,7 +128,18 @@ namespace ExceptionReporting
 			Send(new SilentSendEvent(), exceptions);
 		}
 
-		static readonly bool _isRunningMono = System.Type.GetType("Mono.Runtime") != null;
+		/// <summary>
+		/// Generate report without showing or sending
+		/// </summary>
+		/// <returns>report as a string (in format configured <see cref="TemplateFormat"/></returns>
+		public string GetReport(params Exception[] exceptions)
+		{
+			_error.SetExceptions(exceptions);
+			var generator = new ReportGenerator(_config, _error);
+			return generator.Generate();
+		}
+
+		static readonly bool _isRunningMono = Type.GetType("Mono.Runtime") != null;
 
 		/// <returns><c>true</c>, if running mono <c>false</c> otherwise.</returns>
 		public static bool IsRunningMono() { return _isRunningMono; }

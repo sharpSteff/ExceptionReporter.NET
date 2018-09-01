@@ -5,12 +5,14 @@ namespace ExceptionReporting.Network
 {
 	internal class SenderFactory
 	{
-		private readonly ExceptionReportInfo _config;
+		private readonly ReportConfig _config;
+		private readonly ErrorData _error;
 		private readonly IReportSendEvent _sendEvent;
 
-		public SenderFactory(ExceptionReportInfo config, IReportSendEvent sendEvent)
+		public SenderFactory(ReportConfig config, ErrorData error, IReportSendEvent sendEvent)
 		{
 			_config = config;
+			_error = error;
 			_sendEvent = sendEvent;
 		}
 
@@ -19,11 +21,11 @@ namespace ExceptionReporting.Network
 			switch (_config.SendMethod)
 			{
 				case ReportSendMethod.WebService:
-					return new WebServiceSender(_config, _sendEvent);
+					return new WebServiceSender(_config, _error, _sendEvent);
 				case ReportSendMethod.SMTP:
-					return new SmtpMailSender(_config, _sendEvent);
+					return new SmtpMailSender(_config, _error, _sendEvent);
 				case ReportSendMethod.SimpleMAPI:
-					return new MapiMailSender(_config, _sendEvent);
+					return new MapiMailSender(_config, _error, _sendEvent);
 				case ReportSendMethod.None:
 					return new GhostSender();
 				default:

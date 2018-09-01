@@ -9,8 +9,8 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal class SmtpMailSender : MailSender, IReportSender
 	{
-		public SmtpMailSender(ExceptionReportInfo reportInfo, IReportSendEvent sendEvent) : 
-			base(reportInfo, sendEvent)
+		public SmtpMailSender(ReportConfig reportConfig, ErrorData error, IReportSendEvent sendEvent) : 
+			base(reportConfig, error, sendEvent)
 		{ }
 		
 		public override string Description

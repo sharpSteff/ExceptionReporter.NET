@@ -15,10 +15,10 @@ namespace ExceptionReporting.Tests
 		[TestCase(ReportSendMethod.WebService, ExpectedResult = typeof(WebServiceSender))]
 		public Type Can_Determine_Sender(ReportSendMethod method)
 		{
-			var factory = new SenderFactory(new ExceptionReportInfo 
+			var factory = new SenderFactory(new ReportConfig 
 			{ 
 				SendMethod = method
-			}, new Mock<IReportSendEvent>().Object);
+			}, new ErrorData(), new Mock<IReportSendEvent>().Object);
 
 			return factory.Get().GetType();
 		}

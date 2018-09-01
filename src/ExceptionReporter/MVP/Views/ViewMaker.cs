@@ -27,16 +27,18 @@ namespace ExceptionReporting.MVP.Views
 {
 	internal class ViewMaker : IViewMaker
 	{
-		private readonly ExceptionReportInfo _reportInfo;
+		private readonly ReportConfig _config;
+		private readonly ErrorData _error;
 
-		public ViewMaker(ExceptionReportInfo reportInfo)
+		public ViewMaker(ReportConfig config, ErrorData error)
 		{
-			_reportInfo = reportInfo;
+			_config = config;
+			_error = error;
 		}
 		
 		public IExceptionReportView Create()
 		{
-			return new ExceptionReportView(_reportInfo);
+			return new ExceptionReportView(_config, _error);
 		}
 
 		public void ShowError(string message, string description)

@@ -22,7 +22,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Attach_Nothing_If_None_To_Attach()
 		{
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new string[] {} })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new string[] {} })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -39,7 +39,7 @@ namespace ExceptionReporting.Tests
 			_file.Setup(f => f.Exists("file1")).Returns(true);
 			_file.Setup(f => f.TempFile(It.IsAny<string>())).Returns("attach.zip");
 
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new[] { "file1" } })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new[] { "file1" } })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -56,7 +56,7 @@ namespace ExceptionReporting.Tests
 			_file.Setup(f => f.Exists(It.IsAny<string>())).Returns(true);
 			_file.Setup(f => f.TempFile(It.IsAny<string>())).Returns("attach.zip");
 
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new[] { "file1", "file2", "file3" } })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new[] { "file1", "file2", "file3" } })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -73,7 +73,7 @@ namespace ExceptionReporting.Tests
 			_file.Setup(f => f.Exists(It.IsAny<string>())).Returns(false);
 			_file.Setup(f => f.TempFile(It.IsAny<string>())).Returns("attach.zip");
 
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new[] { "file1", "file2", "file3" } })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new[] { "file1", "file2", "file3" } })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -88,7 +88,7 @@ namespace ExceptionReporting.Tests
 		public void Can_Attach_1_For_Each_Already_Zipped()
 		{
 			_file.Setup(f => f.Exists(It.IsAny<string>())).Returns(true);
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new[] { "file1.zip", "file2.zip" } })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new[] { "file1.zip", "file2.zip" } })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -106,7 +106,7 @@ namespace ExceptionReporting.Tests
 			_file.Setup(f => f.TempFile(It.IsAny<string>())).Returns("attach.zip");
 			_file.Setup(f => f.Exists(It.IsAny<string>())).Returns(true);
 
-			var attacher = new Attacher(new ExceptionReportInfo { FilesToAttach = new[] { "file1.zip" , "file2.txt"} })
+			var attacher = new Attacher(new ReportConfig { FilesToAttach = new[] { "file1.zip" , "file2.txt"} })
 			{
 				File = _file.Object,
 				Zipper = _zip.Object
@@ -123,7 +123,7 @@ namespace ExceptionReporting.Tests
 		{
 			var screenshot = new Mock<IScreenshotTaker>();
 			var attacher =
-				new Attacher(new ExceptionReportInfo {TakeScreenshot = true})
+				new Attacher(new ReportConfig {TakeScreenshot = true})
 				{
 					ScreenshotTaker = screenshot.Object
 				};
@@ -138,7 +138,7 @@ namespace ExceptionReporting.Tests
 		{
 			var screenshot = new Mock<IScreenshotTaker>();
 			var attacher =
-				new Attacher(new ExceptionReportInfo { TakeScreenshot = false })
+				new Attacher(new ReportConfig { TakeScreenshot = false })
 				{
 					ScreenshotTaker = screenshot.Object
 				};

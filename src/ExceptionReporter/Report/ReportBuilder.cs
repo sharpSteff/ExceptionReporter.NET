@@ -6,17 +6,19 @@ namespace ExceptionReporting.Report
 {
 	internal class ReportBuilder
 	{
-		private readonly ExceptionReportInfo _info;
+		private readonly ReportConfig _config;
+		private readonly ErrorData _error;
 		private readonly IAssemblyDigger _assemblyDigger;
 		private readonly IStackTraceMaker _stackTraceMaker;
 		private readonly ISysInfoResultMapper _sysInfoMapper;
 
-		public ReportBuilder(ExceptionReportInfo info,
+		public ReportBuilder(ReportConfig config, ErrorData error,
 			IAssemblyDigger assemblyDigger, 
 			IStackTraceMaker stackTraceMaker, 
 			ISysInfoResultMapper sysInfoMapper)
 		{
-			_info = info;
+			_config = config;
+			_error = error;
 			_assemblyDigger = assemblyDigger;
 			_stackTraceMaker = stackTraceMaker;
 			_sysInfoMapper = sysInfoMapper;
@@ -25,9 +27,9 @@ namespace ExceptionReporting.Report
 		public string Report()
 		{
 			var renderer = new TemplateRenderer(this.ReportModel());
-			return _info.ReportCustomTemplate.IsEmpty()
-				? renderer.RenderPreset(_info.ReportTemplateFormat)
-				: renderer.RenderCustom(_info.ReportCustomTemplate);
+			return _config.ReportCustomTemplate.IsEmpty()
+				? renderer.RenderPreset(_config.ReportTemplateFormat)
+				: renderer.RenderCustom(_config.ReportCustomTemplate);
 		}
 		
 		public ReportModel ReportModel()
@@ -36,19 +38,19 @@ namespace ExceptionReporting.Report
 			{
 				App = new App
 				{
-					Title =   _info.TitleText,
-					Name =    _info.AppName,
-					Version = _info.AppVersion,
-					Region =  _info.RegionInfo,
-					User =    _info.UserName,
+					Title =   _config.TitleText,
+					Name =    _config.AppName,
+					Version = _config.AppVersion,
+					Region =  _config.RegionInfo,
+					User =    _config.UserName,
 					AssemblyRefs = _assemblyDigger.GetAssemblyRefs()
 				},
 				SystemInfo = _sysInfoMapper.SysInfoString(),
 				Error = new Error
 				{
-					Exception = _info.MainException,
-					Explanation = _info.UserExplanation,
-					When = _info.ExceptionDate,
+					Exception = _error.MainException,
+					Explanation = _config.UserExplanation,
+					When = _error.ExceptionDate,
 					FullStackTrace = _stackTraceMaker.FullStackTrace()
 				}
 			};

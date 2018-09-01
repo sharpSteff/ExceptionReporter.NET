@@ -8,13 +8,13 @@ namespace ExceptionReporting.Mail
 	{
 		private const string ZIP = ".zip";
 		
-		private readonly ExceptionReportInfo _config;
+		private readonly ReportConfig _config;
 
 		public IFileService File { private get; set; } = new FileService();
 		public IZipper Zipper { private get; set; } = new Zipper();
 		public IScreenshotTaker ScreenshotTaker { private get; set; } = new ScreenshotTaker();
 
-		public Attacher(ExceptionReportInfo config)
+		public Attacher(ReportConfig config)
 		{
 			_config = config;
 		}

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
+using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
 using ExceptionReporting.Templates;
@@ -16,11 +17,13 @@ namespace ExceptionReporting.Tests
 			var moqer = new AutoMoqer();
 			var reportBuilder = moqer.Create<ReportBuilder>();
 			
-			var info = moqer.GetMock<ExceptionReportInfo>().Object;
+			var info = moqer.GetMock<ReportConfig>().Object;
 			info.AppName = "TestApp";
 			info.AppVersion = "1.0";
-			info.MainException = new TestException();
-
+			
+			var error = moqer.GetMock<ErrorData>().Object;
+			error.MainException = new TestException();
+			
 			var model = reportBuilder.ReportModel();
 			
 			Assert.That(model.App.Name, Is.EqualTo("TestApp"));

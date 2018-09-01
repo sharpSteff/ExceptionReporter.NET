@@ -86,7 +86,7 @@
     <Compile Include="MVP\Views\ViewMaker.cs" />
     <Compile Include="Network\SenderFactory.cs" />
     <Compile Include="Network\Senders\GhostSender.cs" />
-    <Compile Include="ExceptionReportInfo.cs" />
+    <Compile Include="ReportConfig.cs" />
     <Compile Include="MVP\Views\ExceptionDetailControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,6 +115,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ErrorData.cs" />
     <Compile Include="ReportGenerator.cs" />
     <Compile Include="Report\AssemblyDigger.cs" />
     <Compile Include="Report\ReportBuilder.cs" />

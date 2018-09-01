@@ -21,23 +21,25 @@ namespace ExceptionReporting.MVP.Presenters
 		/// <summary>
 		/// constructor accepting a view and the data/config of the report
 		/// </summary>
-		public ExceptionReportPresenter(IExceptionReportView view, ExceptionReportInfo info)
+		public ExceptionReportPresenter(IExceptionReportView view, ReportConfig config, ErrorData error)
 		{
-			_reportGenerator = new ReportGenerator(info);
+			_reportGenerator = new ReportGenerator(config, error);
 			_fileService = new FileService();
 			View = view;
-			ReportInfo = info;
+			Config = config;
+			Error = error;
 		}
 
 		/// <summary> Report configuration and data  </summary>
-		public ExceptionReportInfo ReportInfo { get; }
+		public ReportConfig Config { get; }
+		private ErrorData Error { get; }
 
 		/// <summary> The main dialog/view  </summary>
 		private IExceptionReportView View { get; }
 
 		private string CreateReport()
 		{
-			ReportInfo.UserExplanation = View.UserExplanation;
+			Config.UserExplanation = View.UserExplanation;
 			return _reportGenerator.Generate();
 		}
 
@@ -66,12 +68,12 @@ namespace ExceptionReporting.MVP.Presenters
 			View.EnableEmailButton = false;
 			View.ShowProgressBar = true;
 			
-			var sender = new SenderFactory(ReportInfo, View).Get();
+			var sender = new SenderFactory(Config, Error, View).Get();
 			View.ProgressMessage = sender.ConnectingMessage;
 			
 			try
 			{
-				var report = ReportInfo.IsSimpleMAPI() ? CreateEmailReport() : CreateReport();
+				var report = Config.IsSimpleMAPI() ? CreateEmailReport() : CreateReport();
 				sender.Send(report);
 			}
 			catch (Exception exception)
@@ -82,7 +84,7 @@ namespace ExceptionReporting.MVP.Presenters
 			}
 			finally
 			{
-				if (ReportInfo.IsSimpleMAPI())
+				if (Config.IsSimpleMAPI())
 				{
 					View.MapiSendCompleted();
 				}
@@ -112,7 +114,7 @@ namespace ExceptionReporting.MVP.Presenters
 		{
 			var template = new TemplateRenderer(new EmailIntroModel
 			{
-				ScreenshotTaken = ReportInfo.TakeScreenshot
+				ScreenshotTaken = Config.TakeScreenshot
 			});
 			var emailIntro = template.RenderPreset();
 			var report = CreateReport();
@@ -137,7 +139,7 @@ namespace ExceptionReporting.MVP.Presenters
 			{
 				View.SetInProgressState();
 
-				View.PopulateExceptionTab(ReportInfo.Exceptions);
+				View.PopulateExceptionTab(Error.Exceptions);
 				View.PopulateAssembliesTab();
 				if (ExceptionReporter.NotRunningMono())
 					View.PopulateSysInfoTab();
@@ -150,7 +152,7 @@ namespace ExceptionReporting.MVP.Presenters
 
 		public List<AssemblyRef> GetReferencedAssemblies()
 		{
-			return new AssemblyDigger(ReportInfo.AppAssembly).GetAssemblyRefs().ToList();
+			return new AssemblyDigger(Error.AppAssembly).GetAssemblyRefs().ToList();
 		}
 	}
 }

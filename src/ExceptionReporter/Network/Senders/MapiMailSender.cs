@@ -8,8 +8,8 @@ namespace ExceptionReporting.Network.Senders
 {
 	internal class MapiMailSender : MailSender, IReportSender
 	{
-		public MapiMailSender(ExceptionReportInfo reportInfo, IReportSendEvent sendEvent) : 
-			base(reportInfo, sendEvent)
+		public MapiMailSender(ReportConfig reportConfig, ErrorData error, IReportSendEvent sendEvent) : 
+			base(reportConfig, error, sendEvent)
 		{ }
 
 		public override string Description
