@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExceptionReporting;
 using ExceptionReporting.Templates;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class TemplateRenderer_Tests
 	{

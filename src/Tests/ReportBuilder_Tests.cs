@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
+using ExceptionReporting;
 using ExceptionReporting.Report;
 using ExceptionReporting.SystemInfo;
-using ExceptionReporting.Templates;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class ReportBuilder_Tests
 	{

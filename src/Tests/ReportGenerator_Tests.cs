@@ -1,8 +1,9 @@
 using System;
 using System.Reflection;
+using ExceptionReporting;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class ReportGenerator_Tests
 	{
@@ -28,7 +29,7 @@ namespace ExceptionReporting.Tests
 		[Test]
 		public void Can_Create_Report_With_A_Couple_Of_Minimal_Bits_That_Should_Exist()
 		{
-			if (ExceptionReporter.IsRunningMono()) return;
+			if (ExceptionReporting.ExceptionReporter.IsRunningMono()) return;
 			var report = _reportGenerator.Generate();
 			var reportString = report;
 

@@ -1,9 +1,8 @@
+using System.Linq;
 using ExceptionReporting.SystemInfo;
 using NUnit.Framework;
-using System.Linq;
-using ExceptionReporting.Core;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	/// <summary>
 	/// These are really "integration tests"
@@ -18,7 +17,7 @@ namespace ExceptionReporting.Tests
 		public void Can_Retrieve_SysInfo_For_CPU()
 		{
 			var sysInfoResult = _retriever.Retrieve(SysInfoQueries.Machine);
-			if (ExceptionReporter.IsRunningMono())
+			if (ExceptionReporting.ExceptionReporter.IsRunningMono())
 			{
 				Assert.That(sysInfoResult, Is.Null);
 				return;
@@ -33,7 +32,7 @@ namespace ExceptionReporting.Tests
 		public void Can_Retrieve_SysInfo_For_OS()
 		{
 			var sysInfoResult = _retriever.Retrieve(SysInfoQueries.OperatingSystem);
-			if (ExceptionReporter.IsRunningMono())
+			if (ExceptionReporting.ExceptionReporter.IsRunningMono())
 			{
 				Assert.That(sysInfoResult, Is.Null);
 				return;

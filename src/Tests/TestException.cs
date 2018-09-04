@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	internal class TestException : Exception
 	{

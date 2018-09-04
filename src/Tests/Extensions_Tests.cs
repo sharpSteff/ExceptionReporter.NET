@@ -1,7 +1,7 @@
 using ExceptionReporting.Core;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class Extensions_Tests
 	{

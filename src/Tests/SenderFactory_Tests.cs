@@ -1,11 +1,12 @@
 ﻿using System;
+using ExceptionReporting;
 using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
 using ExceptionReporting.Network.Senders;
 using Moq;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class SenderFactory_Tests
 	{

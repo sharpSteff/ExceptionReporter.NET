@@ -1,9 +1,10 @@
+using ExceptionReporting;
 using ExceptionReporting.Core;
 using ExceptionReporting.Mail;
 using Moq;
 using NUnit.Framework;
 
-namespace ExceptionReporting.Tests
+namespace Tests.ExceptionReporter
 {
 	public class Attacher_Tests
 	{

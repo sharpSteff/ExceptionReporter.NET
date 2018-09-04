@@ -3,7 +3,7 @@
 		<TargetFramework>net452</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ExceptionReporter.NET\ExceptionReporter.NET.csproj" />
+	  <ProjectReference Include="..\..\ExceptionReporting\ExceptionReporter.NET.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="System.Windows.Forms" />
