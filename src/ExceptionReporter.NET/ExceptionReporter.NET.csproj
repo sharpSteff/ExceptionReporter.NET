@@ -12,6 +12,16 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Templates\EmailIntroTemplate.text" />
+    <EmbeddedResource Include="Templates\EmailIntroTemplate.text" />
+    <None Remove="Templates\ReportTemplate.html" />
+    <EmbeddedResource Include="Templates\ReportTemplate.html" />
+    <None Remove="Templates\ReportTemplate.markdown" />
+    <EmbeddedResource Include="Templates\ReportTemplate.markdown" />
+    <None Remove="Templates\ReportTemplate.text" />
+    <EmbeddedResource Include="Templates\ReportTemplate.text" />
+  </ItemGroup>
   <PropertyGroup>
     <Version>4.0.3</Version>
     <FileVersion>4.0.3</FileVersion>

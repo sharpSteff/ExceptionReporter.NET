@@ -17,7 +17,7 @@ namespace ExceptionReporting.Tests
 		{
 			var er = new ExceptionReporter();
 			Assert.That(er.Config.AppAssembly, Is.Not.Null);
-			Assert.That(er.Config.AppAssembly.FullName, Does.Contain("ExceptionReporter.Tests"));
+			Assert.That(er.Config.AppAssembly.FullName, Does.Contain("Tests.ExceptionReporter"));
 		}
 
 		[TestCase(null,                     ExpectedResult = false)]
