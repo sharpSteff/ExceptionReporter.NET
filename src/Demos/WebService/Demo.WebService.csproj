@@ -7,9 +7,18 @@
     <RootNamespace>Demo.WebService</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <Compile Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\**" />
   </ItemGroup>
 </Project>

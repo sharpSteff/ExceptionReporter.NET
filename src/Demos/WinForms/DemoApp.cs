@@ -118,6 +118,9 @@ namespace Demo.WinForms
 						ShowLessDetailButton = true,
 						ReportTemplateFormat = TemplateFormat.Text,
 						// TemplateFormat = TemplateFormat.Markdown
+					},
+					Error = {
+						MainException = exception
 					}
 				};
 				
