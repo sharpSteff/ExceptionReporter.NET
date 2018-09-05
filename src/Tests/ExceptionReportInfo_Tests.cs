@@ -4,7 +4,7 @@ using System.Linq;
 using ExceptionReporting;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class ExceptionReportInfo_Tests
 	{
@@ -86,8 +86,9 @@ namespace Tests.ExceptionReporter
 			Assert.That(_info.Exceptions.Count, Is.EqualTo(1));
 		}
 		
-		[TestCase("test",     ExpectedResult = "test.zip")]
-		[TestCase("test.zip", ExpectedResult = "test.zip")]
+		[TestCase("att",     ExpectedResult = "att.zip")]
+		[TestCase("att.zip", ExpectedResult = "att.zip")]
+		[TestCase("att.ZIP", ExpectedResult = "att.ZIP")]
 		public string Can_Determine_AttachmentFilename(string attachment)
 		{
 			_info.AttachmentFilename = attachment;

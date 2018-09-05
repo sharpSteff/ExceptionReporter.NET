@@ -1,7 +1,7 @@
 using ExceptionReporting.SystemInfo;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class SysInfoResult_Tests
 	{

@@ -45,7 +45,7 @@ namespace ExceptionReporting.Templates
 
 		private string GetTemplate(TemplateFormat format)
 		{
-			var resource = string.Format("{0}.{1}.{2}", "ExceptionReporter.NET.Templates", _name, format.ToString().ToLower());
+			var resource = string.Format("{0}.{1}.{2}", this.GetType().Namespace, _name, format.ToString().ToLower());
 			var assembly = Assembly.GetExecutingAssembly();
 
 				using (var stream = assembly.GetManifestResourceStream(resource))

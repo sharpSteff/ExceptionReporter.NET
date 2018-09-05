@@ -3,7 +3,7 @@ using System.Reflection;
 using ExceptionReporting.Report;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class AssemblyDigger_Tests
 	{

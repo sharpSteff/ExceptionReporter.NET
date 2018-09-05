@@ -3,7 +3,7 @@ using ExceptionReporting;
 using ExceptionReporting.Network.Senders;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class MailSender_Tests
 	{
@@ -37,7 +37,7 @@ namespace Tests.ExceptionReporter
 		{
 			var mailSender = new MapiMailSender(new ExceptionReportInfo(), null);		// no exceptions set, so message will be null, does mail cater for it?
 
-			Assert.That(mailSender.EmailSubject, Is.EqualTo("ExceptionReporter given 0 exceptions"));		// reverts to a default message
+			Assert.That(mailSender.EmailSubject, Is.EqualTo("Empty Exception"));		// reverts to a default message
 		}
 	}
 }

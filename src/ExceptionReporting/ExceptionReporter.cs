@@ -3,7 +3,6 @@
  */
 
 using System;
-using System.Reflection;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
@@ -31,18 +30,10 @@ namespace ExceptionReporting
 		/// </summary>
 		public ExceptionReporter()
 		{
-			_reportInfo = new ExceptionReportInfo
-			{
-				AppAssembly = Assembly.GetCallingAssembly()
-			};
+			_reportInfo = new ExceptionReportInfo();
 			ViewMaker = new ViewMaker(_reportInfo);
 		}
 
-		// One issue we have with Config property here is that we store the exception and other info on it as well
-		// This prevents us from allowing code like this new ExceptionReporter { Config = new ExceptionReportInfo { A = 1 } } 
-		// which I would much prefer
-		// TODO eventually allow this code above  
-		
 		/// <summary>
 		/// Public access to configuration/settings
 		/// </summary>

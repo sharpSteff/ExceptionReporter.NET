@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using ExceptionReporting;
 using ExceptionReporting.MVP.Views;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	/// <summary>
 	/// Testing ExceptionReporter is mostly a case of integration testing (ie using the demo)
@@ -15,16 +16,15 @@ namespace Tests.ExceptionReporter
 		[Test]
 		public void Can_Init_App_Assembly()
 		{
-			var er = new ExceptionReporting.ExceptionReporter();
-			Assert.That(er.Config.AppAssembly, Is.Not.Null);
-			Assert.That(er.Config.AppAssembly.FullName, Does.Contain("Tests.ExceptionReporter"));
+			var er = new ExceptionReporter();
+			Assert.That(er.Config.AppAssembly, Is.Null);
 		}
 
 		[TestCase(null,                     ExpectedResult = false)]
 		[TestCase(default(List<Exception>), ExpectedResult = false)]
 		public bool Can_Prevent_Showing_If_Null_Exception(params Exception[] exceptions)
 		{
-			var er = new ExceptionReporting.ExceptionReporter
+			var er = new ExceptionReporter
 			{
 				ViewMaker = new Mock<IViewMaker>().Object
 			};
@@ -37,7 +37,7 @@ namespace Tests.ExceptionReporter
 			var viewMock = new Mock<IViewMaker>();
 			viewMock.Setup(v => v.Create()).Returns(new Mock<IExceptionReportView>().Object);
 			
-			var er = new ExceptionReporting.ExceptionReporter
+			var er = new ExceptionReporter
 			{
 				ViewMaker = viewMock.Object
 			};

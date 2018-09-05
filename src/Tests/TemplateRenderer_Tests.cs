@@ -4,7 +4,7 @@ using ExceptionReporting;
 using ExceptionReporting.Templates;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class TemplateRenderer_Tests
 	{

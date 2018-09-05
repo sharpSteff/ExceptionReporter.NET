@@ -6,7 +6,7 @@ using ExceptionReporting.Network.Senders;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests.ExceptionReporter
+namespace Tests.ExceptionReporting
 {
 	public class SenderFactory_Tests
 	{

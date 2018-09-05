@@ -32,7 +32,6 @@ namespace ExceptionReporting.Core
 
 			using (var bitmap = new Bitmap(rectangle.Width, rectangle.Height, PixelFormat.Format32bppArgb))
 			{
-
 				using (var graphics = Graphics.FromImage(bitmap))
 				{
 					graphics.CopyFromScreen(rectangle.X, rectangle.Y, 0, 0, rectangle.Size, CopyPixelOperation.SourceCopy);

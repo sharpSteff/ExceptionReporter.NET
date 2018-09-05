@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
-  </PropertyGroup>
+		<RootNamespace>Tests.ExceptionReporting</RootNamespace>
+	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMoq" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />

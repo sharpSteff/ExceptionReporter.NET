@@ -23,7 +23,7 @@ namespace ExceptionReporting
 	/// </summary>
 	public class ExceptionReportInfo
 	{
-		readonly List<Exception> _exceptions = new List<Exception>();
+		private readonly List<Exception> _exceptions = new List<Exception>();
 
 		/// <summary>
 		/// The Main (usually the 'only') exception, which is the subject of this exception 'report'
@@ -34,15 +34,14 @@ namespace ExceptionReporting
 		/// </summary>
 		public Exception MainException
 		{
-			get { return _exceptions.Count > 0 ? 
-				_exceptions[0] : 
-				// while we generally don't want to allow our own exceptions, I'll make an exception here - it would be too silly
-				// for a user to set a null exception
-				new ConfigurationErrorsException("ExceptionReporter given 0 exceptions"); }
+			get { return _exceptions.Count > 0 ? _exceptions[0] : new Exception("Empty Exception"); }
 			set
 			{
 				_exceptions.Clear();
-				_exceptions.Add(value);
+				if (value != null)
+				{
+					_exceptions.Add(value);
+				}
 			}
 		}
 
@@ -166,7 +165,7 @@ namespace ExceptionReporting
 		public bool ShowExceptionsTab { get; set; } = true;
 
 		
-		private bool _showSysInfoTab;
+		private bool _showSysInfoTab = true;
 		/// <summary>
 		/// Show/hide *System Information* (SysInfo) tab in dialog
 		/// <remarks> ignored in Mono </remarks> 
@@ -177,7 +176,7 @@ namespace ExceptionReporting
 			set { _showSysInfoTab = value; }
 		}
 
-		private bool _showAssembliesTab;
+		private bool _showAssembliesTab = true;
 		/// <summary>
 		/// Show/hide *Assemblies* tab in dialog
 		/// <remarks> ignored in Mono </remarks>
@@ -257,12 +256,12 @@ namespace ExceptionReporting
 		/// </summary>
 		public string[] FilesToAttach { get; set; } = {};
 
-		string _attachmentFilename = "ex";
+		private string _attachmentFilename = "ExceptionReport";
 		/// <summary> Gets or sets the attachment filename </summary>
 		/// <value>The attachment filename, extension .zip applied automatically if not provided</value>
 		public string AttachmentFilename
 		{
-			get { return _attachmentFilename.EndsWith(".zip") ? _attachmentFilename : _attachmentFilename + ".zip"; }
+			get { return _attachmentFilename.ToLower().EndsWith(".zip") ? _attachmentFilename : _attachmentFilename + ".zip"; }
 			set { _attachmentFilename = value; }
 		}
 
@@ -309,21 +308,6 @@ namespace ExceptionReporting
 		/// </summary>
 		public string ReportCustomTemplate { get; set; }
 		
-		/// <summary>
-		/// default constructor
-		/// </summary>
-		public ExceptionReportInfo()
-		{
-			SetDefaultValues();
-		}
-
-		private void SetDefaultValues()
-		{
-			ShowAssembliesTab = true;
-			ShowSysInfoTab = true;
-			AttachmentFilename = "ExceptionReport";
-		}
-
 		/// <summary>
 		/// convenience method
 		/// </summary>
