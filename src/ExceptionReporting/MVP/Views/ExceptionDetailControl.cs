@@ -16,11 +16,11 @@ namespace ExceptionReporting.MVP.Views
 		public void SetControlBackgrounds(Color color)
 		{
 			listviewExceptions.BackColor =
-					txtExceptionTabMessage.BackColor =
-					txtExceptionTabStackTrace.BackColor = color;
+				txtExceptionTabMessage.BackColor =
+				txtExceptionTabStackTrace.BackColor = color;
 		}
 
-		//TODO Label='EH' - move this logic out (is duplicated almost entirely (without ListView) in ExceptionReportBuilder)
+		//TODO this is duplicated almost entirely (without ListView) in ReportBuilder)
 		public void PopulateExceptionTab(Exception rootException)
 		{
 			TheException = rootException;
@@ -62,8 +62,7 @@ namespace ExceptionReporting.MVP.Views
 		}
 
 		private static void AddTargetSite(ListViewItem listViewItem, Exception exception)
-		{
-			//TargetSite can be null (http://msdn.microsoft.com/en-us/library/system.exception.targetsite.aspx)
+		{	//TargetSite can be null (http://msdn.microsoft.com/en-us/library/system.exception.targetsite.aspx)
 			if (exception.TargetSite != null)
 			{
 				listViewItem.SubItems.Add(exception.TargetSite.ToString());
@@ -83,7 +82,7 @@ namespace ExceptionReporting.MVP.Views
 				if (!listViewItem.Selected) continue;
 				for (var count = 0; count < int.Parse(listViewItem.Tag.ToString()); count++)
 				{
-					displayException = displayException.InnerException;
+					displayException = displayException?.InnerException;
 				}
 			}
 
