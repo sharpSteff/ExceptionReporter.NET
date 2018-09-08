@@ -79,9 +79,6 @@
     <Compile Include="TestException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ExceptionReporting\ExceptionReporter.NET.csproj">
       <Project>{c49896a3-c0da-45c4-b30e-4d17e548dbf6}</Project>
       <Name>ExceptionReporter.NET</Name>
@@ -100,6 +97,9 @@
     <PackageReference Include="NUnit3TestAdapter">
       <Version>3.10.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
