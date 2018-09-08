@@ -8,9 +8,8 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <ProjectGuid>{38C592CC-F774-4A0F-95FA-318AB0DDB476}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExceptionReporting.Tests</RootNamespace>
-    <AssemblyName>ExceptionReporter.Tests</AssemblyName>
+    <RootNamespace>Tests.ExceptionReporting</RootNamespace>
+    <AssemblyName>Tests.ExceptionReporter.NET</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -35,14 +34,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CustomCommands>
-      <CustomCommands>
-        <Command>
-          <type>BeforeBuild</type>
-        </Command>
-      </CustomCommands>
-    </CustomCommands>
+    <WarningLevel>4</WarningLevel>    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
