@@ -3,12 +3,17 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
 using ExceptionReporting.Network.Events;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
+
+[assembly: InternalsVisibleTo("Tests.ExceptionReporter.NET-new")]
+[assembly: InternalsVisibleTo("Tests.ExceptionReporter.NET")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 namespace ExceptionReporting
 {

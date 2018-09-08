@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net40;net452;net46;net47</TargetFrameworks>
 		<RootNamespace>ExceptionReporting</RootNamespace>
 		<AssemblyName>ExceptionReporter.NET</AssemblyName>
 		<PackageId>ExceptionReporter</PackageId>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<TargetFramework>net40</TargetFramework>
 	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.11.0" />
@@ -12,12 +12,8 @@
     <PackageReference Include="Simple-MAPI.NET" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-		<None Remove="ExceptionReporter.NET.csproj" />
+		<None Remove="ExceptionReporting\ExceptionReporter.NET.csproj" />
+		<None Remove="Tests\Tests.ExceptionReporter.NET.csproj" />
     <None Remove="Templates\EmailIntroTemplate.text" />
     <EmbeddedResource Include="Templates\EmailIntroTemplate.text" />
     <None Remove="Templates\ReportTemplate.html" />
@@ -26,6 +22,12 @@
     <EmbeddedResource Include="Templates\ReportTemplate.markdown" />
     <None Remove="Templates\ReportTemplate.text" />
     <EmbeddedResource Include="Templates\ReportTemplate.text" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <PropertyGroup>
     <Version>4.0.3</Version>
