@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+		<RootNamespace>Tests.ExceptionReporting</RootNamespace>
+	</PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMoq" Version="2.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="Moq" Version="4.9.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
+  <ItemGroup>
+		<None Remove="packages.config" />
+		<ProjectReference Include="..\ExceptionReporting\ExceptionReporter.NET-new.csproj" />
+  </ItemGroup>
+</Project>
