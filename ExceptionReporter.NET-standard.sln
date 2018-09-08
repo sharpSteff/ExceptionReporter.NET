@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WinForms", "..\src\Demos\WinForms\Demo.WinForms.csproj", "{2FC9BAC6-3AC4-43C2-A8E2-C9655446531E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WinForms", "src\Demos\WinForms\Demo.WinForms.csproj", "{2FC9BAC6-3AC4-43C2-A8E2-C9655446531E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionReporter.NET", "..\src\ExceptionReporting\ExceptionReporter.NET.csproj", "{5E4E9937-E082-4298-9528-B8112862695C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionReporter.NET", "src\ExceptionReporting\ExceptionReporter.NET.csproj", "{5E4E9937-E082-4298-9528-B8112862695C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.ExceptionReporter.NET", "..\src\Tests\Tests.ExceptionReporter.NET.csproj", "{38C592CC-F774-4A0F-95FA-318AB0DDB476}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.ExceptionReporter.NET", "src\Tests\Tests.ExceptionReporter.NET.csproj", "{38C592CC-F774-4A0F-95FA-318AB0DDB476}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

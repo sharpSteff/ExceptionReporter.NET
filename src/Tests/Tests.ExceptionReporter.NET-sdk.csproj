@@ -12,6 +12,6 @@
   </ItemGroup>
   <ItemGroup>
 		<None Remove="packages.config" />
-		<ProjectReference Include="..\ExceptionReporting\ExceptionReporter.NET-new.csproj" />
+		<ProjectReference Include="..\ExceptionReporting\ExceptionReporter.NET-sdk.csproj" />
   </ItemGroup>
 </Project>

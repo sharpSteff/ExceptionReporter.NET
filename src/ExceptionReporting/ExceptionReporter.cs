@@ -11,7 +11,7 @@ using ExceptionReporting.Network.Events;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-[assembly: InternalsVisibleTo("Tests.ExceptionReporter.NET-new")]
+[assembly: InternalsVisibleTo("Tests.ExceptionReporter.NET-sdk")]
 [assembly: InternalsVisibleTo("Tests.ExceptionReporter.NET")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
