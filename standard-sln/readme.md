@@ -1,2 +1,0 @@
-This solution points to the old “non-sdk-style” project files - contains all assemblies, including WinForms demo
-See ./sdk-sln/ExceptionReporter.NET.sln - for new style solution pointing to new style project formats
