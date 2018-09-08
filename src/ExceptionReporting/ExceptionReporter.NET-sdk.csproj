@@ -5,6 +5,9 @@
 		<PackageId>ExceptionReporter</PackageId>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<TargetFramework>net40</TargetFramework>
+		<ReleaseVersion>4.0.3</ReleaseVersion>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/PandaWood/ExceptionReporter.NET/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/PandaWood/ExceptionReporter.NET</PackageProjectUrl>
 	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.11.0" />
