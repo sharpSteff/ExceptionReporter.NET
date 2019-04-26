@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+using System.Configuration;
 using ExceptionReporting.Core;
 using ExceptionReporting.Mail;
 using ExceptionReporting.Network.Events;
@@ -35,9 +35,10 @@ namespace ExceptionReporting.Network.Senders
 			}
 			
 			var mapi = new SimpleMapi();
-			mapi.AddRecipient(_config.EmailReportAddress, null, false);
-			_attacher.AttachFiles(new AttachAdapter(mapi));
+			//mapi.Logon(System.IntPtr.Zero);		// this code is strictly correct, but won't work with Outlook 64-bit and is needed in the most common usage
 
+			mapi.AddRecipient(_config.EmailReportAddress, _config.EmailReportAddress, false);
+			//_attacher.AttachFiles(new AttachAdapter(mapi));
 			mapi.Send(EmailSubject, report);
 		}
 	}

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExceptionReporting.Core;
 using ExceptionReporting.MVP.Presenters;
@@ -345,9 +346,16 @@ namespace ExceptionReporting.MVP.Views
 			_presenter.ToggleDetail();
 		}
 
-		private void Email_Click(object sender, EventArgs e)
+		private async void Email_Click(object sender, EventArgs e)
 		{
-			_presenter.SendReport();
+			try
+			{
+				await _presenter.SendReport();
+			}
+			catch(Exception ex)
+			{
+
+			}
 		}
 
 		private void Save_Click(object sender, EventArgs e)

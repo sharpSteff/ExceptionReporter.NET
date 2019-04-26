@@ -353,8 +353,9 @@ namespace ExceptionReporting
 		/// JSON packet containing the properties represented in the DataContract class 'ExceptionReportPacket'
 		/// An example project doing exactly what is required is included in the ExceptionReporter.NET solution
 		/// </summary>
-		WebService
-	}
+		WebService,
+	Mailto
+  }
 
 	internal static class DefaultLabelMessages
 	{

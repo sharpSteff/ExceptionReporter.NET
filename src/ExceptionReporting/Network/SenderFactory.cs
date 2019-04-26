@@ -1,4 +1,4 @@
-﻿using ExceptionReporting.Network.Events;
+using ExceptionReporting.Network.Events;
 using ExceptionReporting.Network.Senders;
 
 namespace ExceptionReporting.Network
@@ -24,6 +24,8 @@ namespace ExceptionReporting.Network
 					return new SmtpMailSender(_config, _sendEvent);
 				case ReportSendMethod.SimpleMAPI:
 					return new MapiMailSender(_config, _sendEvent);
+		case ReportSendMethod.Mailto:
+		  return new MailtoMailSender(_config, _sendEvent);
 				case ReportSendMethod.None:
 					return new GhostSender();
 				default:

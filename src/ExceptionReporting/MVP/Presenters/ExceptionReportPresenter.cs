@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ExceptionReporting.Core;
 using ExceptionReporting.MVP.Views;
 using ExceptionReporting.Network;
@@ -61,7 +62,7 @@ namespace ExceptionReporting.MVP.Presenters
 		/// <summary>
 		/// Send the exception report using the configured send method
 		/// </summary>
-		public void SendReport()
+		public async Task SendReport()
 		{
 			View.EnableEmailButton = false;
 			View.ShowProgressBar = true;
@@ -71,8 +72,14 @@ namespace ExceptionReporting.MVP.Presenters
 			
 			try
 			{
-				var report = ReportInfo.IsSimpleMAPI() ? CreateEmailReport() : CreateReport();
-				sender.Send(report);
+				await Task.Run(() =>
+								{
+								  //string command = "mailto:info[at]codegain.com?subject=The Subject&bcc=vrrave[at]codegaim.com";
+								  //System.Diagnostics.Process.Start(command);
+
+								  var report = ReportInfo.IsSimpleMAPI() || ReportInfo.SendMethod == ReportSendMethod.Mailto? CreateEmailReport() : CreateReport();
+								  sender.Send(report);
+								});
 			}
 			catch (Exception exception)
 			{		// most exceptions will be thrown in the Sender - this is just a backup
